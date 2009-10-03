@@ -1,0 +1,33 @@
+module Steam
+  module Java
+    class << self
+      def const_missing(name)
+        return init && const_get(name) unless @initialized
+        super
+      end
+
+      def import(signature, name = nil)
+        init unless @initialized
+        name ||= signature.split('.').last.to_sym
+        const_set(name, Rjb::import(signature))
+      end
+
+      protected
+
+        def init
+          @initialized = true
+          set_classpath!
+          import_common!
+        end
+        
+        def import_common!
+          import('java.net.URL', :Url)
+        end
+
+        def set_classpath!
+          path = File.expand_path(File.dirname(__FILE__) + "/../htmlunit/")
+          Rjb::load(Dir["#{path}/*.jar"].join(':'))
+        end
+    end
+  end
+end

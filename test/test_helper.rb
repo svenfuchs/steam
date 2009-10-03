@@ -11,15 +11,27 @@ $: << PLUGIN_ROOT + '/lib'
 
 require 'steam'
 
-class HttpMock
-  attr_accessor :response
+class MockConnection
+  attr_accessor :responses
   
-  def initialize(response)
-    @response = response
+  def initialize(responses = {})
+    @responses = responses
   end
   
   [:get, :post, :put, :delete, :head].each do |method|
-    define_method(method) { |*args| response }
+    define_method(method) do |request|
+      responses[request.uri.to_s]
+    end
+  end
+  
+  def mock_response(type, responses)
+    content_types = {
+      :html => 'text/html',
+      :javascript => 'application/javascript'
+    }
+    responses.each do |url, body|
+      @responses[url] = Steam::Response.new(body, 200, :content_type => content_types[type])
+    end
   end
 end
 

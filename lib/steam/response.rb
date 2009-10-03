@@ -1,12 +1,14 @@
+# require 'rack/response'
+
 module Steam
-  class Response
+  class Response # < Rack::Response
     attr_accessor :body, :status, :headers, :cookies
 
-    def initialize(body = '', status = 200, headers = {}, cookies = {})
-      @body    = body
+    def initialize(body = '', status = 200, headers = {}) # , cookies = {}
       @status  = status.to_i
       @headers = headers
-      @cookies = cookies
+      @body    = body
+      # @cookies = cookies
     end
     
     def html?

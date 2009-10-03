@@ -4,16 +4,20 @@ require 'rjb'
 module Steam
   module Browser
     class HtmlUnit
-      autoload :Java,           'steam/browser/html_unit/java'
-      autoload :MockConnection, 'steam/browser/html_unit/mock_connection'
-      autoload :WebClient,      'steam/browser/html_unit/web_client'
+      attr_accessor :ui, :http, :page, :connection
 
-      attr_accessor :gui, :http, :page, :connection
+      Java.import 'com.gargoylesoftware.htmlunit.WebClient'
 
-      def initialize(http = nil)
-        @http = http || Steam::Http::RestClient.new
+      def initialize(http = nil, options = {})
+        default_options = { :css => true, :javascript => true }
+        options = default_options.merge(options)
+        
+        @connection = Steam::Connection::HtmlUnit.new(http || Steam::Connection::RestClient.new)
 
-        @gui = WebClient.new
+        @ui = Java::WebClient.new
+        @ui.setCssEnabled(options[:css])
+        @ui.setJavaScriptEnabled(options[:javascript])
+        @ui.setWebConnection(Rjb::bind(connection, 'com.gargoylesoftware.htmlunit.WebConnection'))
       end
 
       [:get, :post, :put, :delete, :head].each do |method|
@@ -23,13 +27,8 @@ module Steam
       protected
 
         def process(method, request)
-          @page = nil
-          response = http.send(method, request)
-          if response.html?
-            @page = gui.process_html(request, response) 
-            response.body = @page.asXml
-          end
-          response
+          @page = ui.getPage(request.uri.to_s)  # FIXME include request headers etc
+          Response.new(@page.asXml, 200, {})    # FIXME return a full response
         end
     end
   end

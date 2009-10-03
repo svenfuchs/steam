@@ -2,7 +2,7 @@ require 'rest_client'
 require 'steam/response'
 
 module Steam
-  module Http
+  module Connection
     class RestClient
       def get(request)
         process(:get, request.uri.to_s, request.headers)

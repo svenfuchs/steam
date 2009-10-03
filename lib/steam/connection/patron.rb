@@ -3,7 +3,7 @@ require 'patron'
 require 'steam/utils'
 
 module Steam
-  module Http
+  module Connection
     class Patron < Patron::Session
       def get(request)
         self.base_url = request.host_with_port

@@ -2,7 +2,7 @@ require 'uri'
 
 module Steam
   class Request
-    attr_accessor :uri, :params, :headers
+    attr_accessor :method, :uri, :params, :headers
 
     def initialize(uri, params = {}, headers = {})
       uri      = URI.parse(uri)
