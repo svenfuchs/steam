@@ -44,9 +44,5 @@ module Steam
       env = self.class.env_for(uri, opts.merge(:method => method))
       super(env)
     end
-
-    def host_with_port
-      "#{scheme}://#{host}" + (port ? ":#{port}" : '')
-    end
   end
 end

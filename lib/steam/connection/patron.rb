@@ -5,17 +5,18 @@ require 'steam/utils'
 module Steam
   module Connection
     class Patron < Patron::Session
-      def get(request)
-        self.base_url = request.host_with_port
-        response = super(request.path, headers)
-        Rack::Response.new(response.body, response.status, response.headers) # , response.cookies
+      def call(env)
+        request = Rack::Request.new(env)
+        @base_url = base_url(request)
+        method  = request.request_method.downcase.to_sym
+        headers = {}              # FIXME ... request.header, cookies?
+        options = { :data => '' } # FIXME ... body
+        response = self.request(method, request.path, headers, options)
+        Rack::Response.new(response.body, response.status, response.headers).to_a
       end
-  
-      def post(request)
-        self.base_url = request.host_with_port
-        body = Utils.requestify(request.params) || ''
-        response = super(request.path, body, headers)
-        Rack::Response.new(response.body, response.status, response.headers) # , response.cookies
+
+      def base_url(request = nil)
+        @base_url ||= "#{request.scheme}://#{request.host}" + (request.port ? ":#{request.port}" : '')
       end
     end
   end
