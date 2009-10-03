@@ -5,7 +5,7 @@ class ConnectionStaticTest < Test::Unit::TestCase
   include Steam
 
   def test_static
-    url  = 'http://localhost/javascripts/foo.js'
+    url  = 'http://localhost:3000/javascripts/foo.js'
     root = File.expand_path(File.dirname(__FILE__) + '/../fixtures')
     connection = Connection::Static.new(:root => root)
 

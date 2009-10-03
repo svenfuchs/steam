@@ -5,7 +5,6 @@ require 'pp'
 
 TEST_ROOT = File.dirname(__FILE__)
 PLUGIN_ROOT = File.expand_path(TEST_ROOT + "/..")
-RAILS_ROOT = File.expand_path(PLUGIN_ROOT + "/../..")
 
 $: << PLUGIN_ROOT + '/lib'
 

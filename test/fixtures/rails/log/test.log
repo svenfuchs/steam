@@ -1,0 +1,28 @@
+
+
+Processing UsersController#index (for  at 2009-10-03 17:43:40) [GET]
+  [4;36;1mUser Load (0.0ms)[0m   [0;1mSQLite3::SQLException: no such table: users: SELECT * FROM "users" [0m
+
+ActiveRecord::StatementInvalid (SQLite3::SQLException: no such table: users: SELECT * FROM "users" ):
+  app/controllers/users_controller.rb:3:in `index'
+  test/connection/rails_test.rb:15:in `test_static'
+  mocha (0.9.7) lib/mocha/integration/test_unit/ruby_version_186_and_above.rb:19:in `__send__'
+  mocha (0.9.7) lib/mocha/integration/test_unit/ruby_version_186_and_above.rb:19:in `run'
+  /usr/local/lib/ruby/1.8/test/unit/testsuite.rb:34:in `run'
+  /usr/local/lib/ruby/1.8/test/unit/testsuite.rb:33:in `each'
+  /usr/local/lib/ruby/1.8/test/unit/testsuite.rb:33:in `run'
+  /usr/local/lib/ruby/1.8/test/unit/testsuite.rb:34:in `run'
+  /usr/local/lib/ruby/1.8/test/unit/testsuite.rb:33:in `each'
+  /usr/local/lib/ruby/1.8/test/unit/testsuite.rb:33:in `run'
+  /usr/local/lib/ruby/1.8/test/unit/ui/testrunnermediator.rb:46:in `run_suite'
+  /usr/local/lib/ruby/1.8/test/unit/ui/console/testrunner.rb:67:in `start_mediator'
+  /usr/local/lib/ruby/1.8/test/unit/ui/console/testrunner.rb:41:in `start'
+  /usr/local/lib/ruby/1.8/test/unit/ui/testrunnerutilities.rb:29:in `run'
+  /usr/local/lib/ruby/1.8/test/unit/autorunner.rb:216:in `run'
+  /usr/local/lib/ruby/1.8/test/unit/autorunner.rb:12:in `run'
+  /usr/local/lib/ruby/1.8/test/unit.rb:278
+  test/connection/rails_test.rb:8
+
+Rendered rescues/_trace (55.3ms)
+Rendered rescues/_request_and_response (2.0ms)
+Rendering rescues/layout (internal_server_error)
