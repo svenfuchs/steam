@@ -20,16 +20,10 @@ module Steam
         @ui.setWebConnection(Rjb::bind(connection, 'com.gargoylesoftware.htmlunit.WebConnection'))
       end
 
-      [:get, :post, :put, :delete, :head].each do |method|
-        define_method(method) { |*args| process(method, *args) }
+      def process(request)
+        @page = ui.getPage(request.url)           # FIXME include request headers etc
+        Rack::Response.new(@page.asXml, 200, {})  # FIXME return a full response
       end
-
-      protected
-
-        def process(method, request)
-          @page = ui.getPage(request.uri.to_s)  # FIXME include request headers etc
-          Response.new(@page.asXml, 200, {})    # FIXME return a full response
-        end
     end
   end
 end

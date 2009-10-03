@@ -23,7 +23,7 @@ module Steam
     [:get, :post, :put, :delete, :head].each do |method|
       class_eval <<-code
         def #{method}(uri, params = {}, headers = {})
-          @response = browser.#{method}(Request.new(uri, params, headers))
+          @response = browser.#{method}(Request.new(method, uri, params, headers))
         end
       code
     end

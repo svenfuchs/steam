@@ -20,7 +20,7 @@ class MockConnection
   
   [:get, :post, :put, :delete, :head].each do |method|
     define_method(method) do |request|
-      responses[request.uri.to_s]
+      responses[request.url]
     end
   end
   
@@ -30,7 +30,7 @@ class MockConnection
       :javascript => 'application/javascript'
     }
     responses.each do |url, body|
-      @responses[url] = Steam::Response.new(body, 200, :content_type => content_types[type])
+      @responses[url] = Rack::Response.new(body, 200, 'Content-Type' => content_types[type])
     end
   end
 end

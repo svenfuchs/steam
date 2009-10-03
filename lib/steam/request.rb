@@ -1,38 +1,52 @@
 require 'uri'
 
 module Steam
-  class Request
-    attr_accessor :method, :uri, :params, :headers
+  class Request < Rack::Request
+    attr_accessor :method, :headers
 
-    def initialize(uri, params = {}, headers = {})
-      uri      = URI.parse(uri)
-      @uri     = rewrite_uri(uri)
-      @params  = params
-      @headers = normalize_headers(uri, headers)
+    DEFAULT_ENV = {
+      "rack.version"      => [0, 1],
+      "rack.input"        => StringIO.new,
+      "rack.errors"       => StringIO.new,
+      "rack.multithread"  => true,
+      "rack.multiprocess" => true,
+      "rack.run_once"     => false,
+    }
+
+    class << self
+      def env_for(uri = '', opts = {})
+        env   = DEFAULT_ENV.dup
+        uri   = URI.parse(uri)
+        input = opts[:input] || ''
+
+        env.merge!(
+          'REQUEST_METHOD'   => opts[:method] || 'GET',
+          'SERVER_NAME'      => 'localhost',
+          'SERVER_PORT'      => '3000',
+          'QUERY_STRING'     => uri.query.to_s,
+          'PATH_INFO'        => (!uri.path || uri.path.empty?) ? '/' : uri.path,
+          'rack.url_scheme'  => 'http',
+          'SCRIPT_NAME'      => opts[:script_name] || '',
+          'rack.errors'      => StringIO.new,
+          'rack.input'       => input.is_a?(String) ? StringIO.new(input) : input,
+          'CONTENT_LENGTH'   => env['rack.input'].length.to_s,
+          'rack.test.scheme' => uri.scheme || 'http',
+          'rack.test.host'   => uri.host   || 'www.example.com',
+          'rack.test.port'   => uri.port,
+          'rack.test.cache_classes' => true
+        )
+        # env.merge! Hash[*opts.select { |key, value| key.is_a?(String) }.flatten]
+        env
+      end
     end
-    
+
+    def initialize(method, uri, opts = {})
+      env = self.class.env_for(uri, opts.merge(:method => method))
+      super(env)
+    end
+
     def host_with_port
-      "#{uri.scheme}://#{uri.host}" + (uri.port ? ":#{uri.port}" : '')
+      "#{scheme}://#{host}" + (port ? ":#{port}" : '')
     end
-    
-    def path
-      uri.path
-    end
-    
-    protected
-
-      def normalize_headers(uri, headers)
-        headers.merge 'rack.test.scheme' => uri.scheme || 'http',
-                      'rack.test.host'   => uri.host   || 'www.example.com',
-                      'rack.test.port'   => uri.port,
-                      'rack.test.cache_classes' => true
-      end
-
-      def rewrite_uri(uri)
-        uri.scheme = 'http'
-        uri.host   = 'localhost'
-        uri.port   = '3000'
-        uri
-      end
   end
 end

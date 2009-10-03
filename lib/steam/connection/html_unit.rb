@@ -23,7 +23,7 @@ module Steam
       def mock_response(request)
         method = request.getHttpMethod.toString.downcase
         response = connection.send(method, steam_request(request))
-        java.setResponse(request.getUrl, response.body, response.content_type)
+        java.setResponse(request.getUrl, response.body.join, response.content_type)
       end
 
       protected
@@ -32,8 +32,7 @@ module Steam
           # FIXME convert to ruby hashes
           # params  = request.getRequestParameters
           # headers = request.getAdditionalHeaders
-          r = Request.new(request.getUrl.toString)
-          r.method = request.getHttpMethod
+          r = Request.new(request.getHttpMethod, request.getUrl.toString)
           r
         end
     end

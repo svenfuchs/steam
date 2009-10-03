@@ -21,8 +21,10 @@ class HtmlUnitTest < Test::Unit::TestCase
       document.title = "FOO"
     body
 
-    response = @browser.get(Request.new('http://localhost:3000/'))
-    assert_match /FOO/, response.body
+    request  = Request.new('GET', 'http://localhost:3000/')
+    response = @browser.process(request)
+    p response.status
+    assert_match /FOO/, response.body.join
   end
 
   def mock_response(type, responses)
