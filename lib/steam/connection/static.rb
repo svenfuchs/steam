@@ -7,11 +7,12 @@ module Steam
         options = args.last.is_a?(Hash) ? args.pop : {}
         options[:urls] ||= %w(/images /javascripts /stylesheets)
         app = args.pop
-        super(app || lambda { Rack::Response.new('', 404).to_a }, options)
+        super(app || lambda { response_404 }, options)
       end
-      
+
       def call(env)
         status, headers, response = super
+
         case response
         when Rack::File
           Rack::Response.new(File.read(response.path), status, headers).to_a
@@ -20,6 +21,10 @@ module Steam
         else
           [status, headers, response]
         end
+      end
+
+      def response_404
+        Rack::Response.new('', 404).to_a
       end
     end
   end
