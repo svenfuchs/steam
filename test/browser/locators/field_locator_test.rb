@@ -5,29 +5,29 @@ class FieldLocatorTest < Test::Unit::TestCase
   include Steam::Browser::Locators::HtmlUnit
   include TestHelper
 
-  # def test_locates_the_first_element_when_no_value_given
-  #   page = page('<input type="text" name="foo-bar" /><input type="text" name="foo" />')
-  #   element = FieldLocator.new(page).locate
-  #   assert_equal 'foo-bar', element.getNameAttribute
-  # end
-  # 
-  # def test_locates_the_element_with_the_shortest_matching_id_attribute
-  #   page = page('<input type="text" id="foo-bar" /><input type="text" id="foo" />')
-  #   element = FieldLocator.new(page).locate('foo')
-  #   assert_equal 'foo', element.getIdAttribute
-  # end
-  # 
-  # def test_locates_the_element_with_the_shortest_matching_name_attribute
-  #   page = page('<input type="text" name="foo-bar" /><input type="text" name="foo" />')
-  #   element = FieldLocator.new(page).locate('foo')
-  #   assert_equal 'foo', element.getNameAttribute
-  # end
-  # 
-  # def test_locates_the_element_with_the_shortest_matching_title_attribute
-  #   page = page('<input type="text" title="foo-bar" /><input type="text" title="foo" />')
-  #   element = FieldLocator.new(page).locate('foo')
-  #   assert_equal 'foo', element.getTitleAttribute
-  # end
+  def test_locates_the_first_element_when_no_value_given
+    page = page('<input type="text" name="foo-bar" /><input type="text" name="foo" />')
+    element = FieldLocator.new(page).locate
+    assert_equal 'foo-bar', element.getNameAttribute
+  end
+  
+  def test_locates_the_element_with_the_shortest_matching_id_attribute
+    page = page('<input type="text" id="foo-bar" /><input type="text" id="foo" />')
+    element = FieldLocator.new(page).locate('foo')
+    assert_equal 'foo', element.getIdAttribute
+  end
+  
+  def test_locates_the_element_with_the_shortest_matching_name_attribute
+    page = page('<input type="text" name="foo-bar" /><input type="text" name="foo" />')
+    element = FieldLocator.new(page).locate('foo')
+    assert_equal 'foo', element.getNameAttribute
+  end
+  
+  def test_locates_the_element_with_the_shortest_matching_title_attribute
+    page = page('<input type="text" title="foo-bar" /><input type="text" title="foo" />')
+    element = FieldLocator.new(page).locate('foo')
+    assert_equal 'foo', element.getTitleAttribute
+  end
   
   def test_locates_the_labeled_element_with_the_shortest_matching_label_text
     html = '<label for="1">foo-bar</label><input type="text" id="1" />' +
@@ -64,18 +64,18 @@ class FieldLocatorTest < Test::Unit::TestCase
     assert_equal 'foo', element.getIdAttribute
   end
   
-  # def test_returns_nil_for_a_non_existing_id
-  #   page = page('<input type="text" id="foo" />')
-  #   assert_nil FieldLocator.new(page).locate('bogus')
-  # end
-  # 
-  # def test_returns_nil_for_a_non_existing_name
-  #   page = page('<input type="text" name="foo" />')
-  #   assert_nil FieldLocator.new(page).locate('bogus')
-  # end
-  # 
-  # def test_returns_nil_for_a_non_existing_title
-  #   page = page('<input type="text" title="foo" />')
-  #   assert_nil FieldLocator.new(page).locate('bogus')
-  # end
+  def test_returns_nil_for_a_non_existing_id
+    page = page('<input type="text" id="foo" />')
+    assert_nil FieldLocator.new(page).locate('bogus')
+  end
+  
+  def test_returns_nil_for_a_non_existing_name
+    page = page('<input type="text" name="foo" />')
+    assert_nil FieldLocator.new(page).locate('bogus')
+  end
+  
+  def test_returns_nil_for_a_non_existing_title
+    page = page('<input type="text" title="foo" />')
+    assert_nil FieldLocator.new(page).locate('bogus')
+  end
 end

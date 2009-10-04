@@ -1,3 +1,5 @@
+require 'core_ext/ruby/string/underscore'
+
 module Steam
   module Browser
     module Locators
@@ -9,39 +11,50 @@ module Steam
         autoload :Locator,             'steam/browser/locators/html_unit/locator'
         autoload :LabelLocator,        'steam/browser/locators/html_unit/label_locator'
         autoload :LinkLocator,         'steam/browser/locators/html_unit/link_locator'
+        autoload :SelectLocator,       'steam/browser/locators/html_unit/select_locator'
         autoload :SelectOptionLocator, 'steam/browser/locators/html_unit/select_option_locator'
         autoload :TextAreaLocator,     'steam/browser/locators/html_unit/text_area_locator'
 
-        def find_element(value, *types)
-          ElementLocator.new(page, *types).locate(value)
+        def current_scope
+          scopes.last
         end
-        
-        def find_button(value, *types)
-          ButtonLocator.new(page, *types).locate(value)
+
+        def scopes
+          @scopes ||= ['']
         end
-        
-        def find_field(value, *types)
-          FieldLocator.new(page, *types).locate(value)
+
+        def within(element)
+          element = find_element(element) unless element.respond_to?(:_classname)
+          scopes.push(element.getCanonicalXPath)
+          result = yield
+          scopes.pop
+          result
         end
-        
-        def find_form(value)
-          FormLocator.new(page).locate(value)
+
+        def locators
+          @locators ||= Hash[*HtmlUnit.constants.map do |name|
+            [name.underscore.gsub('_locator', ''), HtmlUnit.const_get(name)]
+          end.flatten]
         end
-        
-        def find_label(value)
-          LabelLocator.new(page).locate(value)
+
+        def locate(type, *args)
+          selector = args.shift
+          options  = args.last.is_a?(Hash) ? args.pop : {}
+          scope    = options.delete(:from) || options.delete(:within)
+          locator  = lambda { type.new(page, current_scope, *args << options).locate(selector) }
+
+          scope ? within(scope) { locator.call } : locator.call
         end
-        
-        def find_link(value)
-          LinkLocator.new(page).locate(value)
+
+        def find_select_option(selector, options = {})
+          from = options.delete(:from) or raise "no select specified (use :from)"
+          select = find_select(from)
+          within(select) { locate(SelectOptionLocator, selector, options) }
         end
-        
-        def find_select_option(value, options = {})
-          SelectOptionLocator.new(page).locate(value)
-        end
-        
-        def find_text_area(value)
-          TextAreaLocator.new(page).locate(value)
+
+        def method_missing(method, *args)
+          return super unless method.to_s =~ /^find_(.*)/
+          locate(locators[$1], *args)
         end
       end
     end

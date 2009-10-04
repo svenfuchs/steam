@@ -3,9 +3,11 @@ module Steam
     module Locators
       module HtmlUnit
         class FieldLocator < Locator
-          def initialize(page, *types)
-            types = ['text'] if types.empty?
-            super(page, 'type' => types)
+          def initialize(dom, *args)
+            attributes = args.last.is_a?(Hash) ? args.pop : {}
+            attributes[:type] = 'text' unless attributes.has_key?(:type)
+            scope = args.shift
+            super(dom, scope, attributes)
           end
           
           def matchable_attributes
@@ -13,25 +15,26 @@ module Steam
           end
           
           def xpath
+            # [".//button", ".//input", ".//textarea", ".//select"] # FIXME
             super('input')
           end
 
-          def locate(value = nil)
-            return elements[0] unless value
+          def locate(selector = nil)
+            return elements[0] unless selector
 
-            elements = elements_with_matching_values(value) + labeled_elements(value)
-            element = select_by_min_matching_attribute(elements, value)
+            elements = elements_with_matching_values(selector) + labeled_elements(selector)
+            element = select_by_min_matching_attribute(elements)
             element = input_element_for(element) if element && element._classname.include?('HtmlLabel')
             element
           end
           
-          def labeled_elements(value)
-            LabelLocator.new(page).elements_with_matching_values(value)
+          def labeled_elements(selector)
+            LabelLocator.new(dom, scope).elements_with_matching_values(selector)
           end
           
           def input_element_for(label)
             id = label.getForAttribute
-            page.getElementById(id)
+            dom.getElementById(id)
           end
         end
       end

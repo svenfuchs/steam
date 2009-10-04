@@ -7,11 +7,12 @@ module Steam
     module Locators
       module HtmlUnit
         class Locator
-          attr_reader :page, :attributes
+          attr_reader :dom, :scope, :attributes
           
-          def initialize(page, attributes = {})
-            @page = page
-            @attributes = attributes
+          def initialize(dom, *args)
+            @dom = dom
+            @attributes = args.last.is_a?(Hash) ? args.pop : {}
+            @scope = args.shift
           end
           
           def matchable_attributes
@@ -19,26 +20,26 @@ module Steam
           end
 
           def xpath(type)
-            return "//#{type}" if attributes.empty?
+            return "#{scope}//#{type}" if attributes.empty?
 
             attributes.map do |name, values| 
-              Array(values).map { |value| %(//#{type}[@#{name}="#{value}"]) }
+              Array(values).map { |value| %(#{scope}//#{type}[@#{name}="#{value}"]) }
             end.join('|')
           end
           
-          def locate(value = nil)
-            return elements[0] unless value
+          def locate(selector = nil)
+            return elements[0] unless selector
 
-            selected = elements_with_matching_values(value)
-            select_by_min_matching_attribute(selected, value)
+            selected = elements_with_matching_values(selector)
+            select_by_min_matching_attribute(selected)
           end
           
           def elements
-            elements = page.getByXPath(xpath)
+            elements = dom.getByXPath(xpath)
             silence_warnings { elements.toArray }
           end
 
-          def select_by_min_matching_attribute(elements, value)
+          def select_by_min_matching_attribute(elements)
             selected = elements.min do |(lft_element, lft_value), (rgt_element, rgt_value)|
               compare_by_value(lft_value, rgt_value) || 
               compare_by_hierarchie(lft_element, rgt_element) || 0
@@ -55,10 +56,10 @@ module Steam
             lft.isAncestorOf(rgt) && 1 || rgt.isAncestorOf(lft) && -1
           end
           
-          def elements_with_matching_values(matcher)
+          def elements_with_matching_values(selector)
             elements.map do |element|
               values  = matchable_values(element)
-              matcher = regexp(matcher)
+              matcher = regexp(selector)
               values.map { |value| value =~ matcher && [element, value] }.compact
             end.flatten_once
           end
@@ -75,8 +76,8 @@ module Steam
             values.select { |value| value && !value.empty? }
           end
           
-          def regexp(value)
-            value.is_a?(Regexp) ? value : /#{Regexp.escape(value.to_s)}/i
+          def regexp(selector)
+            selector.is_a?(Regexp) ? selector : /#{Regexp.escape(selector.to_s)}/i
           end
         end
       end

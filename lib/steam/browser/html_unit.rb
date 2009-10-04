@@ -59,35 +59,44 @@ module Steam
       end
 
       def fill_in(value, options = {})
-        field = find_field(value, 'text', 'textarea', 'password')
+        field = find_field(value, :type => %w(text textarea password))
         # field.raise_error_if_disabled # TODO
         method = field._classname.include?('HtmlTextArea') ? :setText : :setValueAttribute
         @page = field.send(method, options[:with])
         respond
       end
 
+      def set_hidden_field(field_locator, options = {})
+        field = locate_field(field_locator, 'hidden')
+        field.setValueAttribute(options[:to])
+      end
+
       def check(value)
-        field = find_field(value, 'checkbox')
+        field = find_field(value, :type => 'checkbox')
         @page = field.setChecked(true)
         respond
       end
 
       def uncheck(value)
-        field = find_field(value, 'checkbox')
+        field = find_field(value, :type => 'checkbox')
         @page = field.setChecked(false)
         respond
       end
 
       def choose(value)
-        field = find_field(value, 'radio')
+        field = find_field(value, :type => 'radio')
         @page = field.setChecked(true)
         respond
       end
 
       def select(option, options = {})
-        field = find_select_option(option, options[:from])
+        field = find_select_option(option, options)
         @page = field.setSelected(true)
         respond
+      end
+
+      def click_area(area_name)
+        find_area(area_name).click
       end
 
       def drag_and_drop(drag, options = {})
@@ -122,14 +131,14 @@ module Steam
 end
 
 # require "webrat/core/locators/locator"
-# 
+#
 # module Webrat
 #   module Locators
 #     class FormLocator < Locator
 #       def locate
 #         Form.load(@session, form_element)
 #       end
-# 
+#
 #       def form_element
 #         Webrat::XML.css_at(@dom, "#" + @value)
 #       end

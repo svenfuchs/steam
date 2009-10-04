@@ -4,7 +4,7 @@ class ConnectionRailsTest < Test::Unit::TestCase
   include TestHelper
   include Steam
 
-  def test_static
+  def test_rails
     rails_root = File.expand_path(File.dirname(__FILE__) + '/../fixtures/rails')
     require rails_root + '/config/environment.rb'
 
@@ -12,6 +12,6 @@ class ConnectionRailsTest < Test::Unit::TestCase
     connection = Connection::Rails.new
 
     status, headers, response = connection.call(Request.env_for(url))
-    puts response.body
+    # assert !response.body.empty?
   end
 end
