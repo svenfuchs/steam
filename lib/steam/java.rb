@@ -1,3 +1,5 @@
+require 'rjb'
+
 module Steam
   module Java
     class << self
@@ -9,7 +11,7 @@ module Steam
       def import(signature, name = nil)
         init unless @initialized
         name ||= signature.split('.').last.to_sym
-        const_set(name, Rjb::import(signature))
+        const_set(name, Rjb::import(signature)) unless const_defined?(name)
       end
 
       protected
