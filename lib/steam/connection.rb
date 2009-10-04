@@ -1,5 +1,6 @@
 module Steam
   module Connection
+    autoload :HtmlUnit,   'steam/connection/html_unit'
     autoload :Mock,       'steam/connection/mock'
     autoload :Patron,     'steam/connection/patron'
     autoload :Rails,      'steam/connection/rails'

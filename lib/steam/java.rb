@@ -22,6 +22,9 @@ module Steam
         
         def import_common!
           import('java.net.URL', :Url)
+          import('java.util.Arrays', :Arrays)
+          import('org.apache.commons.httpclient.NameValuePair', :NameValuePair)
+          import('java.util.ArrayList', :ArrayList)
         end
 
         def set_classpath!
