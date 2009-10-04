@@ -11,12 +11,13 @@ $: << PLUGIN_ROOT + '/lib'
 require 'steam'
 
 module TestHelper
-  def assert_response_contains(text)
+  def assert_response_contains(text, options = {})
+    tag_name = options[:in] || 'body'
     status, headers, response = yield
     assert_equal 200, status
-    assert_match %r(<body>\s*#{text}\s*<\/body>), response.body.join
+    assert_match %r(<#{tag_name}>\s*#{text}\s*<\/#{tag_name}>), response.body.join
   end
-  
+
   def patron_response(body)
     @response = Patron::Response.new
     @response.instance_eval do
