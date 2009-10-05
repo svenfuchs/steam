@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class LocateWithinTest < Test::Unit::TestCase
   include Steam
-  include Steam::Browser::Locators::HtmlUnit
+  include Steam::Locators::HtmlUnit
   include TestHelper
   
   def page(html = nil)

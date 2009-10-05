@@ -1,13 +1,14 @@
 module Steam
   class Session
-    cattr_accessor :host
+    # cattr_accessor :host
 
-    attr_accessor :id, :browser, :request, :response, :session, :cookies
-    delegate :headers, :to => :response
+    attr_accessor :id, :browser
+    #, :request, :response, :session, :cookies
+    # delegate :headers, :to => :response
 
-    def initialize(browser)
+    def initialize(browser = nil)
       @browser = browser
-      @id = start
+      # @id = start
     end
 
     def start
@@ -20,18 +21,19 @@ module Steam
       # delete("/test/sessions/#{id}")
     end
 
-    [:get, :post, :put, :delete, :head].each do |method|
-      class_eval <<-code
-        def #{method}(uri, params = {}, headers = {})
-          @response = browser.process(Request.new(method, uri, params, headers))
-        end
-      code
+    def respond_to?(method)
+      return true if browser.respond_to?(method)
+      super
     end
 
-    def redirect?
-      response.status/100 == 3
+    def method_missing(method, *args)
+      browser.send(method, *args) if browser.respond_to?(method)
     end
 
+    # def redirect?
+    #   response.status/100 == 3
+    # end
+    #
     # def follow_redirect!
     #   # raise "not a redirect! #{@status} #{@status_message}" unless redirect?
     #   get(headers['location'])

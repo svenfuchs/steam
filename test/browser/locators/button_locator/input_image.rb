@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../../../test_helper')
 
 class ButtonLocatorInputImageTest < Test::Unit::TestCase
   include Steam
-  include Steam::Browser::Locators::HtmlUnit
+  include Steam::Locators::HtmlUnit
   include TestHelper
 
   def test_locates_the_first_element_when_no_value_given

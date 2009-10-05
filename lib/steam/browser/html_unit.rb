@@ -4,8 +4,10 @@ require 'core_ext/ruby/kernel/silence_warnings'
 module Steam
   module Browser
     class HtmlUnit
-      include Steam::Browser::Locators::HtmlUnit
+      autoload :Connection, 'steam/browser/html_unit/connection'
 
+      include Locators::HtmlUnit
+      
       attr_accessor :client, :page, :connection, :cache, :response
 
       Java.import 'com.gargoylesoftware.htmlunit.WebClient'
@@ -14,7 +16,7 @@ module Steam
       class << self
         def build_client(connection, options = {})
           options = { :css => true, :javascript => true }.merge(options)
-          connection = Connection::HtmlUnit.new(connection)
+          connection = Connection.new(connection)
 
           client = Java::WebClient.new
           client.setCssEnabled(options[:css])
