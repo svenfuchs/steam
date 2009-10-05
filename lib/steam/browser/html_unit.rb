@@ -3,118 +3,41 @@ require 'core_ext/ruby/kernel/silence_warnings'
 
 module Steam
   module Browser
-    class HtmlUnit # < Base
+    class HtmlUnit
       include Steam::Browser::Locators::HtmlUnit
 
-      attr_accessor :ui, :page, :connection, :cache, :response
+      attr_accessor :client, :page, :connection, :cache, :response
 
       Java.import 'com.gargoylesoftware.htmlunit.WebClient'
       Java.import 'com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException'
 
-      class Cache
-        def elements
-          @elements ||= {}
-        end
+      class << self
+        def build_client(connection, options = {})
+          options = { :css => true, :javascript => true }.merge(options)
+          connection = Connection::HtmlUnit.new(connection)
 
-        def clear
-          @elements.clear
+          client = Java::WebClient.new
+          client.setCssEnabled(options[:css])
+          client.setJavaScriptEnabled(options[:javascript])
+          client.setPrintContentOnFailingStatusCode(false)
+          client.setThrowExceptionOnFailingStatusCode(false)
+          # client.setHTMLParserListener(nil); # doesn't work
+          client.setWebConnection(Rjb::bind(connection, 'com.gargoylesoftware.htmlunit.WebConnection'))
+          client
         end
       end
 
       def initialize(connection, options = {})
-        default_options = { :css => true, :javascript => true }
-        options = default_options.merge(options)
-
-        @connection = Connection::HtmlUnit.new(connection)
-        @cache = Cache.new
-
-        @ui = Java::WebClient.new
-        @ui.setCssEnabled(options[:css])
-        @ui.setJavaScriptEnabled(options[:javascript])
-        @ui.setPrintContentOnFailingStatusCode(false)
-        @ui.setThrowExceptionOnFailingStatusCode(false)
-        # @ui.setHTMLParserListener(nil); # doesn't work
-        @ui.setWebConnection(Rjb::bind(@connection, 'com.gargoylesoftware.htmlunit.WebConnection'))
+        @client = self.class.build_client(connection, options)
       end
 
       def call(env)
         request = Rack::Request.new(env)
-        @page = ui.getPage(request.url)
-        respond
-      end
-
-      def click_link(text_or_title_or_id, options = {})
-        @page = find_link(text_or_title_or_id).click
-        respond
-      end
-
-      def click_button(value = nil)
-        @page = find_button(value).click
-        respond
-      end
-
-      def submit_form(id)
-        @page = find_form(id).submit(nil)
-        respond
-      end
-
-      def fill_in(value, options = {})
-        field = find_field(value, :type => %w(text textarea password))
-        # field.raise_error_if_disabled # TODO
-        method = field._classname.include?('HtmlTextArea') ? :setText : :setValueAttribute
-        @page = field.send(method, options[:with])
-        respond
-      end
-
-      def set_hidden_field(field_locator, options = {})
-        field = locate_field(field_locator, 'hidden')
-        field.setValueAttribute(options[:to])
-      end
-
-      def check(value)
-        field = find_field(value, :type => 'checkbox')
-        @page = field.setChecked(true)
-        respond
-      end
-
-      def uncheck(value)
-        field = find_field(value, :type => 'checkbox')
-        @page = field.setChecked(false)
-        respond
-      end
-
-      def choose(value)
-        field = find_field(value, :type => 'radio')
-        @page = field.setChecked(true)
-        respond
-      end
-
-      def select(option, options = {})
-        field = find_select_option(option, options)
-        @page = field.setSelected(true)
-        respond
-      end
-
-      def click_area(area_name)
-        find_area(area_name).click
-      end
-
-      def drag_and_drop(drag, options = {})
-        drag = find_element(drag)
-        drop = find_element(options[:to])
-        drag.mouseDown
-        drop.mouseMove
-        yield(drag, drop) if block_given?
-        @page = drop.mouseUp
+        @page = client.getPage(request.url)
         respond
       end
 
       protected
-
-        def dom
-          # @dom ||=
-          Webrat::XML.xml_document(response.body.join)
-        end
 
         def respond
           @dom = nil
@@ -129,20 +52,3 @@ module Steam
     end
   end
 end
-
-# require "webrat/core/locators/locator"
-#
-# module Webrat
-#   module Locators
-#     class FormLocator < Locator
-#       def locate
-#         Form.load(@session, form_element)
-#       end
-#
-#       def form_element
-#         Webrat::XML.css_at(@dom, "#" + @value)
-#       end
-#     end
-#   end
-# end
-

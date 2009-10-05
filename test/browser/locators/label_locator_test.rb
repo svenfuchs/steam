@@ -24,7 +24,7 @@ class LabelLocatorTest < Test::Unit::TestCase
   end
   
   def test_locates_the_element_with_the_shortest_matching_text_value
-    page = page('<label>foo-bar</a><label>foo</a>')
+    page = page('<label>foo-bar</label><label>foo</label>')
     element = LabelLocator.new(page).locate('foo')
     assert_equal 'foo', element.getTextContent
   end
@@ -40,7 +40,7 @@ class LabelLocatorTest < Test::Unit::TestCase
   end
 
   def test_returns_nil_for_a_non_existing_text
-    page = page('<label>foo</a>')
+    page = page('<label>foo</label>')
     assert_nil LabelLocator.new(page).locate('bogus')
   end
 end
