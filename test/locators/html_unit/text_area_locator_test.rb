@@ -13,35 +13,35 @@ class TextAreaLocatorTest < Test::Unit::TestCase
 
   def test_locates_the_element_with_the_shortest_matching_id_attribute
     page = page('<textarea id="foo-bar"></textarea><textarea id="foo"></textarea>')
-    element = TextAreaLocator.new(page).locate('foo')
+    element = TextAreaLocator.new(page, 'foo').locate
     assert_equal 'foo', element.getIdAttribute
   end
 
   def test_locates_the_element_with_the_shortest_matching_name_attribute
     page = page('<textarea name="foo-bar"></textarea><textarea name="foo"></textarea>')
-    element = TextAreaLocator.new(page).locate('foo')
+    element = TextAreaLocator.new(page, 'foo').locate
     assert_equal 'foo', element.getNameAttribute
   end
 
   def test_locates_the_element_with_the_shortest_matching_title_attribute
     page = page('<textarea title="foo-bar"></textarea><textarea title="foo"></textarea>')
-    element = TextAreaLocator.new(page).locate('foo')
+    element = TextAreaLocator.new(page, 'foo').locate
     assert_equal 'foo', element.getTitleAttribute
   end
   
   def test_returns_nil_for_a_non_existing_id
     page = page('<textarea id="foo"></textarea>')
-    assert_nil TextAreaLocator.new(page).locate('bogus')
+    assert_nil TextAreaLocator.new(page, 'bogus').locate
   end
 
   def test_returns_nil_for_a_non_existing_name
     page = page('<textarea name="foo"></textarea>')
-    assert_nil TextAreaLocator.new(page).locate('bogus')
+    assert_nil TextAreaLocator.new(page, 'bogus').locate
   end
   
   def test_returns_nil_for_a_non_existing_title
     page = page('<textarea title="foo"></textarea>')
-    assert_nil TextAreaLocator.new(page).locate('bogus')
+    assert_nil TextAreaLocator.new(page, 'bogus').locate
   end
 end
 

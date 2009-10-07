@@ -13,35 +13,35 @@ class SelectOptionLocatorTest < Test::Unit::TestCase
 
   def test_locates_the_element_with_the_shortest_matching_id_attribute
     page = page('<select><option id="foo-bar"></option><option id="foo"></option></select>')
-    element = SelectOptionLocator.new(page).locate('foo')
+    element = SelectOptionLocator.new(page, 'foo').locate
     assert_equal 'foo', element.getIdAttribute
   end
   
   def test_locates_the_element_with_the_shortest_matching_value_attribute
     page = page('<select><option value="foo-bar"></option><option value="foo"></option></select>')
-    element = SelectOptionLocator.new(page).locate('foo')
+    element = SelectOptionLocator.new(page, 'foo').locate
     assert_equal 'foo', element.getValueAttribute
   end
   
   def test_locates_the_element_with_the_shortest_matching_text
     page = page('<select><option>foo-bar</option><option>foo</option></select>')
-    element = SelectOptionLocator.new(page).locate('foo')
+    element = SelectOptionLocator.new(page, 'foo').locate
     assert_equal 'foo', element.getTextContent
   end
   
   def test_returns_nil_for_a_non_existing_id
     page = page('<select><option id="foo"></option></select>')
-    assert_nil SelectOptionLocator.new(page).locate('bogus')
+    assert_nil SelectOptionLocator.new(page, 'bogus').locate
   end
   
   def test_returns_nil_for_a_non_existing_name
     page = page('<select><option name="foo"></option></select>')
-    assert_nil SelectOptionLocator.new(page).locate('bogus')
+    assert_nil SelectOptionLocator.new(page, 'bogus').locate
   end
   
   def test_returns_nil_for_a_non_existing_title
     page = page('<select><option title="foo"></option></select>')
-    assert_nil SelectOptionLocator.new(page).locate('bogus')
+    assert_nil SelectOptionLocator.new(page, 'bogus').locate
   end
 end
 

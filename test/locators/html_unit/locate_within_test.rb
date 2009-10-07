@@ -11,9 +11,13 @@ class LocateWithinTest < Test::Unit::TestCase
 
   def test_locates_the_element_within_the_given_scope
     @page = page('<html><body><form name="foo"></form><div id="div"><div><form name="bar"></form></div></div>')
-    form = within('div') do
-      find_form
-    end
+    form = within(:div) { find_form }
+    assert_equal 'bar', form.getNameAttribute
+  end
+
+  def test_finders_evaluate_blocks_within_the_resulting_element
+    @page = page('<html><body><form name="foo"></form><div><div><form name="bar"></form></div></div>')
+    form = find_element(:div) { find_element(:form) }
     assert_equal 'bar', form.getNameAttribute
   end
 end

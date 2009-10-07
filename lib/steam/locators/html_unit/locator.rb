@@ -6,12 +6,13 @@ module Steam
   module Locators
     module HtmlUnit
       class Locator
-        attr_reader :dom, :scope, :attributes
+        attr_reader :dom, :scope, :selector, :attributes
 
         def initialize(dom, *args)
-          @dom = dom
+          @dom        = dom
           @attributes = args.last.is_a?(Hash) ? args.pop : {}
-          @scope = args.shift
+          @selector   = args.pop
+          @scope      = @attributes.delete(:scope)
         end
 
         def matchable_attributes
@@ -26,11 +27,14 @@ module Steam
           end.join('|')
         end
 
-        def locate(selector = nil)
-          return elements[0] unless selector
-
-          selected = elements_with_matching_values(selector)
-          select_by_min_matching_attribute(selected)
+        def locate
+          case selector
+          when String
+            selected = elements_with_matching_values(selector)
+            select_by_min_matching_attribute(selected)
+          else
+            elements.first
+          end
         end
 
         def elements

@@ -7,7 +7,7 @@ module Steam
         end
 
         def xpath
-          "*//*"
+          super(selector.is_a?(Symbol) ? selector : '*')
         end
       end
     end

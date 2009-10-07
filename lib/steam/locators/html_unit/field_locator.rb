@@ -18,17 +18,17 @@ module Steam
           super('input')
         end
 
-        def locate(selector = nil)
+        def locate
           return elements[0] unless selector
 
-          elements = elements_with_matching_values(selector) + labeled_elements(selector)
+          elements = elements_with_matching_values + labeled_elements
           element = select_by_min_matching_attribute(elements)
           element = input_element_for(element) if element && element._classname.include?('HtmlLabel')
           element
         end
 
-        def labeled_elements(selector)
-          LabelLocator.new(dom, scope).elements_with_matching_values(selector)
+        def labeled_elements
+          LabelLocator.new(dom, scope, selector).elements_with_matching_values
         end
 
         def input_element_for(label)

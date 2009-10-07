@@ -28,8 +28,8 @@ module Steam
       super
     end
 
-    def method_missing(method, *args)
-      return browser.send(method, *args) if browser.respond_to?(method)
+    def method_missing(method, *args, &block)
+      return browser.send(method, *args, &block) if browser.respond_to?(method)
       super
     end
 

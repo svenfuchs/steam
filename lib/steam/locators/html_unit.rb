@@ -102,8 +102,8 @@ module Steam
         super
       end
 
-      def method_missing(method, *args)
-        return locate(locators[$1], *args) if method.to_s =~ /^find_(.*)/
+      def method_missing(method, *args, &block)
+        return locate(locators[$1], *args, &block) if method.to_s =~ /^find_(.*)/
         super
       end
 
@@ -115,13 +115,15 @@ module Steam
           end.flatten]
         end
 
-        def locate(type, *args)
-          selector = args.shift
-          options  = args.last.is_a?(Hash) ? args.pop : {}
-          scope    = options.delete(:from) || options.delete(:within)
-          locator  = lambda { type.new(page, current_scope, *args << options).locate(selector) }
+        def locate(type, *args, &block)
+          attributes = args.last.is_a?(Hash) ? args.last : args.push({}).last
+          scope = attributes.delete(:from) || attributes.delete(:within)
+          attributes.update(:scope => current_scope)
 
-          scope ? within(scope) { locator.call } : locator.call
+          locator = lambda { type.new(page, *args).locate }
+          element = scope ? within(scope) { locator.call } : locator.call
+          element = within(element) { yield } if block_given?
+          element
         end
 
         def find_select_option(selector, options = {})
