@@ -13,14 +13,16 @@ module Steam
       def call(env)
         status, headers, response = super
 
-        case response
+        response = case response
         when Rack::File
-          Rack::Response.new(File.read(response.path), status, headers).to_a
+          Rack::Response.new(::File.read(response.path), status, headers).to_a
         when Array
           Rack::Response.new(response.first, status, headers).to_a
         else
           [status, headers, response]
         end
+
+        response
       end
 
       def response_404

@@ -7,9 +7,11 @@ module Steam
   module Browser
     class HtmlUnit
       class Connection
-        attr_reader :connection, :java
+        @@lock = Mutex.new
 
         Java.import('com.gargoylesoftware.htmlunit.MockWebConnection')
+
+        attr_reader :connection, :java
 
         def initialize(connection)
           @connection = connection
@@ -17,9 +19,11 @@ module Steam
         end
 
         def getResponse(request)
+          @@lock.lock
+          # puts 'locked: ' + request.getUrl.toString
+          
           # FIXME preserve original scheme, host + port
           env = Request.env_for(request.getUrl.toString, :method => request.getHttpMethod.toString)
-
           status, headers, response = connection.call(env)
           set_response(request.getUrl, response)
           java.getResponse(request)
@@ -27,6 +31,9 @@ module Steam
           puts "#{e.class.name}: #{e.message}"
           e.backtrace.each { |line| puts line }
           exit # FIXME
+        ensure
+          @@lock.unlock
+          # puts 'unlocked: ' + request.getUrl.toString
         end
 
         def set_response(url, response)

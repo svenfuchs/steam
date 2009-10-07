@@ -1,5 +1,7 @@
 module Steam
   class Session
+    autoload :Rails, 'steam/session/rails'
+
     # cattr_accessor :host
 
     attr_accessor :id, :browser
@@ -27,7 +29,8 @@ module Steam
     end
 
     def method_missing(method, *args)
-      browser.send(method, *args) if browser.respond_to?(method)
+      return browser.send(method, *args) if browser.respond_to?(method)
+      super
     end
 
     # def redirect?

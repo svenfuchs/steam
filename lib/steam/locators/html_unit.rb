@@ -103,8 +103,8 @@ module Steam
       end
 
       def method_missing(method, *args)
-        return super unless method.to_s =~ /^find_(.*)/
-        locate(locators[$1], *args)
+        return locate(locators[$1], *args) if method.to_s =~ /^find_(.*)/
+        super
       end
 
       protected
