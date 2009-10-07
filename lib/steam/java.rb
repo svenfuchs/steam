@@ -31,7 +31,7 @@ module Steam
 
         def set_classpath!
           path = File.expand_path(File.dirname(__FILE__) + "/../htmlunit/")
-          Rjb::load(Dir["#{path}/*.jar"].join(':'))
+          Rjb::load(Dir["#{path}/*.jar"].join(':'), ['-Xmx512M'])
         end
     end
   end

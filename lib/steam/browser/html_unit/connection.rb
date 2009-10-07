@@ -1,6 +1,7 @@
 # For internal use in Browser::HtmlUnit to hook into HtmlUnit's request process.
 # Does not support the Rack interface because HtmlUnit doesn't.
 
+require 'thread'
 require 'rack/utils'
 
 module Steam
@@ -19,7 +20,7 @@ module Steam
         end
 
         def getResponse(request)
-          @@lock.lock
+          # @@lock.lock
           # puts 'locked: ' + request.getUrl.toString
           
           # FIXME preserve original scheme, host + port
@@ -32,7 +33,7 @@ module Steam
           e.backtrace.each { |line| puts line }
           exit # FIXME
         ensure
-          @@lock.unlock
+          # @@lock.unlock
           # puts 'unlocked: ' + request.getUrl.toString
         end
 
