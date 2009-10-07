@@ -1,1 +1,2 @@
 *.log
+fixtures/rails/log/**/*.log
