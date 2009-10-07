@@ -1,6 +1,3 @@
-require 'rubygems'
-require 'core_ext/ruby/kernel/silence_warnings'
-
 module Steam
   module Browser
     class HtmlUnit
@@ -9,6 +6,7 @@ module Steam
       autoload :Connection, 'steam/browser/html_unit/connection'
 
       include Locators::HtmlUnit
+      include Matchers::HtmlUnit
       
       attr_accessor :client, :page, :connection, :request, :response
 

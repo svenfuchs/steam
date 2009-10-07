@@ -22,7 +22,8 @@ module Steam
         def getResponse(request)
           # @@lock.lock
           # puts 'locked: ' + request.getUrl.toString
-          
+          # p "requested: " + request.getUrl.toString
+
           # FIXME preserve original scheme, host + port
           env = Request.env_for(request.getUrl.toString, :method => request.getHttpMethod.toString)
           status, headers, response = connection.call(env)
