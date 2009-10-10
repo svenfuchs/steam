@@ -1,3 +1,6 @@
+require 'drb'
+require 'steam/java'
+
 module Steam
   module Browser
     class HtmlUnit
@@ -8,30 +11,34 @@ module Steam
         
         Java.import 'com.gargoylesoftware.htmlunit.WebClient'
         Java.import('com.gargoylesoftware.htmlunit.BrowserVersion')
-        
-        attr_reader :client
+        Java.import('com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException')
+
+        attr_reader :java, :page
 
         def initialize(connection = nil, options = {})
           options = { :css => true, :javascript => true }.merge(options)
 
-          @client = Java::WebClient.new(Java::BrowserVersion.FIREFOX_3)
-          @client.setCssEnabled(options[:css])
-          @client.setJavaScriptEnabled(options[:javascript])
-          @client.setPrintContentOnFailingStatusCode(false)
-          @client.setThrowExceptionOnFailingStatusCode(false)
+          @java = Java::WebClient.new(Java::BrowserVersion.FIREFOX_3)
+          @java.setCssEnabled(options[:css])
+          @java.setJavaScriptEnabled(options[:javascript])
+          @java.setPrintContentOnFailingStatusCode(false)
+          # @java.setThrowExceptionOnFailingStatusCode(false)
 
           listener = Rjb::bind(SilencingListener.new, 'com.gargoylesoftware.htmlunit.IncorrectnessListener')
-          @client.setIncorrectnessListener(listener)
+          @java.setIncorrectnessListener(listener)
 
           if connection
-            Rjb::bind(Connection.new(connection), 'com.gargoylesoftware.htmlunit.WebConnection')
-            @client.setWebConnection(connection)
+            connection = Rjb::bind(Connection.new(connection), 'com.gargoylesoftware.htmlunit.WebConnection')
+            @java.setWebConnection(connection)
           end
         end
         
         def request(*args)
-          page = Page.new(@client.getPage(*args))
-          [page, Rack::Response.new(page.body, page.status, page.headers)]
+          @page = Page.new(@java.getPage(*args)) # TODO use WebRequestSettings
+          Rack::Response.new(page.body, page.status, page.headers).to_a
+        rescue Exception => e
+          puts e
+          Rack::Response.new('', 404).to_a
         end
       end
     end

@@ -11,6 +11,10 @@ module Steam
         @@lock = Mutex.new
 
         Java.import('com.gargoylesoftware.htmlunit.MockWebConnection')
+        # Java.import('java.lang.String')
+        # Java.import('com.gargoylesoftware.htmlunit.WebRequestSettings')
+        # Java.import('com.gargoylesoftware.htmlunit.WebResponseData')
+        # Java.import('com.gargoylesoftware.htmlunit.WebResponseImpl')
 
         attr_reader :connection, :java
 
@@ -20,7 +24,7 @@ module Steam
         end
 
         def getResponse(request)
-          @@lock.synchronize do
+          # @@lock.synchronize do
             # puts 'locked: ' + request.getUrl.toString
             # puts "requested: " + request.getUrl.toString
 
@@ -32,13 +36,27 @@ module Steam
             status, headers, response = connection.call(env)
             response.body.close if response.body.respond_to?(:close)
 
+            # settings = Java::WebRequestSettings.new(request.getUrl) # method etc
+            # 
+            # body    = response.body.join
+            # status  = response.status
+            # message = Rack::Utils::HTTP_STATUS_CODES[status.to_i]
+            # headers = response.header.map { |key, value| Java::NameValuePair.new(key, value) }
+            # headers = Java::Arrays.asList(headers)
+            # content_type = response.content_type
+            # 
+            # signature = '[B;int;java.lang.String;java.util.List;'
+            # signature = 'java.io.InputStream;int;java.lang.String;java.util.List;'
+            # response_data = Java::WebResponseData.new_with_sig(signature, body, status, message, headers)
+            # Java::WebResponseImpl.new(response.body.join, request.getUrl)
+            
             set_response(request.getUrl, response)
             java.getResponse(request)
-          end
+          # end
         rescue Exception => e
           puts "#{e.class.name}: #{e.message}"
           e.backtrace.each { |line| puts line }
-          exit # FIXME
+          # exit # FIXME
         ensure
           # @@lock.unlock
           # puts 'unlocked: ' + request.getUrl.toString
