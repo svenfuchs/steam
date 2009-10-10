@@ -24,14 +24,15 @@ module Steam
         
         def import_common!
           import('java.net.URL', :Url)
+          import('java.lang.System', :System)
           import('java.util.Arrays', :Arrays)
-          import('org.apache.commons.httpclient.NameValuePair', :NameValuePair)
           import('java.util.ArrayList', :ArrayList)
+          import('org.apache.commons.httpclient.NameValuePair', :NameValuePair)
         end
 
         def set_classpath!
           path = File.expand_path(File.dirname(__FILE__) + "/../htmlunit/")
-          Rjb::load(Dir["#{path}/*.jar"].join(':'), ['-Xmx512M'])
+          Rjb::load(Dir["#{path}/*.jar"].join(':'), ['-Xmx2048M'])
         end
     end
   end

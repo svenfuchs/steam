@@ -6,23 +6,29 @@ class ElementLocatorTest < Test::Unit::TestCase
   include TestHelper
   
   def test_locates_the_first_element_matching_the_node_type_given_as_a_symbol
-    page = page('<html><head></head><body><p class="foo-bar"></p><p class="foo"></p></html>')
-    element = ElementLocator.new(page, :p).locate
-    assert_equal 'foo-bar', element.getClassAttribute
+    page = page('<p class="class" foo="bar"></p><p class="class" foo="baz"></p>')
+    element = ElementLocator.new(page, :class => 'class', :'foo' => "baz").locate
+    assert_equal 'baz', element.getAttribute('foo')
   end
   
-  def test_locates_the_first_element_matching_the_given_class
-    page = page('<html><head></head><body><p class="foo-bar"></p><p class="foo"></p></html>')
-    element = ElementLocator.new(page, :class => 'foo').locate
-    assert_equal 'foo', element.getClassAttribute
-  end
-  
-  def test_locates_the_first_element_matching_the_given_attributes
-    page = page('<html><head></head><body><p class="foo-bar"></p><p class="foo" data-foo="bar"></p></html>')
-    element = ElementLocator.new(page, :class => 'foo', :'data-foo' => 'bar').locate
-    assert_equal 'bar', element.getAttribute('data-foo')
-  end
-  
+  # def test_locates_the_first_element_matching_the_node_type_given_as_a_symbol
+  #   page = page('<html><head></head><body><p class="foo-bar"></p><p class="foo"></p></html>')
+  #   element = ElementLocator.new(page, :p).locate
+  #   assert_equal 'foo-bar', element.getClassAttribute
+  # end
+  # 
+  # def test_locates_the_first_element_matching_the_given_class
+  #   page = page('<html><head></head><body><p class="foo-bar"></p><p class="foo"></p></html>')
+  #   element = ElementLocator.new(page, :class => 'foo').locate
+  #   assert_equal 'foo', element.getClassAttribute
+  # end
+  # 
+  # def test_locates_the_first_element_matching_the_given_attributes
+  #   page = page('<html><head></head><body><p class="foo-bar"></p><p class="foo" data-foo="bar"></p></html>')
+  #   element = ElementLocator.new(page, :class => 'foo', :'data-foo' => 'bar').locate
+  #   assert_equal 'bar', element.getAttribute('data-foo')
+  # end
+  # 
   # def test_locates_the_first_element_when_no_value_given
   #   page = page('<html><head></head><body><p id="foo-bar"></p><p id="foo"></p></html>')
   #   element = ElementLocator.new(page).locate

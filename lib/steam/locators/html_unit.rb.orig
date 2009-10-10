@@ -141,7 +141,11 @@ module Steam
 
           locator = lambda { type.new(page, *args).locate }
           element = scope ? within(scope) { locator.call } : locator.call
+<<<<<<< HEAD
           element = within(element) { yield(element) } if element && block_given?
+=======
+          element = within(element) { yield(element) } if block_given?
+>>>>>>> 321ce1761bdffcb34a97f08847580798f1412fbb
           element
         end
 

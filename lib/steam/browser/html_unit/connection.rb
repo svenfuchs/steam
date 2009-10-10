@@ -20,15 +20,21 @@ module Steam
         end
 
         def getResponse(request)
-          # @@lock.lock
-          # puts 'locked: ' + request.getUrl.toString
-          # p "requested: " + request.getUrl.toString
+          @@lock.synchronize do
+            # puts 'locked: ' + request.getUrl.toString
+            # puts "requested: " + request.getUrl.toString
 
-          # FIXME preserve original scheme, host + port
-          env = Request.env_for(request.getUrl.toString, :method => request.getHttpMethod.toString)
-          status, headers, response = connection.call(env)
-          set_response(request.getUrl, response)
-          java.getResponse(request)
+            # FIXME preserve original scheme, host + port
+            url = request.getUrl.toString.dup
+            method = request.getHttpMethod.toString.dup
+            env = Request.env_for(url, :method => method)
+
+            status, headers, response = connection.call(env)
+            response.body.close if response.body.respond_to?(:close)
+
+            set_response(request.getUrl, response)
+            java.getResponse(request)
+          end
         rescue Exception => e
           puts "#{e.class.name}: #{e.message}"
           e.backtrace.each { |line| puts line }

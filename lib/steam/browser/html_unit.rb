@@ -10,7 +10,7 @@ module Steam
       
       attr_accessor :client, :page, :connection, :request, :response
 
-      def initialize(connection, options = {})
+      def initialize(connection = nil, options = {})
         @client = Client.new(connection, options)
       end
       

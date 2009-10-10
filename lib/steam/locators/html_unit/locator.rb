@@ -20,11 +20,14 @@ module Steam
         end
 
         def xpath(type)
-          return "#{scope}//#{type}" if attributes.empty?
+          "#{scope}//#{type}" + attributes.map do |name, value| 
+            "[contains(@#{name}, \"#{value}\")]"
+          end.join
 
-          attributes.map do |name, values|
-            Array(values).map { |value| %(#{scope}//#{type}[@#{name}="#{value}"]) }
-          end.join('|')
+          # return "#{scope}//#{type}" if attributes.empty?
+          # attributes.map do |name, values|
+          #   Array(values).map { |value| %(#{scope}//#{type}[@#{name}="#{value}"]) }
+          # end.join('|')
         end
 
         def locate
