@@ -1,6 +1,5 @@
 require 'uri'
 require 'patron'
-require 'steam/utils'
 
 module Steam
   module Connection

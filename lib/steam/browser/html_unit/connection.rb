@@ -24,7 +24,7 @@ module Steam
         end
 
         def getResponse(request)
-          # @@lock.synchronize do
+          @@lock.synchronize do
             # puts 'locked: ' + request.getUrl.toString
             # puts "requested: " + request.getUrl.toString
 
@@ -52,7 +52,7 @@ module Steam
             
             set_response(request.getUrl, response)
             java.getResponse(request)
-          # end
+          end
         rescue Exception => e
           puts "#{e.class.name}: #{e.message}"
           e.backtrace.each { |line| puts line }

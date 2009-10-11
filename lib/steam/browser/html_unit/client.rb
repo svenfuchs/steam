@@ -9,9 +9,11 @@ module Steam
           def notify(message, origin); end
         end
         
+        include Locators::HtmlUnit
+
         Java.import 'com.gargoylesoftware.htmlunit.WebClient'
-        Java.import('com.gargoylesoftware.htmlunit.BrowserVersion')
-        Java.import('com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException')
+        Java.import 'com.gargoylesoftware.htmlunit.BrowserVersion'
+        Java.import 'com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException'
 
         attr_reader :java, :page
 

@@ -150,6 +150,17 @@ module Steam
           select = find_select(from)
           within(select) { locate(SelectOptionLocator, selector, options) }
         end
+ 
+        def respond
+          @dom = nil
+          status = @page.getWebResponse.getStatusCode
+          headers = @page.getWebResponse.getResponseHeaders.toArray.inject({}) do |headers, pair|
+            headers[pair.name] = pair.value
+            headers
+          end
+          @response = Rack::Response.new(@page.asXml, status, headers)
+          @response.to_a
+        end
     end
   end
 end

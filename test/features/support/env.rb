@@ -16,7 +16,7 @@ Spork.prefork do
   rails  = Steam::Connection::Rails.new
   
   connection = Rack::Cascade.new([static, rails])
-  server = Steam::Browser::HtmlUnit::Drb::Service.daemonize(connection)
+  Steam::Browser::HtmlUnit::Drb::Service.daemonize(connection)
   sleep(0.25)
 
   World do

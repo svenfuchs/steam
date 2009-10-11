@@ -18,5 +18,5 @@ methods.each do |method|
 end
 
 signature = '[B'
-klass.new_with_sig(klass.new("foo"))
+p klass.new_with_sig(signature, "foo".split(/./))
 # String(byte[] bytes)

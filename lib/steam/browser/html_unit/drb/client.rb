@@ -7,11 +7,11 @@ module Steam
         class Client
           def initialize
             DRb.start_service
-            @browser = DRbObject.new(nil, 'druby://localhost:9000')
+            @browser = DRbObject.new(nil, Service.uri)
           end
           
           def method_missing(method, *args, &block)
-            return @browser.send(method, *args, &block) if @browser.respond_to?(method)
+            return @browser.send(method, *args, &block) # if @browser.respond_to?(method)
           end
         end
       end

@@ -20,20 +20,30 @@ module Steam
         end
 
         def xpath(type)
-          "#{scope}//#{type}" + attributes.map do |name, value| 
-            "[contains(@#{name}, \"#{value}\")]"
-          end.join
+          attribute_pairs.map { |pair| "#{scope}//#{type}" + pair }.join('|')
+        end
+        
+        def attribute_pairs
+          arrays = attributes.select { |name, value| value.is_a?(Array) }
+          values = attributes.select { |name, value| !value.is_a?(Array) }
 
-          # return "#{scope}//#{type}" if attributes.empty?
-          # attributes.map do |name, values|
-          #   Array(values).map { |value| %(#{scope}//#{type}[@#{name}="#{value}"]) }
-          # end.join('|')
+          pairs = values.empty? ? '' : values.inject('') do |pairs, (name, value)|
+            pairs << "[contains(@#{name}, \"#{value}\")]"
+          end
+          pairs = [pairs]
+
+          arrays.inject(pairs) do |pairs, (name, values)|
+            values.inject(pairs) do |pairs, (name, value)|
+              # pairs << "[contains(@#{name}, \"#{value}\")]"
+              pairs.map! { |pair| pair << "[contains(@#{name}, \"#{value}\")]" }
+            end
+          end
         end
 
         def locate
           case selector
           when String
-            selected = elements_with_matching_values(selector)
+            selected = elements_with_matching_values
             select_by_min_matching_attribute(selected)
           else
             elements.first
@@ -62,7 +72,7 @@ module Steam
           lft.isAncestorOf(rgt) && 1 || rgt.isAncestorOf(lft) && -1
         end
 
-        def elements_with_matching_values(selector)
+        def elements_with_matching_values
           elements.map do |element|
             values  = matchable_values(element)
             matcher = regexp(selector)

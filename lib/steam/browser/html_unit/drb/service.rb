@@ -7,7 +7,7 @@ module Steam
         module Service
           class << self
             def uri
-              'druby://localhost:9000'
+              'druby://127.0.0.1:9000'
             end
 
             def daemonize(connection = nil, options = {})
@@ -16,6 +16,7 @@ module Steam
             
             def start(connection = nil, options = {})
               DRb.start_service(uri, HtmlUnit::Client.new(connection, options))
+              puts "Browser ready and listening at #{uri}"
               DRb.thread.join
             end
           end
