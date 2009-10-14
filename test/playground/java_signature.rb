@@ -6,7 +6,7 @@ Rjb::load(class_path)
 
 
 klass = Rjb::import('java.lang.String')
-# klass = Rjb::import('com.gargoylesoftware.htmlunit.WebResponseData')
+klass = Rjb::import('com.gargoylesoftware.htmlunit.WebResponseData')
 
 # methods = klass.getDeclaredMethods
 methods = klass.getConstructors

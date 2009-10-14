@@ -25,7 +25,6 @@ module Steam
         responses(method)[url] || Rack::Response.new('', 404)
       end
       
-      # FIXME allow lambdas and lazy-eval the response
       def mock(method, url, response, headers = {})
         responses(method)[url] = case response
           when Rack::Response

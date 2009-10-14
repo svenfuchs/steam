@@ -23,7 +23,7 @@ module Steam
           @java = Java::WebClient.new(Java::BrowserVersion.FIREFOX_3)
           @java.setCssEnabled(options[:css])
           @java.setJavaScriptEnabled(options[:javascript])
-          @java.setPrintContentOnFailingStatusCode(false)
+          # @java.setPrintContentOnFailingStatusCode(false)
           # @java.setThrowExceptionOnFailingStatusCode(false)
 
           listener = Rjb::bind(SilencingListener.new, 'com.gargoylesoftware.htmlunit.IncorrectnessListener')
@@ -38,9 +38,12 @@ module Steam
         def request(*args)
           @page = Page.new(@java.getPage(*args)) # TODO use WebRequestSettings
           Rack::Response.new(page.body, page.status, page.headers).to_a
-        rescue Exception => e
-          puts e
-          Rack::Response.new('', 404).to_a
+        # rescue Exception => e
+        #   puts e.message
+        #   e.backtrace.each { |line| puts line }
+        #   nil
+        # rescue Exception => e
+        #   Rack::Response.new('', 404).to_a
         end
       end
     end
