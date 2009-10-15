@@ -1,15 +1,18 @@
 module Steam
   module Browser
     class HtmlUnit
+      autoload :Actions,     'steam/browser/html_unit/actions'
       autoload :Drb,         'steam/browser/html_unit/drb'
       autoload :Page,        'steam/browser/html_unit/page'
       autoload :Client,      'steam/browser/html_unit/client'
       autoload :Connection,  'steam/browser/html_unit/connection'
       autoload :WebResponse, 'steam/browser/html_unit/web_response'
-
+      
+      include Actions
+      include Locators
       include Matchers::HtmlUnit
 
-      attr_accessor :client, :connection, :request, :response
+      attr_accessor :client, :page, :connection, :request, :response
 
       def initialize(*args)
         options = args.last.is_a?(Hash) ? args.pop : {}
@@ -17,9 +20,9 @@ module Steam
 
         @client = options[:drb] ? Drb::Client.new : Client.new(connection, options)
       end
-
-      def page
-        client.page # TODO remove dependency?
+    
+      def html
+        response.body.join
       end
 
       def request(url)
@@ -30,18 +33,26 @@ module Steam
       def call(env)
         @dom = nil
         @request = Rack::Request.new(env)
-        client.request(@request.url)
+        @page = client.request(@request.url)
+        respond!
       end
 
-      def respond_to?(method)
-        return true if client.respond_to?(method)
-        super
-      end
-
-      def method_missing(method, *args, &block)
-        return client.send(method, *args, &block) # if client.respond_to?(method)
-        super
-      end
+      protected
+      
+        def respond!
+          body    = @page.asXml
+          status  = @page.getWebResponse.getStatusCode
+          headers = @page.getWebResponse.getResponseHeaders.toArray.inject({}) do |headers, pair|
+            headers[pair.name] = pair.value
+            headers
+          end
+          @response = Rack::Response.new(body, status, headers)
+          @response.to_a
+        # rescue Exception => e
+        #   puts e.message
+        #   e.backtrace.each { |line| puts line }
+        #   nil
+        end
     end
   end
 end

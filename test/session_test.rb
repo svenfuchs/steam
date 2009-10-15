@@ -15,6 +15,6 @@ class SessionTest < Test::Unit::TestCase
   end
 
   def test_session_responds_to_dynamic_locator_methods
-    assert @session.respond_to?(:find_element)
+    assert @session.respond_to?(:locate_element)
   end
 end

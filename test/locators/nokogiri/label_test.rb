@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
-class HtmlUnitLocatorLabelTest < HtmlUnitLocatorTest
+class NokogiriLocatorLabelTest < NokogiriLocatorTest
 
   def test_locates_the_first_element_when_no_value_given
     dom = dom('<label id="foo-bar"></label><label id="foo"></label>')

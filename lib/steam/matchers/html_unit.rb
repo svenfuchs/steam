@@ -8,7 +8,7 @@ module Steam
 
         def matches?(target)
           @target = target
-          !!@target.find_element(@content)
+          !!@target.locate_element(@content)
         end
 
         def failure_message

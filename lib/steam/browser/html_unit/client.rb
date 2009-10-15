@@ -9,14 +9,11 @@ module Steam
           def notify(message, origin); end
         end
         
-        include Locators::HtmlUnit
-
         Java.import 'com.gargoylesoftware.htmlunit.WebClient'
         Java.import 'com.gargoylesoftware.htmlunit.BrowserVersion'
-        Java.import 'com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException'
-
-        attr_reader :java, :page
-
+        Java.import 'com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController'
+        # Java.import 'com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException'
+        
         def initialize(connection = nil, options = {})
           options = { :css => true, :javascript => true }.merge(options)
 
@@ -29,6 +26,9 @@ module Steam
           listener = Rjb::bind(SilencingListener.new, 'com.gargoylesoftware.htmlunit.IncorrectnessListener')
           @java.setIncorrectnessListener(listener)
 
+          controller = Java::NicelyResynchronizingAjaxController.new
+          @java.setAjaxController(controller)
+
           if connection
             connection = Rjb::bind(Connection.new(connection), 'com.gargoylesoftware.htmlunit.WebConnection')
             @java.setWebConnection(connection)
@@ -36,14 +36,7 @@ module Steam
         end
         
         def request(*args)
-          @page = Page.new(@java.getPage(*args)) # TODO use WebRequestSettings
-          Rack::Response.new(page.body, page.status, page.headers).to_a
-        # rescue Exception => e
-        #   puts e.message
-        #   e.backtrace.each { |line| puts line }
-        #   nil
-        # rescue Exception => e
-        #   Rack::Response.new('', 404).to_a
+          @java.getPage(*args) # TODO use WebRequestSettings
         end
       end
     end

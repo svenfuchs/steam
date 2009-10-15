@@ -1,7 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
-class HtmlUnitLocatorAreaTest < HtmlUnitLocatorTest
-
+class NokogiriLocatorAreaTest < NokogiriLocatorTest
   def test_locates_the_first_element_when_no_value_given
     dom = dom('<area id="foo-bar" /><area id="foo" />')
     element = Locators::Area.new(dom).locate

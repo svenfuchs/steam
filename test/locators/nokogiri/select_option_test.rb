@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
-class HtmlUnitLocatorSelectOptionTest < HtmlUnitLocatorTest
+class NokogiriLocatorSelectOptionTest < NokogiriLocatorTest
 
   def test_locates_the_first_element_when_no_value_given
     dom = dom('<select><option id="foo-bar"></option><option id="foo"></option></select>')

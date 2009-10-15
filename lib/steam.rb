@@ -2,8 +2,9 @@ require 'rubygems'
 require 'rack'
 
 module Steam
-  autoload :Connection, 'steam/connection'
   autoload :Browser,    'steam/browser'
+  autoload :Connection, 'steam/connection'
+  autoload :Dom,        'steam/dom'
   autoload :Forker,     'steam/forker'
   autoload :Java,       'steam/java'
   autoload :Locators,   'steam/locators'
