@@ -4,7 +4,7 @@
 #     @app.call(env)
 #   end
 # end
-# 
+#
 # ActionController::Dispatcher.middleware.instance_eval do
 #   use Steam::Reloader
 # end

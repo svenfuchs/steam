@@ -20,7 +20,7 @@ module Steam
         end
 
         def squeeze_space(inner_text)
-          inner_text.gsub(/^\s*$/, "").squeeze("\n")
+          (inner_text || '').gsub(/^\s*$/, "").squeeze("\n")
         end
 
         def content_message

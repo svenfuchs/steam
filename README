@@ -1,0 +1,6 @@
+
+Installing RJB on Mac OS X:
+
+http://www.elctech.com/articles/sudo-java_home-and-mac-os-x
+
+The visudo way worked for me. Don't forget to add yourself to the sudoers file though.

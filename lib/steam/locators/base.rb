@@ -13,6 +13,10 @@ module Steam
         @attributes = args.last.is_a?(Hash) ? args.pop : {}
         @selector   = args.pop
         @scope      = @attributes.delete(:scope)
+
+        # for some reason, when we don't scope to //body, nokogiri crashes
+        # with an "invalid memory access to location 0x0" error
+        @scope ||= '//body'
       end
 
       def matchable_attributes
@@ -40,7 +44,7 @@ module Steam
 
       def locate
         case selector
-        when String
+        when String, Regexp
           selected = elements_with_matching_values
           select_by_min_matching_attribute(selected)
         else

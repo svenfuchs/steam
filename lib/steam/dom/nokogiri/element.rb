@@ -11,6 +11,10 @@ module Steam
         def xpath
           @element.path.to_s
         end
+        
+        def css_path
+          @element.css_path.to_s
+        end
 
         def inner_html
           @element.inner_html
