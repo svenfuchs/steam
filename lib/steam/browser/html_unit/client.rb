@@ -8,12 +8,12 @@ module Steam
         class SilencingListener
           def notify(message, origin); end
         end
-        
+
         Java.import 'com.gargoylesoftware.htmlunit.WebClient'
         Java.import 'com.gargoylesoftware.htmlunit.BrowserVersion'
         Java.import 'com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController'
         # Java.import 'com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException'
-        
+
         def initialize(connection = nil, options = {})
           options = { :css => true, :javascript => true }.merge(options)
 
@@ -34,9 +34,13 @@ module Steam
             @java.setWebConnection(connection)
           end
         end
-        
+
         def request(*args)
           @java.getPage(*args) # TODO use WebRequestSettings
+        end
+
+        def method_missing(method, *args)
+          @java.send(method, *args)
         end
       end
     end

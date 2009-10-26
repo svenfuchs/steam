@@ -7,7 +7,7 @@ module Steam
       autoload :Client,      'steam/browser/html_unit/client'
       autoload :Connection,  'steam/browser/html_unit/connection'
       autoload :WebResponse, 'steam/browser/html_unit/web_response'
-      
+
       include Actions
       include Locators
       include Matchers::HtmlUnit
@@ -20,7 +20,7 @@ module Steam
 
         @client = options[:drb] ? Drb::Client.new : Client.new(connection, options)
       end
-    
+
       def html
         response.body.join
       end
@@ -37,9 +37,15 @@ module Steam
         respond!
       end
 
+      def execute(javascript)
+        @page.executeJavaScript(javascript)
+      end
+
       protected
-      
+
         def respond!
+          @client.waitForBackgroundJavaScript(5000) # FIXME should probably use some block syntax
+
           body    = @page.asXml
           status  = @page.getWebResponse.getStatusCode
           headers = @page.getWebResponse.getResponseHeaders.toArray.inject({}) do |headers, pair|
