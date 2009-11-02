@@ -64,6 +64,24 @@ class HtmlUnitTest < Test::Unit::TestCase
     assert_match %r(<title>\s*FOO\s*<\/title>), @response.body.join
   end
 
+  def test_click_on_clicks_a_link
+    perform :get, 'http://localhost:3000/', html
+
+    assert_response_contains('LINK') do
+      @mock.mock :get, 'http://localhost:3000/link', 'LINK'
+      @browser.click_on('link')
+    end
+  end
+
+  def test_click_on_clicks_a_button
+    perform :get, 'http://localhost:3000/', html(:field)
+
+    assert_response_contains('FORM') do
+      @mock.mock :get, 'http://localhost:3000/form?field=', 'FORM'
+      @browser.click_on('button')
+    end
+  end
+
   def test_click_link
     perform :get, 'http://localhost:3000/', html(:foo)
 
@@ -75,45 +93,45 @@ class HtmlUnitTest < Test::Unit::TestCase
 
   def test_click_button
     perform :get, 'http://localhost:3000/', html(:field)
-  
+
     assert_response_contains('FORM') do
       @mock.mock :get, 'http://localhost:3000/form?field=', 'FORM'
       @browser.click_button('button')
     end
   end
-  
+
   def test_submit_form
     perform :get, 'http://localhost:3000/', html(:field)
-  
+
     assert_response_contains('FORM') do
       @mock.mock :get, 'http://localhost:3000/form?field=', 'FORM'
       @browser.submit_form('form')
     end
   end
-  
+
   def test_fill_in
     perform :get, 'http://localhost:3000/', html(:field)
-  
+
     assert_response_contains('FIELD') do
       @mock.mock :get, 'http://localhost:3000/form?field=field', 'FIELD'
       @browser.fill_in('field', :with => 'field')
       @browser.submit_form('form')
     end
   end
-  
+
   def test_check
     perform :get, 'http://localhost:3000/', html(:checkbox)
-  
+
     assert_response_contains('CHECKED') do
       @mock.mock :get, 'http://localhost:3000/form?checkbox=1', 'CHECKED'
       @browser.check('checkbox')
       @browser.submit_form('form')
     end
   end
-  
+
   def test_uncheck
     perform :get, 'http://localhost:3000/', html(:checkbox)
-  
+
     assert_response_contains('FORM') do
       @mock.mock :get, 'http://localhost:3000/form', 'FORM'
       @browser.check('checkbox')
@@ -121,27 +139,27 @@ class HtmlUnitTest < Test::Unit::TestCase
       @browser.submit_form('form')
     end
   end
-  
+
   def test_choose
     perform :get, 'http://localhost:3000/', html(:radio)
-  
+
     assert_response_contains('RADIO') do
       @mock.mock :get, 'http://localhost:3000/form?radio=radio', 'RADIO'
       @browser.choose('radio')
       @browser.submit_form('form')
     end
   end
-  
+
   def test_select
     perform :get, 'http://localhost:3000/', html(:select)
-  
+
     assert_response_contains('SELECT') do
       @mock.mock :get, 'http://localhost:3000/form?select=foo', 'SELECT'
       @browser.select('foo', :from => 'select')
       @browser.submit_form('form')
     end
   end
-  
+
   def test_drag_and_drop
     perform :get, 'http://localhost:3000/', html(:drag)
     # @browser.drag_and_drop('link', :to => 'form')
