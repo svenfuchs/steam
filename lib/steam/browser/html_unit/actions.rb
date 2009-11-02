@@ -88,6 +88,13 @@ module Steam
           @page = element.mouseUp
           respond!
         end
+
+        def hover(element)
+          element = locate_element(element) unless element.respond_to?(:xpath)
+          element = page.getFirstByXPath(element.xpath)
+          element.mouseOver
+          respond!
+        end
       end
     end
   end

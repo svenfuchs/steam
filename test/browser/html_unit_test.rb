@@ -21,6 +21,11 @@ class HtmlUnitTest < Test::Unit::TestCase
         fields << '<select name="select"><option value=""></option><option value="foo">foo</option></select>'
       when :foo
         scripts << '<script src="/javascripts/foo.js" type="text/javascript"></script>'
+      when :hover
+        fields  << '<p id="hoverable">not hovered</p>'
+        scripts << '<script src="/javascripts/jquery.js" type="text/javascript"></script>' \
+                << '<script src="/javascripts/jquery-ui.js" type="text/javascript"></script>' \
+                << '<script src="/javascripts/hover.js" type="text/javascript"></script>'
       when :drag
         scripts << '<script src="/javascripts/jquery.js" type="text/javascript"></script>' \
                 << '<script src="/javascripts/jquery-ui.js" type="text/javascript"></script>' \
@@ -173,5 +178,12 @@ class HtmlUnitTest < Test::Unit::TestCase
 
     @browser.drag('link', :to => 'form')
     assert_equal 'DROPPED!', @browser.page.getTitleText
+  end
+
+  def test_hover
+    perform :get, 'http://localhost:3000/', html(:hover)
+
+    @browser.hover('hoverable')
+    assert_equal 'HOVERED!', @browser.page.getTitleText
   end
 end
