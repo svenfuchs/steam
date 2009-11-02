@@ -190,4 +190,14 @@ class HtmlUnitElementsTest < Test::Unit::TestCase
     @browser.drop(drop_element)
     assert_equal 'DROPPED!', @browser.page.getTitleText
   end
+
+  def test_drag_and_drop_single_statement
+    perform :get, 'http://localhost:3000/', html(:drag)
+
+    drag_element = @browser.locate_element('link')
+    drop_element = @browser.locate_element('form')
+
+    @browser.drag(drag_element, :to => drop_element)
+    assert_equal 'DROPPED!', @browser.page.getTitleText
+  end
 end

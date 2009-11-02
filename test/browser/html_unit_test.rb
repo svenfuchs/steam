@@ -162,9 +162,16 @@ class HtmlUnitTest < Test::Unit::TestCase
 
   def test_drag_and_drop
     perform :get, 'http://localhost:3000/', html(:drag)
-    # @browser.drag_and_drop('link', :to => 'form')
+
     @browser.drag('link')
     @browser.drop('form')
+    assert_equal 'DROPPED!', @browser.page.getTitleText
+  end
+
+  def test_drag_and_drop_single_statement
+    perform :get, 'http://localhost:3000/', html(:drag)
+
+    @browser.drag('link', :to => 'form')
     assert_equal 'DROPPED!', @browser.page.getTitleText
   end
 end

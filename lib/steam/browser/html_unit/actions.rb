@@ -73,18 +73,18 @@ module Steam
         def drag(element, options = {})
           element = locate_element(element) unless element.respond_to?(:xpath)
           @page = page.getFirstByXPath(element.xpath).mouseDown
-          if @_drop_target = options.values_at(:onto, :over, :target).compact.first
-            @page = page.getFirstByXPath(@_drop_target.xpath).mouseMove
+
+          if drop_target = options.values_at(:to, :onto, :over, :target).compact.first
+            drop(drop_target)
+          else
+            respond!
           end
-          respond!
         end
 
-        def drop(element = nil)
-          if element ||= @_drop_target
-            element = locate_element(element) unless element.respond_to?(:xpath)
-            element = page.getFirstByXPath(element.xpath)
-            element.mouseMove
-          end
+        def drop(element)
+          element = locate_element(element) unless element.respond_to?(:xpath)
+          element = page.getFirstByXPath(element.xpath)
+          element.mouseMove
           @page = element.mouseUp
           respond!
         end
