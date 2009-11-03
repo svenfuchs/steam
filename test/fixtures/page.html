@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+    <title>
+       | shiftplan.com
+    </title>
+    <script>
+//<![CDATA[
+
+			// var Plan = {}
+
+//]]>
+    </script>
+    <script src="/javascripts/lib/core_ext/array.js?1254954865" type="text/javascript">
+    </script>
+    <script src="/javascripts/lib/core_ext/date.js?1254954865" type="text/javascript">
+    </script>
+    <script src="/javascripts/lib/core_ext/uri.js?1254954865" type="text/javascript">
+    </script>
+    <script src="/javascripts/lib/ejs.js?1255789752" type="text/javascript">
+    </script>
+    <script src="/javascripts/lib/jquery/jquery.js?1256440010" type="text/javascript">
+    </script>
+    <script src="/javascripts/lib/jquery/jquery-ui.js?1255811444" type="text/javascript">
+    </script>
+    <script src="/javascripts/lib/jquery/jquery-plugin-form.js?1255290274" type="text/javascript">
+    </script>
+    <script src="/javascripts/lib/jquery/jquery-plugin-simulate.js?1256440383" type="text/javascript">
+    </script>
+    <script src="/javascripts/shiftplan/cursor.js?1255871010" type="text/javascript">
+    </script>
+    <script src="/javascripts/shiftplan/resource.js?1255866245" type="text/javascript">
+    </script>
+    <script src="/javascripts/shiftplan/plan.js?1255866319" type="text/javascript">
+    </script>
+    <script src="/javascripts/shiftplan/plan/shifts.js?1255866295" type="text/javascript">
+    </script>
+    <script src="/javascripts/shiftplan/plan/shift.js?1256539729" type="text/javascript">
+    </script>
+    <script src="/javascripts/shiftplan/plan/requirement.js?1255864170" type="text/javascript">
+    </script>
+    <script src="/javascripts/shiftplan/plan/assignment.js?1255864170" type="text/javascript">
+    </script>
+    <script src="/javascripts/shiftplan/plan/employee.js?1256546126" type="text/javascript">
+    </script>
+    <script src="/javascripts/shiftplan/plan/workplace.js?1255790802" type="text/javascript">
+    </script>
+    <script src="/javascripts/shiftplan/plan/qualification.js?1255790802" type="text/javascript">
+    </script>
+    <script src="/javascripts/shiftplan/stuff/dialogs.js?1255270477" type="text/javascript">
+    </script>
+    <script src="/javascripts/shiftplan/stuff/lists.js?1256416893" type="text/javascript">
+    </script>
+    <script src="/javascripts/shiftplan/stuff/workplaces.js?1255290274" type="text/javascript">
+    </script>
+    <script src="/javascripts/application.js?1256417694" type="text/javascript">
+    </script>
+    <link href="/stylesheets/reset.css?1252173326" media="screen" rel="stylesheet" type="text/css"/>
+    <link href="/stylesheets/shiftplan/plan.css?1256303813" media="screen" rel="stylesheet" type="text/css"/>
+    <link href="/stylesheets/shiftplan/resources.css?1255890661" media="screen" rel="stylesheet" type="text/css"/>
+    <link href="/stylesheets/shiftplan/sidebar.css?1256304008" media="screen" rel="stylesheet" type="text/css"/>
+    <link href="/stylesheets/application.css?1256395883" media="screen" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript">
+//<![CDATA[
+
+    //<![CDATA[
+      window._auth_token_name = 'authenticity_token';
+      window._auth_token = 'R6l4RFYXPaOpwx6HB1balwGN9NBnTa67uRb3pGGC4Jk=';
+    //]]>
+
+//]]>
+    </script>
+    <style type="text/css">
+
+		  .plan .employee_1,
+.employee_1 div {
+	background-image: url(http://gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e.png?r=PG&amp;s=30);
+}.plan .employee_2,
+.employee_2 div {
+	background-image: url(http://gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e.png?r=PG&amp;s=30);
+}
+		  .plan .workplace_1,
+.workplace_1 div {
+	background-color: #ff8c8c;
+}
+#workplace_1 div.color {
+	background-color: #ff8c8c;
+}
+.plan .workplace_2,
+.workplace_2 div {
+	background-color: #ffc58c;
+}
+#workplace_2 div.color {
+	background-color: #ffc58c;
+}
+
+		  .plan .qualification_2,
+.qualification_2 div {
+	border-color: #ffcf3f;
+}
+#qualification_2 div.color {
+	background-color: #ffcf3f;
+}
+
+.plan .qualification.any,
+.qualification.any div {
+  border-color: transparent;
+}.plan .qualification_1,
+.qualification_1 div {
+	border-color: #ff6f3f;
+}
+#qualification_1 div.color {
+	background-color: #ff6f3f;
+}
+
+.plan .qualification.any,
+.qualification.any div {
+  border-color: transparent;
+}
+
+    </style>
+  </head>
+  <body class="ui-droppable">
+    <div>
+      <ul id="navigation">
+        <li>
+          <a href="/">
+            Overview
+          </a>
+        </li>
+        <li>
+          <a href="/plans">
+            Plans
+          </a>
+        </li>
+        <li>
+          <a href="/workplaces">
+            Workplaces
+          </a>
+        </li>
+        <li>
+          <a href="/employees">
+            Employees
+          </a>
+        </li>
+        <li>
+          <a href="/qualifications">
+            Qualifications
+          </a>
+        </li>
+      </ul>
+      <div id="login_status">
+
+	        	      Logged in as fritz@thielemann.de
+  	      (
+        <a href="/logout" onclick="var f = document.createElement(&apos;form&apos;); f.style.display = &apos;none&apos;; this.parentNode.appendChild(f); f.method = &apos;POST&apos;; f.action = this.href;var m = document.createElement(&apos;input&apos;); m.setAttribute(&apos;type&apos;, &apos;hidden&apos;); m.setAttribute(&apos;name&apos;, &apos;_method&apos;); m.setAttribute(&apos;value&apos;, &apos;delete&apos;); f.appendChild(m);f.submit();return false;">
+          Logout
+        </a>
+        )
+
+      </div>
+      <style type="text/css">
+
+  .plan .employee_1,
+.employee_1 div {
+	background-image: url(http://gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e.png?r=PG&amp;s=30);
+}.plan .employee_2,
+.employee_2 div {
+	background-image: url(http://gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e.png?r=PG&amp;s=30);
+}
+  .plan .workplace_1,
+.workplace_1 div {
+	background-color: #ff8c8c;
+}
+#workplace_1 div.color {
+	background-color: #ff8c8c;
+}
+.plan .workplace_2,
+.workplace_2 div {
+	background-color: #ffc58c;
+}
+#workplace_2 div.color {
+	background-color: #ffc58c;
+}
+
+  .plan .qualification_2,
+.qualification_2 div {
+	border-color: #ffcf3f;
+}
+#qualification_2 div.color {
+	background-color: #ffcf3f;
+}
+
+.plan .qualification.any,
+.qualification.any div {
+  border-color: transparent;
+}.plan .qualification_1,
+.qualification_1 div {
+	border-color: #ff6f3f;
+}
+#qualification_1 div.color {
+	background-color: #ff6f3f;
+}
+
+.plan .qualification.any,
+.qualification.any div {
+  border-color: transparent;
+}
+
+      </style>
+      <div class="plan" data-duration="720" data-start="480" id="plan_1">
+        <h1>
+          Plan 1
+          <span class="dates">
+            2009-09-07 - 2009-09-08
+          </span>
+        </h1>
+        <div class="day" data-day="20090907">
+          <ul class="shifts ui-droppable">
+            <li class="shift workplace_3 ui-droppable ui-draggable" data-duration="300" data-start="480" data-workplace-id="3" id="shift_1" style="left: 1px; width: 359px;">
+              <h3>
+                Reception
+              </h3>
+              <ul class="requirements">
+                <li class="requirement ui-draggable ui-droppable" id="requirement_1"/>
+              </ul>
+              <span class="resize_handle left ui-draggable" style="position: null;">
+              </span>
+              <span class="resize_handle right ui-draggable" style="position: null;">
+              </span>
+            </li>
+            <li class="shift workplace_1 ui-droppable ui-draggable" data-duration="240" data-start="540" data-workplace-id="1" id="shift_2" style="left: 73px; width: 287px;">
+              <h3>
+                Kitchen
+              </h3>
+              <ul class="requirements">
+                <li class="requirement qualification_1 ui-draggable ui-droppable" id="requirement_2">
+                  <a href="/employees/1" class="assignment employee_1 qualification_1 dialog ui-draggable"/>
+                </li>
+              </ul>
+              <span class="resize_handle left ui-draggable" style="position: null;">
+              </span>
+              <span class="resize_handle right ui-draggable" style="position: null;">
+              </span>
+            </li>
+            <li class="shift workplace_2 ui-droppable ui-draggable" data-duration="240" data-start="720" data-workplace-id="2" id="shift_3" style="left: 289px; width: 287px;">
+              <h3>
+                Bar
+              </h3>
+              <ul class="requirements">
+                <li class="requirement qualification_2 ui-draggable ui-droppable" id="requirement_3"/>
+              </ul>
+              <span class="resize_handle left ui-draggable" style="position: null;">
+              </span>
+              <span class="resize_handle right ui-draggable" style="position: null;">
+              </span>
+            </li>
+          </ul>
+        </div>
+        <div class="day" data-day="20090908">
+          <ul class="shifts ui-droppable">
+          </ul>
+        </div>
+      </div>
+      <div id="sidebar">
+        <h3>
+          Employees
+        </h3>
+        <ul id="employees">
+          <li>
+            <a href="/employees/1" class="employee employee_1 dialog" data-possible-workplaces="workplace_1" data-qualifications="qualification_1">
+              <div class="ui-draggable">
+              </div>
+              CK
+            </a>
+          </li>
+          <li>
+            <a href="/employees/2" class="employee employee_2 dialog" data-possible-workplaces="workplace_2" data-qualifications="qualification_2">
+              <div class="ui-draggable">
+              </div>
+              LK
+            </a>
+          </li>
+        </ul>
+        <h3>
+          Workplaces
+        </h3>
+        <ul id="workplaces">
+          <li>
+            <a href="/workplaces/1" class="workplace workplace_1 dialog" data-default-staffing="[]" data-workplace-id="1">
+              <div class="ui-draggable">
+              </div>
+              Kitchen
+            </a>
+          </li>
+          <li>
+            <a href="/workplaces/2" class="workplace workplace_2 dialog" data-default-staffing="[]" data-workplace-id="2">
+              <div class="ui-draggable">
+              </div>
+              Bar
+            </a>
+          </li>
+        </ul>
+        <h3>
+          Qualifications
+        </h3>
+        <ul id="qualifications">
+          <li>
+            <a href="/qualifications/2" class="qualification qualification_2 dialog" data-possible-workplaces="workplace_2">
+              <div class="ui-draggable">
+              </div>
+              Barkeeper
+            </a>
+          </li>
+          <li>
+            <a href="/qualifications/1" class="qualification qualification_1 dialog" data-possible-workplaces="workplace_1">
+              <div class="ui-draggable">
+              </div>
+              Chef
+            </a>
+          </li>
+          <!--<li><a href="#" class="qualification any">(Beliebig)</a></li>-->        </ul>
+      </div>
+    </div>
+  </body>
+</html>

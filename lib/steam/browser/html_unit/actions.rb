@@ -56,19 +56,28 @@ module Steam
           action { locate_first_element(element, options).click }
         end
 
-        def drag(element, options = {})
-          # TODO should pass options hash?
-          @page = locate_first_element(element).mouseDown
-
-          if drop_target = options.values_at(:to, :onto, :over, :target).compact.first
-            drop(drop_target)
-          else
-            respond!
-          end
+        def drag_and_drop(element, options = {})
+          drag(element, options)
+          drop
         end
 
-        def drop(element, options = {})
-          action { (element = locate_first_element(element, options)) && element.mouseMove && element.mouseUp }
+        def drag(element, options = {})
+          element = locate_element(element) unless element.respond_to?(:xpath)
+          @page = page.getFirstByXPath(element.xpath).mouseDown
+          if @_drop_target = options.values_at(:to, :onto, :over, :target).compact.first
+            @page = page.getFirstByXPath(@_drop_target.xpath).mouseMove
+          end
+          respond!
+        end
+
+        def drop(element = nil)
+          if element ||= @_drop_target
+            element = locate_element(element) unless element.respond_to?(:xpath)
+            element = page.getFirstByXPath(element.xpath)
+            element.mouseMove
+          end
+          @page = element.mouseUp
+          respond!
         end
 
         def hover(element, options = {})
