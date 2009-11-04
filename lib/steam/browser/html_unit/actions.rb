@@ -95,6 +95,18 @@ module Steam
           element.mouseOver
           respond!
         end
+
+        def blur(element, options = {})
+          element = locate_element(element) unless element.respond_to?(:xpath)
+          page.getFirstByXPath(element.xpath).blur # blur always returns nil
+          respond!
+        end
+
+        def focus(element, options = {})
+          element = locate_element(element) unless element.respond_to?(:xpath)
+          page.getFirstByXPath(element.xpath).focus # blur always returns nil
+          respond!
+        end
       end
     end
   end

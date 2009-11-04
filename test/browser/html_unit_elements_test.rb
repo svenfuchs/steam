@@ -4,65 +4,7 @@ require 'erb'
 class HtmlUnitElementsTest < Test::Unit::TestCase
   include Steam
   include TestHelper
-
-  def html(*elements)
-    scripts = ''
-    fields  = ''
-    elements.each do |element|
-      case element
-      when :field
-        fields << '<input type="text" name="field" />'
-      when :checkbox
-        fields << '<input type="checkbox" name="checkbox" value="1" />'
-      when :radio
-        fields << '<input type="radio" name="radio" value="radio" />' \
-               << '<input type="radio" name="radio" value="tv" />'
-      when :select
-        fields << '<select name="select"><option value=""></option><option value="foo">foo</option></select>'
-      when :foo
-        scripts << '<script src="/javascripts/foo.js" type="text/javascript"></script>'
-      when :hover
-        fields  << '<p id="hoverable">not hovered</p>'
-        scripts << '<script src="/javascripts/jquery.js" type="text/javascript"></script>' \
-                << '<script src="/javascripts/jquery-ui.js" type="text/javascript"></script>' \
-                << '<script src="/javascripts/hover.js" type="text/javascript"></script>'
-      when :drag
-        scripts << '<script src="/javascripts/jquery.js" type="text/javascript"></script>' \
-                << '<script src="/javascripts/jquery-ui.js" type="text/javascript"></script>' \
-                << '<script src="/javascripts/drag.js" type="text/javascript"></script>'
-      end
-    end
-
-    html = <<-erb
-      <html>
-        <head><%= scripts %></head>
-        <body>
-          <p><a href="/link" id="link">link</a></p>
-          <form action="/form" method="get" id="form">
-            <%= fields %>
-            <input type="submit" value="button" />
-          </form>
-        </body>
-      </html>
-    erb
-
-    ERB.new(html).result(binding)
-  end
-
-  def setup
-    @mock = Connection::Mock.new
-
-    root = File.expand_path(File.dirname(__FILE__) + '/../fixtures')
-    static = Connection::Static.new(:root => root)
-
-    connection = Rack::Cascade.new([static, @mock])
-    @browser = Browser::HtmlUnit.new(connection)
-  end
-
-  def perform(method, url, response)
-    @mock.mock(method, url, response)
-    @status, @headers, @response = @browser.call(Request.env_for(url))
-  end
+  include HtmlUnitHelper
 
   def test_click_on_clicks_a_link
     perform :get, 'http://localhost:3000/', html
@@ -186,7 +128,7 @@ class HtmlUnitElementsTest < Test::Unit::TestCase
   end
 
   def test_drag_and_drop
-    perform :get, 'http://localhost:3000/', html(:drag)
+    perform :get, 'http://localhost:3000/', html(:jquery, :jquery_ui, :drag)
 
     drag_element = @browser.locate_element('link')
     drop_element = @browser.locate_element('form')
@@ -197,7 +139,7 @@ class HtmlUnitElementsTest < Test::Unit::TestCase
   end
 
   def test_drag_and_drop_single_statement
-    perform :get, 'http://localhost:3000/', html(:drag)
+    perform :get, 'http://localhost:3000/', html(:jquery, :jquery_ui, :drag)
 
     drag_element = @browser.locate_element('link')
     drop_element = @browser.locate_element('form')
@@ -207,11 +149,30 @@ class HtmlUnitElementsTest < Test::Unit::TestCase
   end
 
   def test_hover
-    perform :get, 'http://localhost:3000/', html(:hover)
+    perform :get, 'http://localhost:3000/', html(:jquery, :jquery_ui, :hover)
 
     element = @browser.locate_element('hoverable')
 
     @browser.hover(element)
     assert_equal 'HOVERED!', @browser.page.getTitleText
+  end
+
+  def test_blur
+    perform :get, 'http://localhost:3000/', html(:field, :jquery, :blur)
+
+    element = @browser.locate_element('field')
+
+    @browser.click_on(element) # not good to couple this to another action?
+    @browser.blur(element)
+    assert_equal 'BLURRED!', @browser.page.getTitleText
+  end
+
+  def test_focus
+    perform :get, 'http://localhost:3000/', html(:field, :jquery, :focus)
+
+    element = @browser.locate_element('field')
+
+    @browser.focus(element)
+    assert_equal 'FOCUSED!', @browser.page.getTitleText
   end
 end
