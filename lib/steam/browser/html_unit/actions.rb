@@ -3,63 +3,57 @@ module Steam
     class HtmlUnit
       module Actions
         def click_on(element, options = {})
-          @page = locate_first_element(element, options).click
-          respond!
+          action { locate_first_element(element, options).click }
         end
 
         def click_link(element, options = {})
-          @page = locate_first_element(element).click
-          respond!
+          action { locate_first_element(element).click }
         end
 
         def click_button(element = nil, options = {})
-          @page = locate_first_element(element, options).click
-          respond!
+          action { locate_first_element(element, options).click }
         end
 
         def submit_form(element, options = {})
-          @page = locate_first_element(element, options).submit(nil)
-          respond!
+          action { locate_first_element(element, options).submit(nil) }
         end
 
         def fill_in(element, options = {})
-          value = options.delete(:with)
-          # TODO remove silence_warnings
-          silence_warnings { element = locate_first_element(element, options) }
+          action do
+            value = options.delete(:with)
+            # TODO remove silence_warnings
+            silence_warnings { element = locate_first_element(element, options) }
 
-          # weird - setText returns nil, setValueAttribute returns a page
-          element.getNodeName == 'textarea' ? element.setText(value) : @page = element.setValueAttribute(value)
-          respond!
+            # weird - setText returns nil, setValueAttribute returns a page
+            element.getNodeName == 'textarea' ? element.setText(value) : element.setValueAttribute(value)
+          end
         end
 
         def set_hidden_field(element, options = {})
-          value = options.delete(:to)
-          @page = locate_first_element(element, options.merge(:type => 'hidden')).setValueAttribute(value)
+          action do
+            value = options.delete(:to)
+            locate_first_element(element, options.merge(:type => 'hidden')).setValueAttribute(value)
+          end
         end
 
         def check(element, options = {})
-          @page = locate_first_element(element, options.merge(:type => 'checkbox')).setChecked(true)
-          respond!
+          action { locate_first_element(element, options.merge(:type => 'checkbox')).setChecked(true) }
         end
 
         def uncheck(element, options = {})
-          @page = locate_first_element(element, options.merge(:type => 'checkbox')).setChecked(false)
-          respond!
+          action { locate_first_element(element, options.merge(:type => 'checkbox')).setChecked(false) }
         end
 
         def choose(element, options = {})
-          @page = locate_first_element(element, options.merge(:type => 'radio')).setChecked(true)
-          respond!
+          action { locate_first_element(element, options.merge(:type => 'radio')).setChecked(true) }
         end
 
         def select(element, options = {})
-          @page = locate_first_element(element, options).setSelected(true)
-          respond!
+          action { locate_first_element(element, options).setSelected(true) }
         end
 
         def click_area(element, options = {})
-          @page = locate_first_element(element, options).click
-          respond!
+          action { locate_first_element(element, options).click }
         end
 
         def drag(element, options = {})
@@ -74,32 +68,32 @@ module Steam
         end
 
         def drop(element, options = {})
-          element = locate_first_element(element, options)
-          @page = element.mouseMove && element.mouseUp
-          respond!
+          action { (element = locate_first_element(element, options)) && element.mouseMove && element.mouseUp }
         end
 
         def hover(element, options = {})
-          locate_first_element(element, options).mouseOver
-          respond!
+          action { locate_first_element(element, options).mouseOver }
         end
 
         def blur(element, options = {})
-          locate_first_element(element, options).blur # blur always returns nil
-          respond!
+          action { locate_first_element(element, options).blur }
         end
 
         def focus(element, options = {})
-          locate_first_element(element, options).focus # focus always returns nil
-          respond!
+          action { locate_first_element(element, options).focus }
         end
 
         def double_click(element, options = {})
-          @page = locate_first_element(element, options).dblClick
-          respond!
+          action { locate_first_element(element, options).dblClick }
         end
 
         protected
+
+          def action
+            new_page = yield
+            @page = new_page if new_page # some actions return nil
+            respond!
+          end
 
           def locate_first_element(element, options = {})
             element = locate_element(element, options) unless element.respond_to?(:xpath)
