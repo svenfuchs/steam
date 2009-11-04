@@ -10,7 +10,7 @@ module Steam
           action { locate_first_element(element).click }
         end
 
-        def click_button(element = nil, options = {})
+        def click_button(element, options = {})
           action { locate_first_element(element, options).click }
         end
 
