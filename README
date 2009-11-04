@@ -1,6 +1,49 @@
+Steam
+=====
+
+Steam is a headless integration testing tool driving HtmlUnit (http://htmlunit.sourceforge.net/) (and at some point potentially other browsers) which enables testing JavaScript-driven web sites.
+
+Installation
+============
+
+Steam currently has the following dependencies:
+
+* Working Java Runtime
+* RJB (if you're on OS X, see Troubleshooting section)
+
+After that, installing Steam for a Rails project should be as simple as typing
+
+  $ ruby script/plugin install git://github.com/svenfuchs/steam.git
+
+Note: Since the HtmlUnit and all the JARs it depends on come packaged with Steam, the download might take a while.
+
+Usage
+=====
+
+You can use Steam by itself as well as with Cucumber. You can find an example for a Cucumber setup in examples/cucumber/env.rb.
+
+Steam is widely compatible with Webrat - many actions are implemented and take the same or very similar parameters as their Webrat equivalent. You should even be able to use the default webrat_steps.rb that ships with Cucumber.
+
+Troubleshooting
+===============
 
 Installing RJB on Mac OS X:
 
-http://www.elctech.com/articles/sudo-java_home-and-mac-os-x
+  http://www.elctech.com/articles/sudo-java_home-and-mac-os-x
 
-The visudo way worked for me. Don't forget to add yourself to the sudoers file though.
+The visudo way worked for us. Don't forget to add yourself to the sudoers file, though.
+
+Acknowledgements
+================
+
+Kudos to Alexander Lang (http://github.com/langalex) for writing Culerity (http://github.com/langalex/culerity) which pioneered full-stack AJAX-enabled integration testing in Rails.
+
+Developer
+=========
+
+Sven Fuchs <svenfuchs@artweb-design.de>
+
+Contributors
+============
+
+Clemens Kofler <clemens@railway.at>
