@@ -90,8 +90,7 @@ module Steam
         protected
 
           def action
-            new_page = yield
-            @page = new_page if new_page # some actions return nil
+            @page = (page = yield) ? page : @page # some actions return nil
             respond!
           end
 
