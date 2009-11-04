@@ -151,7 +151,7 @@ class HtmlUnitElementsTest < Test::Unit::TestCase
   def test_hover
     perform :get, 'http://localhost:3000/', html(:jquery, :jquery_ui, :hover)
 
-    element = @browser.locate_element('hoverable')
+    element = @browser.locate_element('paragraph')
 
     @browser.hover(element)
     assert_equal 'HOVERED!', @browser.page.getTitleText
@@ -174,5 +174,14 @@ class HtmlUnitElementsTest < Test::Unit::TestCase
 
     @browser.focus(element)
     assert_equal 'FOCUSED!', @browser.page.getTitleText
+  end
+
+  def test_double_click
+    perform :get, 'http://localhost:3000/', html(:field, :jquery, :double_click)
+
+    element = @browser.locate_element('paragraph')
+
+    @browser.double_click(element)
+    assert_equal 'DOUBLE CLICKED!', @browser.page.getTitleText
   end
 end

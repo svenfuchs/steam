@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	$('#hoverable').mouseover(function() {
+	$('#paragraph').mouseover(function() {
 	  document.title = 'HOVERED!';
 	});
 });

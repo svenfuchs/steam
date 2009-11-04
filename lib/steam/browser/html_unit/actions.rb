@@ -89,7 +89,7 @@ module Steam
           respond!
         end
 
-        def hover(element)
+        def hover(element, options = {})
           element = locate_element(element) unless element.respond_to?(:xpath)
           element = page.getFirstByXPath(element.xpath)
           element.mouseOver
@@ -104,7 +104,14 @@ module Steam
 
         def focus(element, options = {})
           element = locate_element(element) unless element.respond_to?(:xpath)
-          page.getFirstByXPath(element.xpath).focus # blur always returns nil
+          page.getFirstByXPath(element.xpath).focus # focus always returns nil
+          respond!
+        end
+
+        def double_click(element, options = {})
+          element = locate_element(element) unless element.respond_to?(:xpath)
+          element = page.getFirstByXPath(element.xpath)
+          @page = element.dblClick
           respond!
         end
       end

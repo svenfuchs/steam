@@ -60,12 +60,13 @@ module HtmlUnitHelper
       when :foo
         scripts << '<script src="/javascripts/foo.js" type="text/javascript"></script>'
       when :hover
-        fields  << '<p id="hoverable">not hovered</p>'
         scripts << '<script src="/javascripts/hover.js" type="text/javascript"></script>'
       when :blur
         scripts << '<script src="/javascripts/blur.js" type="text/javascript"></script>'
       when :focus
         scripts << '<script src="/javascripts/focus.js" type="text/javascript"></script>'
+      when :double_click
+        scripts << '<script src="/javascripts/double_click.js" type="text/javascript"></script>'
       when :drag
         scripts << '<script src="/javascripts/drag.js" type="text/javascript"></script>'
       end
@@ -75,6 +76,7 @@ module HtmlUnitHelper
       <html>
         <head><%= scripts %></head>
         <body>
+          <p id="paragraph"></p>
           <p><a href="/link" id="link">link</a></p>
           <form action="/form" method="get" id="form">
             <%= fields %>

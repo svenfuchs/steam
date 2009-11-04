@@ -125,7 +125,7 @@ class HtmlUnitTest < Test::Unit::TestCase
   def test_hover
     perform :get, 'http://localhost:3000/', html(:jquery, :hover)
 
-    @browser.hover('hoverable')
+    @browser.hover('paragraph')
     assert_equal 'HOVERED!', @browser.page.getTitleText
   end
 
@@ -142,5 +142,12 @@ class HtmlUnitTest < Test::Unit::TestCase
 
     @browser.focus('field')
     assert_equal 'FOCUSED!', @browser.page.getTitleText
+  end
+
+  def test_double_click
+    perform :get, 'http://localhost:3000/', html(:field, :jquery, :double_click)
+
+    @browser.double_click('paragraph')
+    assert_equal 'DOUBLE CLICKED!', @browser.page.getTitleText
   end
 end
