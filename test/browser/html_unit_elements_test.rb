@@ -73,6 +73,18 @@ class HtmlUnitElementsTest < Test::Unit::TestCase
     end
   end
 
+  def test_fill_in_textarea
+    perform :get, 'http://localhost:3000/', html(:textarea)
+
+    element = @browser.locate_element('textarea')
+
+    assert_response_contains('TEXTAREA') do
+      @mock.mock :get, 'http://localhost:3000/form?textarea=textarea', 'TEXTAREA'
+      @browser.fill_in(element, :with => 'textarea')
+      @browser.submit_form('form')
+    end
+  end
+
   def test_check
     perform :get, 'http://localhost:3000/', html(:checkbox)
 

@@ -46,6 +46,8 @@ module HtmlUnitHelper
       case element
       when :field
         fields << '<input type="text" name="field" />'
+      when :textarea
+        fields << '<textarea name="textarea"></textarea>'
       when :checkbox
         fields << '<input type="checkbox" name="checkbox" value="1" />'
       when :radio
