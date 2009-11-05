@@ -1,0 +1,8 @@
+Potential bugs
+==============
+
+Doesn't work:
+  locate_element("list_1") { click_link(:class => 'add_task') }
+  within("list_1") { click_link(:class => 'add_task') }
+Works:
+  locate_element("list_1") { @page = page.getFirstByXPath(locate_element(:class => 'add_task').xpath).click && respond! }
