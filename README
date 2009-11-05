@@ -3,6 +3,18 @@ Steam
 
 Steam is a headless integration testing tool driving HtmlUnit (http://htmlunit.sourceforge.net/) (and at some point potentially other browsers) which enables testing JavaScript-driven web sites.
 
+Concept
+=======
+
+Check out the pictures in the "doc" directory to get an idea how Steam is different from a classic (Webrat) Cucumber or Culerity setup.
+
+Demo
+====
+
+You can find a demo application here:
+
+  http://github.com/clemens/steam-demo
+
 Installation
 ============
 
