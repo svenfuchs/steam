@@ -156,7 +156,7 @@ class HtmlUnitElementsTest < Test::Unit::TestCase
     drag_element = @browser.locate_element('link')
     drop_element = @browser.locate_element('form')
 
-    @browser.drag(drag_element, :to => drop_element)
+    @browser.drag_and_drop(drag_element, :to => drop_element)
     assert_equal 'DROPPED!', @browser.page.getTitleText
   end
 
