@@ -62,21 +62,25 @@ module Steam
         end
 
         def drag(element, options = {})
-          element = locate_first_element(element)
-          @page = element.mouseDown
-          if selector = options.values_at(:to, :onto, :over, :target).compact.first
-            @_drop_target = locate_first_element(selector)
-            @page = @_drop_target.mouseMove
+          action do
+            element = locate_first_element(element)
+            if selector = options.values_at(:to, :onto, :over, :target).compact.first
+              element.mouseDown
+              @_drop_target = locate_first_element(selector)
+              @_drop_target.mouseMove
+            else
+              element.mouseDown
+            end
           end
-          respond!
         end
 
         def drop(element = nil)
-          element ||= @_drop_target
-          element = locate_first_element(element)
-          element.mouseMove unless @_drop_target
-          @page = element.mouseUp
-          respond!
+          action do
+            element ||= @_drop_target
+            element = locate_first_element(element)
+            element.mouseMove unless @_drop_target
+            element.mouseUp
+          end
         end
 
         def hover(element, options = {})
