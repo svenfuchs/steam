@@ -50,12 +50,8 @@ Acknowledgements
 
 Kudos to Alexander Lang (http://github.com/langalex) for writing Culerity (http://github.com/langalex/culerity) which pioneered full-stack AJAX-enabled integration testing in Rails.
 
-Developer
-=========
+Developers
+==========
 
 Sven Fuchs <svenfuchs@artweb-design.de>
-
-Contributors
-============
-
 Clemens Kofler <clemens@railway.at>
