@@ -24,8 +24,8 @@ class ConnectionCascadeTest < Test::Unit::TestCase
 
     if Gem.available?('patron')
       patron = Connection::Patron.new
-      patron_body = patron_response('patron body')
-      patron.stubs(:handle_request).returns(patron_body) # FIXME .with(...)
+      patron_body = 'patron body'
+      patron.stubs(:handle_request).returns(patron_response(patron_body)) # FIXME .with(...)
       connections << patron
       @urls << 'http://localhost:3000/patron'
       @bodies << patron_body
