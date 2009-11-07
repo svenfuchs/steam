@@ -52,6 +52,11 @@ module Steam
           action { locate_first_element(element, options).setSelected(true) }
         end
 
+        # TODO implement a way to supply content_type
+        def attach_file(element, path, options = {})
+          fill_in(element, options.merge(:with => path))
+        end
+
         def click_area(element, options = {})
           action { locate_first_element(element, options).click }
         end

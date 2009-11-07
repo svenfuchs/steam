@@ -55,6 +55,8 @@ module HtmlUnitHelper
                << '<input type="radio" name="radio" value="tv" />'
       when :select
         fields << '<select name="select"><option value=""></option><option value="foo">foo</option></select>'
+      when :file
+        fields << '<input type="file" name="file" />'
       when :jquery
         scripts << '<script src="/javascripts/jquery.js" type="text/javascript"></script>'
       when :jquery_ui
@@ -80,7 +82,7 @@ module HtmlUnitHelper
         <body>
           <p id="paragraph"></p>
           <p><a href="/link" id="link">link</a></p>
-          <form action="/form" method="get" id="form">
+          <form action="/form" method="get" id="form" enctype="multipart/form-data">
             <%= fields %>
             <input type="submit" value="button" />
           </form>

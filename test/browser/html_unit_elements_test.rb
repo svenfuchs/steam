@@ -139,6 +139,21 @@ class HtmlUnitElementsTest < Test::Unit::TestCase
     end
   end
 
+  def test_attach_file
+    perform :get, 'http://localhost:3000/', html(:file)
+
+    element = @browser.locate_element('file')
+    form    = @browser.locate_element('form')
+
+    # does this test the correct thing?
+    assert_response_contains('FILE') do
+      @mock.mock :get, 'http://localhost:3000/form?file=rails.png', 'FILE'
+      filename = TEST_ROOT + '/fixtures/rails.png'
+      @browser.attach_file(element, filename)
+      @browser.submit_form(form)
+    end
+  end
+
   def test_drag_and_drop
     perform :get, 'http://localhost:3000/', html(:jquery, :jquery_ui, :drag)
 
