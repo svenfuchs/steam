@@ -49,7 +49,13 @@ module Steam
         end
 
         def select(element, options = {})
-          action { locate_first_element(element, options).setSelected(true) }
+          # action { locate_first_element(element, options).setSelected(true) }
+          action do
+            locate_select(options[:from]) do
+              element = locate_select_option(element) unless element.respond_to?(:xpath)
+              page.getFirstByXPath(element.xpath).setSelected(true)
+            end
+          end
         end
 
         # TODO implement a way to supply content_type
@@ -102,6 +108,44 @@ module Steam
 
         def double_click(element, options = {})
           action { locate_first_element(element, options).dblClick }
+        end
+
+        # Rails specific actions
+        DATE_TIME_SUFFIXES = {
+          :year   => '1i',
+          :month  => '2i',
+          :day    => '3i',
+          :hour   => '4i',
+          :minute => '5i',
+          :second => '6i'
+        }
+
+        def select_date(date, options = {})
+          date = date.respond_to?(:strftime) ? date : Date.parse(date)
+
+          id_prefix   = options.delete(:id_prefix)
+          id_prefix ||= options[:from] # FIXME adapt webrat
+
+          # FIXME .to_s should be done somewhere inside the locator
+          select(date.year.to_s, :from => "#{id_prefix}_#{DATE_TIME_SUFFIXES[:year]}")
+          select(date.mon.to_s,  :from => "#{id_prefix}_#{DATE_TIME_SUFFIXES[:month]}")
+          select(date.day.to_s,  :from => "#{id_prefix}_#{DATE_TIME_SUFFIXES[:day]}")
+        end
+
+        def select_datetime(datetime, options = {})
+          select_date(datetime)
+          select_time(datetime)
+        end
+
+        def select_time(time, options = {})
+          time = time.respond_to?(:strftime) ? time : DateTime.parse(time)
+
+          id_prefix   = options.delete(:id_prefix)
+          id_prefix ||= options[:from] # FIXME adapt webrat
+
+          select(time.hour.to_s.rjust(2,'0'), :from => "#{id_prefix}_#{DATE_TIME_SUFFIXES[:hour]}")
+          select(time.min.to_s.rjust(2,'0'),  :from => "#{id_prefix}_#{DATE_TIME_SUFFIXES[:minute]}")
+          # second?
         end
 
         protected
