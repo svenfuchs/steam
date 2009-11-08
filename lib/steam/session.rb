@@ -28,6 +28,11 @@ module Steam
       super
     end
 
+    # FIXME - there has to be a better way to enforce this - how does webrat handle it?
+    def select(*args, &block)
+      browser.select(*args, &block)
+    end
+
     def method_missing(method, *args, &block)
       return browser.send(method, *args, &block) # if browser.respond_to?(method)
       super
