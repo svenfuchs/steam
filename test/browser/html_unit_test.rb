@@ -66,6 +66,16 @@ class HtmlUnitTest < Test::Unit::TestCase
     end
   end
 
+  def test_fill_in_with_label_text
+    perform :get, 'http://localhost:3000/', html(:field)
+
+    assert_response_contains('FIELD') do
+      @mock.mock :get, 'http://localhost:3000/form?field=field', 'FIELD'
+      @browser.fill_in('Label for field', :with => 'field')
+      @browser.submit_form('form')
+    end
+  end
+
   def test_fill_in_textarea
     perform :get, 'http://localhost:3000/', html(:textarea)
 
@@ -76,12 +86,32 @@ class HtmlUnitTest < Test::Unit::TestCase
     end
   end
 
+  def test_fill_in_textarea_with_label_text
+    perform :get, 'http://localhost:3000/', html(:textarea)
+
+    assert_response_contains('TEXTAREA') do
+      @mock.mock :get, 'http://localhost:3000/form?textarea=textarea', 'TEXTAREA'
+      @browser.fill_in('Label for textarea', :with => 'textarea')
+      @browser.submit_form('form')
+    end
+  end
+
   def test_check
     perform :get, 'http://localhost:3000/', html(:checkbox)
 
     assert_response_contains('CHECKED') do
       @mock.mock :get, 'http://localhost:3000/form?checkbox=1', 'CHECKED'
       @browser.check('checkbox')
+      @browser.submit_form('form')
+    end
+  end
+
+  def test_check_with_label_text
+    perform :get, 'http://localhost:3000/', html(:checkbox)
+
+    assert_response_contains('CHECKED') do
+      @mock.mock :get, 'http://localhost:3000/form?checkbox=1', 'CHECKED'
+      @browser.check('Label for checkbox')
       @browser.submit_form('form')
     end
   end
@@ -97,12 +127,33 @@ class HtmlUnitTest < Test::Unit::TestCase
     end
   end
 
+  def test_uncheck_with_label_text
+    perform :get, 'http://localhost:3000/', html(:checkbox)
+
+    assert_response_contains('FORM') do
+      @mock.mock :get, 'http://localhost:3000/form', 'FORM'
+      @browser.check('checkbox')
+      @browser.uncheck('Label for checkbox')
+      @browser.submit_form('form')
+    end
+  end
+
   def test_choose
     perform :get, 'http://localhost:3000/', html(:radio)
 
     assert_response_contains('RADIO') do
       @mock.mock :get, 'http://localhost:3000/form?radio=radio', 'RADIO'
       @browser.choose('radio')
+      @browser.submit_form('form')
+    end
+  end
+
+  def test_choose_with_label_text
+    perform :get, 'http://localhost:3000/', html(:radio)
+
+    assert_response_contains('RADIO') do
+      @mock.mock :get, 'http://localhost:3000/form?radio=radio', 'RADIO'
+      @browser.choose('Label for radio')
       @browser.submit_form('form')
     end
   end
@@ -117,6 +168,16 @@ class HtmlUnitTest < Test::Unit::TestCase
     end
   end
 
+  def test_select_with_label_text
+    perform :get, 'http://localhost:3000/', html(:select)
+
+    assert_response_contains('SELECT') do
+      @mock.mock :get, 'http://localhost:3000/form?select=foo', 'SELECT'
+      @browser.select('foo', :from => 'Label for select')
+      @browser.submit_form('form')
+    end
+  end
+
   def test_attach_file
     perform :get, 'http://localhost:3000/', html(:file)
 
@@ -125,6 +186,18 @@ class HtmlUnitTest < Test::Unit::TestCase
       @mock.mock :get, 'http://localhost:3000/form?file=rails.png', 'FILE'
       filename = TEST_ROOT + '/fixtures/rails.png'
       @browser.attach_file('file', filename)
+      @browser.submit_form('form')
+    end
+  end
+
+  def test_attach_file_with_label_text
+    perform :get, 'http://localhost:3000/', html(:file)
+
+    # does this test the correct thing?
+    assert_response_contains('FILE') do
+      @mock.mock :get, 'http://localhost:3000/form?file=rails.png', 'FILE'
+      filename = TEST_ROOT + '/fixtures/rails.png'
+      @browser.attach_file('Label for file', filename)
       @browser.submit_form('form')
     end
   end

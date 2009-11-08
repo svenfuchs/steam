@@ -45,18 +45,18 @@ module HtmlUnitHelper
     elements.each do |element|
       case element
       when :field
-        fields << '<input type="text" name="field" />'
+        fields << '<label for="field">Label for field</label><input type="text" id="field" name="field" />'
       when :textarea
-        fields << '<textarea name="textarea"></textarea>'
+        fields << '<label for="textarea">Label for textarea</label><textarea id="textarea" name="textarea"></textarea>'
       when :checkbox
-        fields << '<input type="checkbox" name="checkbox" value="1" />'
+        fields << '<label for="checkbox">Label for checkbox</label><input id="checkbox" type="checkbox" name="checkbox" value="1" />'
       when :radio
-        fields << '<input type="radio" name="radio" value="radio" />' \
-               << '<input type="radio" name="radio" value="tv" />'
+        fields << '<label for="radio1">Label for radio</label><input id="radio1" type="radio" name="radio" value="radio" />' \
+               << '<label for="radio2">Label for tv</label><input id="radio2" type="radio" name="radio" value="tv" />'
       when :select
-        fields << '<select name="select"><option value=""></option><option value="foo">foo</option></select>'
+        fields << '<label for="select">Label for select</label><select id="select" name="select"><option value=""></option><option value="foo">foo</option></select>'
       when :file
-        fields << '<input type="file" name="file" />'
+        fields << '<label for="file">Label for file</label><input id="file" type="file" name="file" />'
       when :date
         fields << '<select id="date_1i" name="date(1i)"><option value="2008">2008</option><option value="2009">2009</option><option value="2010">2010</option></select>' \
                << '<select id="date_2i" name="date(2i)"><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>' \

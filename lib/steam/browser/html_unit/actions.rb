@@ -7,22 +7,22 @@ module Steam
         end
 
         def click_link(element, options = {})
-          action { locate_first_element(element).click }
+          action { locate_first_link(element).click }
         end
 
         def click_button(element, options = {})
-          action { locate_first_element(element, options).click }
+          action { locate_first_button(element, options).click }
         end
 
         def submit_form(element, options = {})
-          action { locate_first_element(element, options).submit(nil) }
+          action { locate_first_form(element, options).submit(nil) }
         end
 
         def fill_in(element, options = {})
           action do
             value = options.delete(:with)
             # TODO remove silence_warnings
-            silence_warnings { element = locate_first_element(element, options) }
+            silence_warnings { element = locate_first_field(element, options) }
 
             # weird - setText returns nil, setValueAttribute returns a page
             element.getNodeName == 'textarea' ? element.setText(value) : element.setValueAttribute(value)
@@ -32,28 +32,29 @@ module Steam
         def set_hidden_field(element, options = {})
           action do
             value = options.delete(:to)
-            locate_first_element(element, options.merge(:type => 'hidden')).setValueAttribute(value)
+            locate_first_field(element, options.merge(:type => 'hidden')).setValueAttribute(value)
           end
         end
 
         def check(element, options = {})
-          action { locate_first_element(element, options.merge(:type => 'checkbox')).setChecked(true) }
+          action { locate_first_field(element, options.merge(:type => 'checkbox')).setChecked(true) }
         end
 
         def uncheck(element, options = {})
-          action { locate_first_element(element, options.merge(:type => 'checkbox')).setChecked(false) }
+          action { locate_first_field(element, options.merge(:type => 'checkbox')).setChecked(false) }
         end
 
         def choose(element, options = {})
-          action { locate_first_element(element, options.merge(:type => 'radio')).setChecked(true) }
+          action { locate_first_field(element, options.merge(:type => 'radio')).setChecked(true) }
         end
 
         def select(element, options = {})
-          # action { locate_first_element(element, options).setSelected(true) }
           action do
-            locate_select(options[:from]) do
-              element = locate_select_option(element) unless element.respond_to?(:xpath)
-              page.getFirstByXPath(element.xpath).setSelected(true)
+            # FIXME
+            unless options[:from].respond_to?(:xpath)
+              locate_select(options[:from]) { locate_first_select_option(element).setSelected(true) }
+            else
+              within(options[:from]) { locate_first_select_option(element).setSelected(true) }
             end
           end
         end
@@ -148,16 +149,29 @@ module Steam
           # second?
         end
 
+        def respond_to?(method)
+          return true if method.to_s =~ /^locate_first_(.*)$/
+          super
+        end
+
+        def method_missing(method, *args, &block)
+          method_name = method.to_s
+
+          if method_name =~ /^locate_first_(.*)$/
+            # TODO define this method when it's first called?
+            element = args.shift
+            element = send(:"locate_#{$1}", element, *args, &block) unless element.respond_to?(:xpath)
+            page.getFirstByXPath(element.xpath)
+          else
+            super
+          end
+        end
+
         protected
 
           def action
             @page = (page = yield) ? page : @page # some actions return nil
             respond!
-          end
-
-          def locate_first_element(element, options = {})
-            element = locate_element(element, options) unless element.respond_to?(:xpath)
-            page.getFirstByXPath(element.xpath)
           end
       end
     end

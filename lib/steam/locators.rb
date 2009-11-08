@@ -13,26 +13,26 @@ module Steam
     autoload :Select,       'steam/locators/select'
     autoload :SelectOption, 'steam/locators/select_option'
     autoload :TextArea,     'steam/locators/text_area'
-    
-    @@adapters = { 
-      :nokogiri => Dom::Nokogiri::Page, 
-      :html_unit => Dom::HtmlUnit::Page 
+
+    @@adapters = {
+      :nokogiri => Dom::Nokogiri::Page,
+      :html_unit => Dom::HtmlUnit::Page
     }
 
     class << self
       def strategy
         @@strategy ||= :nokogiri
       end
-      
+
       def strategy=(strategy)
         @@strategy = strategy
       end
-      
+
       def adapter(name)
         @@adapters[name || Locators.strategy]
       end
     end
-    
+
     def current_scope
       scopes.last
     end
@@ -50,12 +50,12 @@ module Steam
     end
 
     def respond_to?(method)
-      return true if method.to_s =~ /^locate_(.*)/
+      return true if method.to_s =~ /^locate_(#{locators.keys.join('|')})$/
       super
     end
 
     def method_missing(method, *args, &block)
-      return locate(locators[$1.to_sym], *args, &block) if method.to_s =~ /^locate_(.*)/
+      return locate(locators[$1.to_sym], *args, &block) if method.to_s =~ /^locate_(#{locators.keys.join('|')})$/
       super
     end
 
@@ -66,7 +66,7 @@ module Steam
           [name.underscore.gsub('_locator', '').to_sym, Locators.const_get(name)]
         end.flatten]
       end
-      
+
       def locate(type, *args, &block)
         attributes = args.last.is_a?(Hash) ? args.last : args.push({}).last
         scope = attributes.delete(:from) || attributes.delete(:within)
@@ -77,13 +77,13 @@ module Steam
         element = within(element) { yield(element) } if element && block_given?
         element
       end
-      
+
       def locator(type, *args)
         options = args.last.is_a?(Hash) ? args.last : args.push({}).last
 
         adapter = options.delete(:using)
         dom = Locators.adapter(adapter).build(page, response.body.join)
-        
+
         type = locators[type.to_sym] if type.is_a?(Symbol)
         type.new(dom, *args)
       end
@@ -92,6 +92,6 @@ module Steam
       #   from = options.delete(:from) or raise "no select specified (use :from)"
       #   select = locate_select(from)
       #   within(select) { locate(SelectOptionLocator, selector, options) }
-      # end    
+      # end
   end
 end
