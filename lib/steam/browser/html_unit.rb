@@ -41,6 +41,10 @@ module Steam
         @page.executeJavaScript(javascript)
       end
 
+      def current_url
+        page.getWebResponse.getRequestSettings.getUrl.toString
+      end
+
       protected
 
         def respond!

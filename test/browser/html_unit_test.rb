@@ -202,6 +202,17 @@ class HtmlUnitTest < Test::Unit::TestCase
     end
   end
 
+  def test_current_url
+    perform :get, 'http://localhost:3000/', html(:field)
+    @mock.mock :get, 'http://localhost:3000/form?field=field', 'FIELD'
+
+    assert_equal 'http://localhost:3000/', @browser.current_url
+
+    @browser.fill_in('Label for field', :with => 'field')
+    @browser.submit_form('form')
+    assert_equal 'http://localhost:3000/form?field=field', @browser.current_url
+  end
+
   def test_drag_and_drop
     perform :get, 'http://localhost:3000/', html(:jquery, :jquery_ui, :drag)
 
