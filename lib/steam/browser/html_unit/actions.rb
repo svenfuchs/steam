@@ -91,6 +91,7 @@ module Steam
             element ||= @_drop_target
             element = locate_first_element(element)
             element.mouseMove unless @_drop_target
+            @_drop_target = nil
             element.mouseUp
           end
         end
