@@ -29,6 +29,28 @@ After that, installing Steam for a Rails project should be as simple as typing
 
 Note: Since the HtmlUnit and all the JARs it depends on come packaged with Steam, the download might take a while.
 
+Configuration
+=============
+
+You can control some parameters in init.rb for fitting your needs:
+
+	Steam.configure do |config|
+	  #:javaloadparams: "-Xms256M -Xmx2048M"
+	  config.java_load_params = "-Xmx2048M"
+	# your test server running steam
+	  config.server_name = "localhost"
+	# the port you start your test server
+	  config.server_port = "3000"
+	# the url scheme for rack
+	  config.rack_url_scheme = "http"
+	# defaut charset
+	  config.charset = "utf-8"
+	# DRB uri
+	  config.drb_uri = "druby://127.0.0.1:9000"
+	# for which server the session request the env
+	  config.request_env_for = "http://localhost"
+	end
+
 Usage
 =====
 

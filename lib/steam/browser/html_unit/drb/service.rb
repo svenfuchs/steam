@@ -7,7 +7,7 @@ module Steam
         module Service
           class << self
             def uri
-              'druby://127.0.0.1:9000'
+              Steam.config.drb_uri
             end
 
             def daemonize(connection = nil, options = {})

@@ -66,14 +66,14 @@ module Steam
         end
 
         def getContentCharset
-          @content_charset ||= 'utf-8' # FIXME
+          @content_charset ||= Steam.config.charset
         rescue Exception => e
           puts e.message
           e.backtrace.each { |line| puts line }
         end
 
         def getContentCharsetOrNull
-          @content_charset_or_null ||= 'utf-8' # FIXME
+          @content_charset_or_null ||= Steam.config.charset
         rescue Exception => e
           puts e.message
           e.backtrace.each { |line| puts line }
