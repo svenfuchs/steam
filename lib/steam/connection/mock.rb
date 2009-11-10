@@ -20,11 +20,11 @@ module Steam
         request = Rack::Request.new(env)
         response(request.request_method, request.url).to_a
       end
-      
+
       def response(method, url)
         responses(method)[url] || Rack::Response.new('', 404)
       end
-      
+
       def mock(method, url, response, headers = {})
         responses(method)[url] = case response
           when Rack::Response
@@ -37,7 +37,7 @@ module Steam
       end
 
       protected
-      
+
         def responses(method)
           @responses[method.to_s.upcase] ||= {}
         end

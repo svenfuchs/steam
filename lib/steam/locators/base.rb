@@ -59,7 +59,7 @@ module Steam
       def select_by_min_matching_attribute(elements)
         selected = elements.min do |(lft_element, lft_value), (rgt_element, rgt_value)|
           compare_by_value(lft_value, rgt_value) ||
-          compare_by_hierarchie(lft_element, rgt_element) || 0
+          compare_by_hierarchy(lft_element, rgt_element) || 0
         end
         selected && selected[0]
       end
@@ -69,7 +69,7 @@ module Steam
         result != 0 && result
       end
 
-      def compare_by_hierarchie(lft, rgt)
+      def compare_by_hierarchy(lft, rgt)
         lft.ancestor_of?(rgt) && 1 || rgt.ancestor_of?(lft) && -1
       end
 
