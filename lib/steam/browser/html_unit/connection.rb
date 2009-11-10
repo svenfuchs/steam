@@ -45,7 +45,7 @@ module Steam
           body    = response.body.join
           status  = response.status
           message = Rack::Utils::HTTP_STATUS_CODES[status.to_i]
-          charset = 'utf-8' # FIXME
+          charset = Steam.config.charset
           headers = response.header.map { |key, value| Java::NameValuePair.new(key, value) }
           headers = Java::Arrays.asList(headers)
           content_type = response.content_type

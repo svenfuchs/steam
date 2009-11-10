@@ -21,11 +21,11 @@ module Steam
 
         env.merge!(
           'REQUEST_METHOD'   => opts[:method] || 'GET',
-          'SERVER_NAME'      => 'localhost',
-          'SERVER_PORT'      => '3000',
+          'SERVER_NAME'      => Steam.config.server_name,
+          'SERVER_PORT'      => Steam.config.server_port,
           'QUERY_STRING'     => uri.query.to_s,
           'PATH_INFO'        => (!uri.path || uri.path.empty?) ? '/' : uri.path,
-          'rack.url_scheme'  => 'http',
+          'rack.url_scheme'  => Steam.config.rack_url_scheme,
           'SCRIPT_NAME'      => opts[:script_name] || '',
           'rack.errors'      => StringIO.new,
           'rack.input'       => input.is_a?(String) ? StringIO.new(input) : input,
