@@ -11,8 +11,8 @@
 
 Steam.configure do |config|
   # jvm load params - lib/steam/java.rb
-  #:javaloadparams: "-Xms256M -Xmx2048M"
-  config.java_load_params = "-Xmx2048M"
+  #:javaloadparams: "'-Xms256M', '-Xmx2048M'"
+  config.java_load_params = "-Xmx1024M"
 
   # common params - lib/steam/request.rb
   config.server_name = "localhost"

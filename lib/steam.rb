@@ -12,7 +12,8 @@ module Steam
   autoload :Reloader,       'steam/reloader'
   autoload :Request,        'steam/request'
   autoload :Session,        'steam/session'
-  autoload :Configuration,  'steam/configuration'
+#  autoload :Configuration,  'steam/configuration'
+  require  'steam/configuration'
   # autoload :TestCase,   'steam/test_case'
   # autoload :Utils,      'steam/utils'
 end

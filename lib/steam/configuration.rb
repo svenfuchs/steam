@@ -11,13 +11,13 @@ module Steam
 
   class Configuration
 
-    attr_accessor_with_default :java_load_params, "-Xmx2048M"
-    attr_accessor_with_default :server_name, "localhost"
-    attr_accessor_with_default :server_port, "3000"
-    attr_accessor_with_default :rack_url_scheme, "http"
-    attr_accessor_with_default :charset, "utf-8"
-    attr_accessor_with_default :drb_uri, "druby://127.0.0.1:9000"
-    attr_accessor_with_default :request_env_for, "http://localhost"
+    attr_accessor :java_load_params
+    attr_accessor :server_name
+    attr_accessor :server_port
+    attr_accessor :rack_url_scheme
+    attr_accessor :charset
+    attr_accessor :drb_uri
+    attr_accessor :request_env_for
 
     def initialize
     end
