@@ -32,7 +32,7 @@ module Steam
 
         def set_classpath!
           path = File.expand_path(File.dirname(__FILE__) + "/../htmlunit/")
-          Rjb::load(Dir["#{path}/*.jar"].join(':'), Steam.config.java_load_params)
+          Rjb::load(Dir["#{path}/*.jar"].join(':'), Steam.config.java_load_params.to_a)
         end
     end
   end
