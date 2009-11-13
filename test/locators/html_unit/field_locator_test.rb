@@ -1,7 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../../test_helper')
 
 class HtmlUnitLocatorFieldTest < HtmlUnitLocatorTest
-
   def test_locates_the_first_element_when_no_value_given
     dom = dom('<input type="text" name="foo-bar" /><input type="text" name="foo" />')
     element = Locators::Field.new(dom).locate

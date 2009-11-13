@@ -138,34 +138,15 @@ class LocatorTest < Test::Unit::TestCase
 end
 
 class NokogiriLocatorTest < LocatorTest
-  def setup
-    @old_strategy = Steam::Locators.strategy
-    Steam::Locators.strategy = :nokogiri
-    super
-  end
-
-  def teardown
-    Steam::Locators.strategy = @old_strategy
-  end
-
   def dom(html)
     Dom::Nokogiri::Page.build(nil, html)
   end
 end
 
 class HtmlUnitLocatorTest < LocatorTest
-  def setup
-    @old_strategy = Steam::Locators.strategy
-    Steam::Locators.strategy = :html_unit
-    super
-  end
-
-  def teardown
-    Steam::Locators.strategy = @old_strategy
-  end
 
   def dom(html)
-    Dom::HtmlUnit::Page.build(nil, html)
+    Dom::Nokogiri::Page.build(nil, html)
   end
 end
 

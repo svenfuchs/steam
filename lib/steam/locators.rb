@@ -1,35 +1,24 @@
 require 'core_ext/ruby/string/underscore'
 
 module Steam
-  module Locators
-    autoload :Area,         'steam/locators/area'
-    autoload :Base,         'steam/locators/base'
-    autoload :Button,       'steam/locators/button'
-    autoload :Element,      'steam/locators/element'
-    autoload :Field,        'steam/locators/field'
-    autoload :Form,         'steam/locators/form'
-    autoload :Label,        'steam/locators/label'
-    autoload :Link,         'steam/locators/link'
-    autoload :Select,       'steam/locators/select'
-    autoload :SelectOption, 'steam/locators/select_option'
-    autoload :TextArea,     'steam/locators/text_area'
+  autoload :NotFoundError, 'steam/not_found_error'
 
-    @@adapters = {
-      :nokogiri => Dom::Nokogiri::Page,
-      :html_unit => Dom::HtmlUnit::Page
-    }
+  module Locators
+    autoload :Area,          'steam/locators/area'
+    autoload :Base,          'steam/locators/base'
+    autoload :Button,        'steam/locators/button'
+    autoload :Element,       'steam/locators/element'
+    autoload :Field,         'steam/locators/field'
+    autoload :Form,          'steam/locators/form'
+    autoload :Label,         'steam/locators/label'
+    autoload :Link,          'steam/locators/link'
+    autoload :Select,        'steam/locators/select'
+    autoload :SelectOption,  'steam/locators/select_option'
+    autoload :TextArea,      'steam/locators/text_area'
 
     class << self
-      def strategy
-        @@strategy ||= :nokogiri
-      end
-
-      def strategy=(strategy)
-        @@strategy = strategy
-      end
-
-      def adapter(name)
-        @@adapters[name || Locators.strategy]
+      def adapter
+        Dom::Nokogiri::Page
       end
     end
 
@@ -75,14 +64,14 @@ module Steam
         locator = lambda { locator(type, *args).locate }
         element = scope ? within(scope) { locator.call } : locator.call
         element = within(element) { yield(element) } if element && block_given?
-        element
+        element || raise(Steam::NotFoundError.new(type, args))
       end
 
       def locator(type, *args)
         options = args.last.is_a?(Hash) ? args.last : args.push({}).last
 
         adapter = options.delete(:using)
-        dom = Locators.adapter(adapter).build(page, response.body.join)
+        dom = Locators.adapter.build(page, response.body.join)
 
         type = locators[type.to_sym] if type.is_a?(Symbol)
         type.new(dom, *args)

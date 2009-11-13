@@ -10,10 +10,17 @@ class HtmlUnitElementsTest < Test::Unit::TestCase
     perform :get, 'http://localhost:3000/', html
 
     element = @browser.locate_element('link')
-
     assert_response_contains('LINK') do
       @mock.mock :get, 'http://localhost:3000/link', 'LINK'
-      @browser.click_on(element)
+      @browser.click_on('link')
+    end
+  end
+
+  def test_locate_non_existing_element_raises_an_exception_with_info
+    html = ERB.new("<html></html>").result(binding)
+    perform :get, 'http://localhost:3000/', html
+    assert_raise Steam::NotFoundError do
+      @browser.click_link('hello')
     end
   end
 
