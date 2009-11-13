@@ -1,3 +1,21 @@
+# running this script, e.g. with
+#
+#   ruby test/playground/stack_level_problem.rb
+#
+# will yield an error message like this:
+#
+#   stack level too deep
+#   test/playground/stack_level_problem.rb:94:in `getResponse'
+#   test/playground/stack_level_problem.rb:109:in `method_missing'
+#   test/playground/stack_level_problem.rb:109
+#
+# The fun part is that whenever I change a single line, e.g. output
+# something with puts, I'll get the same error from a different place.
+#
+# Also, there doesn't seem to happen any "real" recursion. Maybe Ruby
+# just "thinks" there's  recursion happening. Or maybe something
+# completely unrelated is happening?
+
 $: << File.expand_path(File.dirname(__FILE__) + "/../../lib")
 require 'steam'
 require 'steam/browser/html_unit/client'
@@ -18,7 +36,7 @@ class WebResponse
   def getRequestSettings
     Java::WebRequestSettings.new(Java::Url.new('http://localhost:3000/'))
   end
-  
+
   def getResponseHeaders
     Java::Arrays.asList([])
   end
@@ -78,14 +96,14 @@ class Connection
       </head>
     </html>
   erb
-  
+
   @@responses = {
     'http://localhost:3000/' => Rack::Response.new(page, 200),
     'http://localhost:3000/ajax/1' => Rack::Response.new('post ajax call!', 200, 'Content-Type' => 'application/javascript')
   }
-  
+
   @@track = []
-  
+
   def getResponse(request)
     url = request.getUrl.toString.dup
     method = request.getHttpMethod.toString.dup
@@ -107,5 +125,5 @@ connection = Connection.new
 client.setWebConnection(Rjb::bind(connection, 'com.gargoylesoftware.htmlunit.WebConnection'))
 
 page = client.getPage('http://localhost:3000/')
-puts page.asXml
-puts page.getTitleText
+# puts page.asXml
+# puts page.getTitleText
