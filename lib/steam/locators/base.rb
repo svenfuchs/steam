@@ -16,7 +16,7 @@ module Steam
 
         # for some reason, when we don't scope to //body, nokogiri crashes
         # with an "invalid memory access to location 0x0" error
-        # @scope ||= selector.to_s == 'body' ? '' : '//body'
+        @scope ||= selector.to_s == 'body' ? '' : '//body'
       end
 
       def matchable_attributes
