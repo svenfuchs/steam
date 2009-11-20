@@ -3,7 +3,7 @@ module Steam
     class Field < Base
       def initialize(dom, *args)
         attributes = args.last.is_a?(Hash) ? args.pop : {}
-        attributes[:type] = 'text' unless attributes.has_key?(:type)
+        attributes[:type] = ['text', 'password'] unless attributes.has_key?(:type)
         scope = args.shift
         super(dom, scope, attributes)
       end

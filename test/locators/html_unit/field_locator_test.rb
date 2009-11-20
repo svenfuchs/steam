@@ -74,4 +74,16 @@ class HtmlUnitLocatorFieldTest < HtmlUnitLocatorTest
     dom = dom('<input type="text" title="foo" />')
     assert_nil Locators::Field.new(dom, 'bogus').locate
   end
+
+  def test_locates_the_first_password_field_when_no_value_given
+    dom = dom('<input type="password" name="foo-bar" /><input type="text" name="foo" />')
+    element = Locators::Field.new(dom, 'foo-bar').locate
+    assert_equal 'foo-bar', element.attribute('name')
+  end
+
+  def test_locate_text_fields_before_password_fields
+    dom = dom('<input type="password" name="foo" /><input type="text" name="foo" />')
+    element = Locators::Field.new(dom, 'foo').locate
+    assert_equal 'foo', element.attribute('name')
+  end
 end
