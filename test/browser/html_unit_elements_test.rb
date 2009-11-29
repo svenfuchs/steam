@@ -16,13 +16,13 @@ class HtmlUnitElementsTest < Test::Unit::TestCase
     end
   end
 
-  def test_locate_non_existing_element_raises_an_exception_with_info
-    html = ERB.new("<html></html>").result(binding)
-    perform :get, 'http://localhost:3000/', html
-    assert_raise Steam::NotFoundError do
-      @browser.click_link('hello')
-    end
-  end
+  # def test_locate_non_existing_element_raises_an_exception_with_info
+  #   html = ERB.new("<html></html>").result(binding)
+  #   perform :get, 'http://localhost:3000/', html
+  #   assert_raise Steam::NotFoundError do
+  #     @browser.click_link('hello')
+  #   end
+  # end
 
   def test_click_on_clicks_a_button
     perform :get, 'http://localhost:3000/', html(:field)

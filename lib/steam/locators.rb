@@ -64,7 +64,11 @@ module Steam
         locator = lambda { locator(type, *args).locate }
         element = scope ? within(scope) { locator.call } : locator.call
         element = within(element) { yield(element) } if element && block_given?
-        element || raise(Steam::NotFoundError.new(type, args))
+        # FIXME: Can't raise exception here because Steam automatically returns
+        # the first suitable element if element is nil here. We might want to
+        # think about whether or not we actually want that behavior.
+        # raise(Steam::NotFoundError.new(type, args)) unless element
+        element
       end
 
       def locator(type, *args)
