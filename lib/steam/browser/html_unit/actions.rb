@@ -125,13 +125,13 @@ module Steam
         def select_date(date, options = {})
           date = date.respond_to?(:strftime) ? date : Date.parse(date)
 
-          id_prefix   = options.delete(:id_prefix)
-          id_prefix ||= options[:from] # FIXME adapt webrat
+          # inspired by Webrat
+          id_prefix = locate_id_prefix(options)
 
           # FIXME .to_s should be done somewhere inside the locator
-          select(date.year.to_s, :from => "#{id_prefix}_#{DATE_TIME_SUFFIXES[:year]}")
-          select(date.mon.to_s,  :from => "#{id_prefix}_#{DATE_TIME_SUFFIXES[:month]}")
-          select(date.day.to_s,  :from => "#{id_prefix}_#{DATE_TIME_SUFFIXES[:day]}")
+          select(date.year.to_s,      :from => "#{id_prefix}_#{DATE_TIME_SUFFIXES[:year]}")
+          select(date.strftime('%B'), :from => "#{id_prefix}_#{DATE_TIME_SUFFIXES[:month]}")
+          select(date.day.to_s,       :from => "#{id_prefix}_#{DATE_TIME_SUFFIXES[:day]}")
         end
 
         def select_datetime(datetime, options = {})
@@ -142,8 +142,8 @@ module Steam
         def select_time(time, options = {})
           time = time.respond_to?(:strftime) ? time : DateTime.parse(time)
 
-          id_prefix   = options.delete(:id_prefix)
-          id_prefix ||= options[:from] # FIXME adapt webrat
+          # inspired by Webrat
+          id_prefix = locate_id_prefix(options)
 
           select(time.hour.to_s.rjust(2,'0'), :from => "#{id_prefix}_#{DATE_TIME_SUFFIXES[:hour]}")
           select(time.min.to_s.rjust(2,'0'),  :from => "#{id_prefix}_#{DATE_TIME_SUFFIXES[:minute]}")
@@ -169,6 +169,19 @@ module Steam
         end
 
         protected
+
+          # inspired by Webrat
+          def locate_id_prefix(options)
+            return options[:id_prefix] if options[:id_prefix]
+
+            if options[:from]
+              if (label = locate(:label, options[:from]))
+                label.attribute('for')
+              else
+                raise NotFoundError.new(:label, options[:from])
+              end
+            end
+          end
 
           def action
             @page = (page = yield) ? page : @page # some actions return nil

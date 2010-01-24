@@ -58,18 +58,21 @@ module HtmlUnitHelper
       when :file
         fields << '<label for="file">Label for file</label><input id="file" type="file" name="file" />'
       when :date
-        fields << '<select id="date_1i" name="date(1i)"><option value="2008">2008</option><option value="2009">2009</option><option value="2010">2010</option></select>' \
-               << '<select id="date_2i" name="date(2i)"><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>' \
-               << '<select id="date_3i" name="date(3i)"><option value="6">6</option><option value="7">7</option><option value="8">8</option></select>'
+        fields << '<label for="event_date">Date</label>' \
+               << '<select id="event_date_1i" name="event_date(1i)"><option value="2008">2008</option><option value="2009">2009</option><option value="2010">2010</option></select>' \
+               << '<select id="event_date_2i" name="event_date(2i)"><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>' \
+               << '<select id="event_date_3i" name="event_date(3i)"><option value="6">6</option><option value="7">7</option><option value="8">8</option></select>'
       when :datetime
-        fields << '<select id="datetime_1i" name="datetime(1i)"><option value="2008">2008</option><option value="2009">2009</option><option value="2010">2010</option></select>' \
-               << '<select id="datetime_2i" name="datetime(2i)"><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>' \
-               << '<select id="datetime_3i" name="datetime(3i)"><option value="6">6</option><option value="7">7</option><option value="8">8</option></select> : ' \
-               << '<select id="datetime_4i" name="datetime(4i)"><option value="18">18</option><option value="19">19</option><option value="20">20</option></select>' \
-               << '<select id="datetime_5i" name="datetime(5i)"><option value="0">00</option><option value="1">01</option><option value="2">02</option></select>'
+        fields << '<label for="event_datetime">Datetime</label>' \
+               << '<select id="event_datetime_1i" name="event_datetime(1i)"><option value="2008">2008</option><option value="2009">2009</option><option value="2010">2010</option></select>' \
+               << '<select id="event_datetime_2i" name="event_datetime(2i)"><option value="10">October</option><option value="11">November</option><option value="12">December</option></select>' \
+               << '<select id="event_datetime_3i" name="event_datetime(3i)"><option value="6">6</option><option value="7">7</option><option value="8">8</option></select> : ' \
+               << '<select id="event_datetime_4i" name="event_datetime(4i)"><option value="18">18</option><option value="19">19</option><option value="20">20</option></select>' \
+               << '<select id="event_datetime_5i" name="event_datetime(5i)"><option value="0">00</option><option value="1">01</option><option value="2">02</option></select>'
       when :time
-        fields << '<select id="time_4i" name="time(4i)"><option value="18">18</option><option value="19">19</option><option value="20">20</option></select>' \
-               << '<select id="time_5i" name="time(5i)"><option value="0">00</option><option value="1">01</option><option value="2">02</option></select>'
+        fields << '<label for="event_time">Time</label>' \
+               << '<select id="event_time_4i" name="event_time(4i)"><option value="18">18</option><option value="19">19</option><option value="20">20</option></select>' \
+               << '<select id="event_time_5i" name="event_time(5i)"><option value="0">00</option><option value="1">01</option><option value="2">02</option></select>'
       when :jquery
         scripts << '<script src="/javascripts/jquery.js" type="text/javascript"></script>'
       when :jquery_ui
