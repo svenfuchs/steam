@@ -32,10 +32,11 @@ class NokogiriLocatorElementTest < NokogiriLocatorTest
     assert_equal 'bar', element.attribute('data-foo').to_s
   end
 
-  def test_locates_the_first_element_when_no_value_given
+  # def test_locates_the_first_element_when_no_value_given
+  def test_locates_the_first_element_in_the_body_element_when_no_value_given
     dom = dom('<html><head></head><body><p id="foo-bar"></p><p id="foo"></p></html>')
     element = Locators::Element.new(dom).locate
-    assert_match %r(<html>), element.to_s
+    assert element.to_s.include?('<p id="foo-bar"></p>')
   end
 
   def test_locates_the_element_with_the_shortest_matching_id_attribute
