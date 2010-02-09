@@ -1,5 +1,4 @@
 require File.expand_path(File.dirname(__FILE__) + '/test_helper')
-require 'erb'
 
 class SessionTest < Test::Unit::TestCase
   include Steam

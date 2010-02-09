@@ -1,6 +1,5 @@
 require File.expand_path('../../../test_helper', __FILE__)
 require 'fixtures/html_fakes'
-require 'erb'
 
 class HtmlUnitActionsTest < Test::Unit::TestCase
   include Steam, HtmlFakes

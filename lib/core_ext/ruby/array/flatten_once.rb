@@ -6,4 +6,4 @@ class Array
     end
     result
   end
-end
+end unless Array.method_defined?(:flatten_once)
