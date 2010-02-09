@@ -37,8 +37,8 @@ class Test::Unit::TestCase
 
   def assert_response_contains(text, options = {})
     tag_name = options[:in] || 'body'
-    status, headers, response = yield
-    assert_equal 200, status
-    assert_match %r(<#{tag_name}>\s*#{text}\s*<\/#{tag_name}>), response.body.join
+    response = yield
+    assert_equal 200, response.status
+    assert_match %r(<#{tag_name}>\s*#{text}\s*<\/#{tag_name}>), response.body
   end
 end

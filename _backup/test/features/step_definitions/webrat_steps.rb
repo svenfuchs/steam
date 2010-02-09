@@ -129,5 +129,5 @@ Then /^the "([^\"]*)" checkbox should not be checked$/ do |label|
 end
 
 Then /^I should be on (.+)$/ do |page_name|
-  URI.parse(current_url).path.should == path_to(page_name)
+  URI.parse(page.url).path.should == path_to(page_name)
 end

@@ -29,25 +29,18 @@ module Steam
       alias :visit :request
 
       def call(env)
-        @request = Rack::Request.new(env)
-        @page = client.request(@request.url)
-        respond!
+        respond_to do
+          @request = Rack::Request.new(env)
+          client.request(@request.url)
+        end.to_a
       end
 
       def execute(javascript)
-        @page.executeJavaScript(javascript) # FIXME doesn't respond?
-      end
-
-      def current_url
-        page.getWebResponse.getRequestSettings.getUrl.toString
-      end
-
-      def html
-        response.body.join
+        page.execute(javascript) # FIXME does execute return a page so we need to respond?
       end
 
       def locate(*args, &block)
-        Locator.locate(html, *args, &block) || raise(ElementNotFound.new(*args))
+        Locator.locate(response.body, *args, &block) || raise(ElementNotFound.new(*args))
       end
 
       def locate_in_browser(*args, &block)
@@ -61,26 +54,16 @@ module Steam
       end
 
       def within(*args, &block)
-        Locator.within(html, *args, &block)
+        Locator.within(response.body, *args, &block)
       end
 
       protected
 
         def respond_to
-          @page = yield || raise('Block did not yield a dom.gargoylesoftware.htmlunit.html.HtmlPage.')
-          respond!
-        end
-
-        def respond!
-          @client.waitForBackgroundJavaScript(5000) # FIXME should probably use some block syntax
-          body    = @page.asXml
-          status  = @page.getWebResponse.getStatusCode
-          headers = @page.getWebResponse.getResponseHeaders.toArray.inject({}) do |headers, pair|
-            headers[pair.name] = pair.value
-            headers
-          end
-          @response = Rack::Response.new(body, status, headers)
-          @response.to_a
+          result = yield || raise('Block did not yield a dom.gargoylesoftware.htmlunit.html.HtmlPage.')
+          @page = Page.new(result)
+          client.wait_for_javascript(Steam.config[:html_unit][:js_timeout])
+          @response = Response.new(*page.to_a)
         end
     end
   end
