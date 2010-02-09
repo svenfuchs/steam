@@ -28,6 +28,7 @@ module Steam
           import('java.util.Arrays', :Arrays)
           import('java.util.ArrayList', :ArrayList)
           import('org.apache.commons.httpclient.NameValuePair', :NameValuePair)
+          # import('com.gargoylesoftware.htmlunit.util.NameValuePair', :NameValuePair) # HtmlUnit 2.7
         end
 
         def set_classpath!
