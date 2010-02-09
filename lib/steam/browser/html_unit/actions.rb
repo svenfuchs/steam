@@ -63,7 +63,10 @@ module Steam
         end
         
         def submit_form(element, options = {})
-          respond_to { locate_in_browser(:form, element, options).submit(nil) }
+          respond_to do
+            scope = [:form, element, options]
+            locate_in_browser(:input, :type => 'submit', :within => scope).click
+          end
         end
         
         def drag_and_drop(element, options = {})
