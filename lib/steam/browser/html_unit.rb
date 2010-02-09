@@ -36,30 +36,33 @@ module Steam
       def current_url
         page.getWebResponse.getRequestSettings.getUrl.toString
       end
-      
+
       def html
         response.body.join
       end
 
       def locate(*args, &block)
-        return args.first if args.first.respond_to?(:_classname)
-
-        # FIXME why not just use self.html?
-        element = Locator.locate(@page.as_xml, *args, &block) 
-        element || raise(ElementNotFound.new(*args))
-        # FIXME remove silence_warnings
-        # FIXME raise something meaningful
-        silence_warnings { page.getFirstByXPath(element.xpath) }
+        Locator.locate(html, *args, &block) || raise(ElementNotFound.new(*args))
       end
-      
+
+      def locate_in_browser(*args, &block)
+        if args.first.respond_to?(:_classname)
+          args.first
+        else
+          element = locate(*args, &block)
+          # FIXME remove silence_warnings, raise something meaningful
+          silence_warnings { page.getFirstByXPath(element.xpath) }
+        end
+      end
+
       def within(*args, &block)
         Locator.within(html, *args, &block)
       end
 
       protected
 
-        def action
-          @page = yield || raise('Action did not return a dom.gargoylesoftware.htmlunit.html.HtmlPage.')
+        def respond_to
+          @page = yield || raise('Block did not yield a dom.gargoylesoftware.htmlunit.html.HtmlPage.')
           respond!
         end
 

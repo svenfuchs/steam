@@ -6,25 +6,25 @@ module Steam
     class HtmlUnit
       module Actions
         def click_on(*args)
-          action { locate(*args).click }
+          respond_to { locate_in_browser(*args).click }
         end
 
         def click_link(element, options = {})
-          action { locate(:link, element, options).click }
+          respond_to { locate_in_browser(:link, element, options).click }
         end
         
         def click_button(element, options = {})
-          action { locate(:button, element, options).click }
+          respond_to { locate_in_browser(:button, element, options).click }
         end
         
         def click_area(element, options = {})
-          action { locate(:area, element, options).click }
+          respond_to { locate_in_browser(:area, element, options).click }
         end
         
         def fill_in(element, options = {})
-          action do
+          respond_to do
             value = options.delete(:with)
-            element = locate(:field, element, options)
+            element = locate_in_browser(:field, element, options)
             result = element.setText(value) rescue element.setValueAttribute(value)
             # TODO - submit a bug: element.setText returns nil, textarea.setValueAttribute returns a page
             result || page
@@ -32,26 +32,26 @@ module Steam
         end
         
         def check(element, options = {})
-          action { locate(:check_box, element, options).setChecked(true) }
+          respond_to { locate_in_browser(:check_box, element, options).setChecked(true) }
         end
         
         def uncheck(element, options = {})
-          action { locate(:check_box, element, options).setChecked(false) }
+          respond_to { locate_in_browser(:check_box, element, options).setChecked(false) }
         end
         
         def choose(element, options = {})
-          action { locate(:radio_button, element, options).setChecked(true) }
+          respond_to { locate_in_browser(:radio_button, element, options).setChecked(true) }
         end
         
         def select(element, options = {})
           options.update(:within => [:select, options.delete(:from)])
-          action { locate(:select_option, element, options).setSelected(true) }
+          respond_to { locate_in_browser(:select_option, element, options).setSelected(true) }
         end
         
         def set_hidden_field(element, options = {})
-          action do
+          respond_to do
             value = options.delete(:to)
-            locate(:hidden_field, element, options).setValueAttribute(value)
+            locate_in_browser(:hidden_field, element, options).setValueAttribute(value)
           end
         end
         
@@ -61,7 +61,7 @@ module Steam
         end
         
         def submit_form(element, options = {})
-          action { locate(:form, element, options).submit(nil) }
+          respond_to { locate_in_browser(:form, element, options).submit(nil) }
         end
         
         def drag_and_drop(element, options = {})
@@ -70,12 +70,12 @@ module Steam
         end
         
         def drag(element, options = {})
-          action do
+          respond_to do
             target  = extract_drop_target!(options, [:to, :onto, :over, :target])
-            element = locate(element, options)
+            element = locate_in_browser(element, options)
             if target
               element.mouseDown
-              @_drop_target = locate(target)
+              @_drop_target = locate_in_browser(target)
               @_drop_target.mouseMove
             else
               element.mouseDown
@@ -84,8 +84,8 @@ module Steam
         end
         
         def drop(element = nil, options = {})
-          action do
-            element = @_drop_target || locate(element, options)
+          respond_to do
+            element = @_drop_target || locate_in_browser(element, options)
             element.mouseMove unless @_drop_target
             @_drop_target = nil
             element.mouseUp
@@ -93,28 +93,28 @@ module Steam
         end
         
         def hover(element, options = {})
-          action { locate(element, options).mouseOver }
+          respond_to { locate_in_browser(element, options).mouseOver }
         end
         
         def blur(element, options = {})
-          action do
-            locate(element, options).blur
+          respond_to do
+            locate_in_browser(element, options).blur
             @page # blur seems to return nil
           end
         end
         
         def focus(element, options = {})
-          action do
-            locate(element, options).focus
+          respond_to do
+            locate_in_browser(element, options).focus
             @page # focus seems to return nil
           end
         end
         
         def double_click(element, options = {})
-          action { locate(element, options).dblClick }
+          respond_to { locate_in_browser(element, options).dblClick }
         end
         
-        # Rails specific actions
+        # Rails specific respond_tos
         DATE_TIME_CODE = {
           :year   => '1i',
           :month  => '2i',
@@ -156,7 +156,7 @@ module Steam
           end
           
           def locate_id_prefix_label(options)
-            locate(:label, options[:from]) rescue locate(:label, :for => options[:from])
+            locate_in_browser(:label, options[:from]) rescue locate_in_browser(:label, :for => options[:from])
           end
         
           def extract_drop_target!(targets, keys)

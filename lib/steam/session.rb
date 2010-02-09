@@ -7,10 +7,6 @@ module Steam
     def initialize(browser = nil)
       @browser = browser
     end
-      
-    def locate(*args, &block)
-      Locator.locate(browser.html, *args, &block) || raise(ElementNotFound.new(*args))
-    end
 
     # FIXME - there has to be a better way to enforce this - how does webrat handle it?
     def select(*args, &block)
