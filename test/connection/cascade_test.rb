@@ -2,7 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 require 'rack/cascade'
 
 class ConnectionCascadeTest < Test::Unit::TestCase
-  include TestHelper
   include Steam
 
   def setup

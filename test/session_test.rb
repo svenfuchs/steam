@@ -13,8 +13,4 @@ class SessionTest < Test::Unit::TestCase
   def test_session_responds_to_browser_methods
     assert @session.respond_to?(:call)
   end
-
-  def test_session_responds_to_dynamic_locator_methods
-    assert @session.respond_to?(:locate_element)
-  end
 end

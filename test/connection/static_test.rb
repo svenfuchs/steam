@@ -1,7 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class ConnectionStaticTest < Test::Unit::TestCase
-  include TestHelper
   include Steam
 
   def test_static

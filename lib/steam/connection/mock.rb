@@ -1,3 +1,5 @@
+require 'cgi'
+
 module Steam
   module Connection
     class Mock
@@ -22,7 +24,7 @@ module Steam
       end
 
       def response(method, url)
-        responses(method)[url] || Rack::Response.new('', 404)
+        responses(method)[CGI::unescape(url)] || Rack::Response.new('', 404)
       end
 
       def mock(method, url, response, headers = {})

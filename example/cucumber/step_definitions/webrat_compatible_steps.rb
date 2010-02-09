@@ -130,7 +130,7 @@ end
 
 Then /^(?:|I )should see "([^\"]*)"$/ do |text|
   if defined?(Steam)
-    locate_element(text).should_not be_nil
+    locate(text).should_not be_nil
   else
     response.should contain(text)
   end
