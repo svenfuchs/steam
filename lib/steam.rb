@@ -1,14 +1,13 @@
 require 'rack'
 
 module Steam
-  autoload :Browser,         'steam/browser'
-  autoload :Connection,      'steam/connection'
-  autoload :ElementNotFound, 'steam/exceptions'
-  autoload :Java,            'steam/java'
-  autoload :Reloader,        'steam/reloader'
-  autoload :Request,         'steam/request'
-  autoload :Response,        'steam/response'
-  autoload :Session,         'steam/session'
+  autoload :Browser,    'steam/browser'
+  autoload :Connection, 'steam/connection'
+  autoload :Java,       'steam/java'
+  autoload :Reloader,   'steam/reloader'
+  autoload :Request,    'steam/request'
+  autoload :Response,   'steam/response'
+  autoload :Session,    'steam/session'
 
   class << self
     def config
@@ -26,6 +25,12 @@ module Steam
           :on_error_status => nil   # set to :print to print content on error status, :fail to raise an exception
         }
       }
+    end
+  end
+
+  class ElementNotFound < StandardError
+    def initialize(*args)
+      super "could not find element: #{args.map { |arg| arg.inspect }.join(', ') }"
     end
   end
 end
