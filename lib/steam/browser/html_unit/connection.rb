@@ -1,5 +1,16 @@
 # For internal use in Browser::HtmlUnit to hook into HtmlUnit's request process.
-# Does not support the Rack interface because HtmlUnit doesn't.
+# Does not support the Rack interface because HtmlUnit doesn't. Not currently
+# used by Steam, but potentially useful to get HtmlUnit and the app running in
+# a single stack.
+#
+# Can be set to a com.gargoylesoftware.htmlunit.WebClient like this:
+#
+#   mock = Steam::Connection::Mock.new
+#   mock.mock :get, 'http://localhost:3000/', 'body!'
+#   connection = Steam::Browser::HtmlUnit::Connection.new(mock)
+#
+#   client = java::WebClient.new(Java::BrowserVersion.FIREFOX_3)
+#   client.setWebConnection(Rjb::bind(connection, 'com.gargoylesoftware.htmlunit.WebConnection'))
 
 require 'thread'
 require 'rack/utils'

@@ -1,3 +1,7 @@
+# Mimicks the com.gargoylesoftware.htmlunit.WebRequestSettings api so it can be
+# returned by an object that mimicks com.gargoylesoftware.htmlunit.WebConnection
+# Not currently used in Steam, but useful for experimental stuff.
+
 module Steam
   module Browser
     class HtmlUnit

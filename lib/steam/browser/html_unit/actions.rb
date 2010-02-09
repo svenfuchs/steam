@@ -1,5 +1,7 @@
+# Convenience dsl for executing typical actions on the web browser and current
+# page. Mimicks the well-known Webrat API but adds stuff like drag/drop support.
+
 require 'core_ext/ruby/hash/slice'
-require 'core_ext/ruby/kernel/silence_warnings'
 
 module Steam
   module Browser

@@ -1,3 +1,5 @@
+# Extends a Rack::Request with convenience methods
+
 require 'uri'
 
 module Steam
@@ -25,7 +27,7 @@ module Steam
           'SERVER_PORT'      => Steam.config[:server_port],
           'QUERY_STRING'     => uri.query.to_s,
           'PATH_INFO'        => (!uri.path || uri.path.empty?) ? '/' : uri.path,
-          'rack.url_scheme'  => Steam.config[:rack_url_scheme],
+          'rack.url_scheme'  => Steam.config[:url_scheme],
           'SCRIPT_NAME'      => opts[:script_name] || '',
           'rack.errors'      => StringIO.new,
           'rack.input'       => input.is_a?(String) ? StringIO.new(input) : input,
@@ -35,7 +37,6 @@ module Steam
           'rack.test.port'   => uri.port,
           'rack.test.cache_classes' => true
         )
-        # env.merge! Hash[*opts.select { |key, value| key.is_a?(String) }.flatten]
         env
       end
     end

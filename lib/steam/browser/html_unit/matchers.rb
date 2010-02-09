@@ -43,14 +43,14 @@
 #       # the supplied string or regexp
 #       def assert_contain(content)
 #         hc = HasContent.new(content)
-#         assert hc.matches?(response_body), hc.failure_message
+#         assert hc.matches?(response.body), hc.failure_message
 #       end
 # 
 #       # Asserts that the body of the response
 #       # does not contain the supplied string or regepx
 #       def assert_not_contain(content)
 #         hc = HasContent.new(content)
-#         assert !hc.matches?(response_body), hc.negative_failure_message
+#         assert !hc.matches?(response.body), hc.negative_failure_message
 #       end
 #     end
 #   end

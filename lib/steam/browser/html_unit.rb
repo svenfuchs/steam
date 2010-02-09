@@ -1,4 +1,9 @@
+# Browser implementation using HtmlUnit. Steam::Session delegates here, so this
+# interface is available in your Cucumber environment. Also see HtmlUnit::Actions
+# which is included here.
+
 require 'locator'
+require 'core_ext/ruby/kernel/silence_warnings'
 
 module Steam
   module Browser

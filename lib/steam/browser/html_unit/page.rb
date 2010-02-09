@@ -1,9 +1,18 @@
+# Wraps a dom.gargoylesoftware.htmlunit.html.HtmlPage (which is returned by
+# most browser actions such as click, drag, drop etc.) with a nicer interface.
+
 module Steam
   module Browser
     class HtmlUnit
       class Page
+        attr_reader
+
         def initialize(page)
           @page = page
+        end
+
+        def url
+          @page.getWebResponse.getRequestSettings.getUrl.toString
         end
 
         def status
@@ -21,8 +30,16 @@ module Steam
           @page.asXml
         end
 
+        def execute(javascript)
+          @page.executeJavaScript(javascript)
+        end
+
         def sourceCode
           @page.asXml
+        end
+
+        def to_a
+          [body, status, headers]
         end
 
         def method_missing(method, *args)
