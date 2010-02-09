@@ -19,6 +19,7 @@ module Steam
         :charset           => 'utf-8',
         :java_load_params  => '-Xmx1024M',
         :html_unit => {
+          :browser_version => :FIREFOX_3,
           :css             => true,
           :javascript      => true,
           :js_timeout      => 5000,

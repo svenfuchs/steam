@@ -17,7 +17,7 @@ module Steam
         def initialize(connection = nil, options = {})
           options = Steam.config[:html_unit].merge(options)
 
-          @java = Java::WebClient.new(Java::BrowserVersion.FIREFOX_3)
+          @java = Java::WebClient.new(Java::BrowserVersion.send(options[:browser_version]))
           @java.setCssEnabled(options[:css])
           @java.setJavaScriptEnabled(options[:javascript])
           @java.setPrintContentOnFailingStatusCode(options[:on_error_status] == :print)
