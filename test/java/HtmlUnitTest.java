@@ -4,6 +4,7 @@ import org.junit.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.regex.Pattern;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.MockWebConnection;
@@ -11,6 +12,12 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.apache.commons.io.FileUtils;
+
+/*
+    org.junit.ComparisonFailure:
+    Expected :<div id="drop_2" class="drop ui-droppable"></div>
+    Actual   :<div id="drop_1" class="drop ui-droppable"></div>
+*/
 
 public class HtmlUnitTest {
     protected WebClient client;
@@ -31,7 +38,7 @@ public class HtmlUnitTest {
 
         HtmlPage page = client.getPage("http://localhost/index.html");
         HtmlElement drag = (HtmlElement) page.getByXPath("//div[contains(@class, 'drag')]").get(0);
-        HtmlElement drop = (HtmlElement) page.getByXPath("//div[@id='drop_4']").get(0);
+        HtmlElement drop = (HtmlElement) page.getByXPath("//div[@id='drop_2']").get(0);
 
         drag.mouseDown();
         drop.mouseMove();
@@ -39,7 +46,7 @@ public class HtmlUnitTest {
         client.waitForBackgroundJavaScript(1000);
 
         String log = page.executeJavaScript("$('#log').text()").getJavaScriptResult().toString();
-        assertEquals("<div class=\"drop ui-droppable\" id=\"drop_2\">", log);
+        assertEquals("<div id=\"drop_2\" class=\"drop ui-droppable\"></div>", log);
     }
 
     public void mockResponse(String path, String contentType) throws Exception {
@@ -50,4 +57,5 @@ public class HtmlUnitTest {
     public String readFile(String name) throws IOException {
         return FileUtils.readFileToString(new File(name));
     }
+
 }
