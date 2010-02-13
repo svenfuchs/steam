@@ -1,0 +1,5 @@
+http://htmlunit.sourceforge.net/logging.html
+
+http://htmlunit.sourceforge.net/faq.html#MemoryLeak
+HtmlUnit appears to be leaking memory; what's the deal?
+Make sure (a) that you are using the latest version of HtmlUnit, and (b) that you are calling WebClient.closeAllWindows() when you are finished with your WebClient instance.
