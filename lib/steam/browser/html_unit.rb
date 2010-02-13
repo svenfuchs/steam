@@ -54,7 +54,7 @@ module Steam
       end
 
       def within(*args, &block)
-        Locator.within(response.body, *args, &block)
+        Locator.within(*args, &block)
       end
 
       protected
