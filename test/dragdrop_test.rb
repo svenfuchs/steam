@@ -15,7 +15,8 @@ def drag_to(target)
   drag = @browser.locate_in_browser(:div, :class => 'drag')
   drop = @browser.locate_in_browser(:div, :id => target)
 
-  puts "\nDROPPING ONTO (#{drop.getCanonicalXPath}):\n" + drop.asXml
+  puts "\nDRAGGING #{drag.getCanonicalXPath}"
+  puts "DROPPING ONTO (#{drop.getCanonicalXPath}):\n" + drop.asXml
 
   drag.mouseDown
   drop.mouseMove
