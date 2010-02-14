@@ -27,8 +27,8 @@ module Steam
           :js_timeout        => 5000,
           :log_level         => :warning,
           :log_incorrectness => false,
-          :on_error_status   => nil # set to :raise to raise an exception on error status, :print to print content
-          :on_script_error   => nil # set to :raise to raise an exception on javascript exceptions
+          :on_error_status   => nil, # set to :raise to raise an exception on error status, :print to print content
+          :on_script_error   => nil  # set to :raise to raise an exception on javascript exceptions
         }
       }
     end

@@ -23,6 +23,10 @@ module Steam
         @client = Client.new(*args)
       end
 
+      def close
+        @client.closeAllWindows
+      end
+
       def request(url)
         call Request.env_for(url)
       end
