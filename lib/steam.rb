@@ -19,12 +19,16 @@ module Steam
         :charset           => 'utf-8',
         :java_load_params  => '-Xmx1024M',
         :html_unit => {
-          :java_path       =>  File.expand_path("../htmlunit-2.6/", __FILE__),
-          :browser_version => :FIREFOX_3,
-          :css             => true,
-          :javascript      => true,
-          :js_timeout      => 5000,
-          :on_error_status => nil   # set to :print to print content on error status, :fail to raise an exception
+          :java_path         =>  File.expand_path("../htmlunit-2.6/", __FILE__),
+          :browser_version   => :FIREFOX_3,
+          :css               => true,
+          :javascript        => true,
+          :resynchronize     => true,
+          :js_timeout        => 5000,
+          :log_level         => :warning,
+          :log_incorrectness => false,
+          :on_error_status   => nil # set to :raise to raise an exception on error status, :print to print content
+          :on_script_error   => nil # set to :raise to raise an exception on javascript exceptions
         }
       }
     end

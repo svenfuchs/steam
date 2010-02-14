@@ -31,13 +31,19 @@ module Steam
           @java.setCssEnabled(options[:css])
           @java.setJavaScriptEnabled(options[:javascript])
           @java.setPrintContentOnFailingStatusCode(options[:on_error_status] == :print)
-          @java.setThrowExceptionOnFailingStatusCode(options[:on_error_status] == :fail)
+          @java.setThrowExceptionOnFailingStatusCode(options[:on_error_status] == :raise)
+          @java.setThrowExceptionOnScriptError(options[:on_script_error] == :raise)
 
-          listener = Rjb::bind(SilencingListener.new, 'com.gargoylesoftware.htmlunit.IncorrectnessListener')
-          @java.setIncorrectnessListener(listener)
+          self.log_level = options[:log_level]
+          unless options[:log_incorrectness]
+            listener = Rjb::bind(SilencingListener.new, 'com.gargoylesoftware.htmlunit.IncorrectnessListener')
+            @java.setIncorrectnessListener(listener)
+          end
 
-          controller = Java::NicelyResynchronizingAjaxController.new
-          @java.setAjaxController(controller)
+          if options[:resynchronize]
+            controller = Java::NicelyResynchronizingAjaxController.new
+            @java.setAjaxController(controller)
+          end
 
           if connection
             connection = Rjb::bind(Connection.new(connection), 'com.gargoylesoftware.htmlunit.WebConnection')
@@ -52,6 +58,16 @@ module Steam
         def wait_for_javascript(timeout)
           waitForBackgroundJavaScript(timeout)
           yield if block_given?
+        end
+
+        # FIXME setLevel throws "Fail: unknown method name `setLevel'". weird.
+        def log_level=(level)
+          [ 'com.gargoylesoftware.htmlunit',
+            'com.gargoylesoftware.htmlunit.html',
+            'com.gargoylesoftware.htmlunit.javascript',
+            'org.apache.commons.httpclient'
+          ].each { |classifier|
+            Java.logger(classifier).setLevel(Java.log_level(level)) }
         end
 
         def method_missing(method, *args)
