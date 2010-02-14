@@ -1,7 +1,27 @@
 require 'rjb'
+require 'core_ext/ruby/string/camelize'
+require 'core_ext/ruby/string/underscore'
 
 module Steam
   module Java
+    module AutoDefine
+      def const_set_nested(full_name, const)
+        name = pop_name(full_name)
+        return const_set(name, const) if full_name.empty? && !const_defined?(name)
+
+        const_set(name, Module.new { extend AutoDefine }) unless const_defined?(name)
+        target = const_get(name)
+        target.const_set_nested(full_name, const)
+      end
+
+      def pop_name(string)
+        name, *rest = string.split('::')
+        string.replace(rest.join('::'))
+        name
+      end
+    end
+    extend AutoDefine
+
     class << self
       def const_missing(name)
         return init && const_get(name) unless @initialized
@@ -10,33 +30,35 @@ module Steam
 
       def import(signature, name = nil)
         init unless @initialized
-        name ||= signature.split('.').last.to_sym
-        const_set(name, Rjb::import(signature)) unless const_defined?(name)
+        name = path_to_const_name(signature)
+        const_set_nested(name, Rjb::import(signature))
+      end
+
+      def path_to_const_name(path)
+        path.split('.').map { |token| token.underscore.camelize }.join('::').gsub('Java::', '')
       end
 
       def init
         @initialized = true
 
-        import('java.net.URL', :Url)
-        import('java.lang.System', :System)
-        import('java.util.Arrays', :Arrays)
-        import('java.util.ArrayList', :ArrayList)
-        import('java.util.logging.Logger', :Logger)
-        import('java.util.logging.Level', :LogLevel)
-        
-        # System.getProperties().put("org.apache.commons.logging.simplelog.defaultlog", "error");
+        import('java.net.URL')
+        import('java.lang.System')
+        import('java.util.Arrays')
+        import('java.util.ArrayList')
+        import('java.util.logging.Logger')
+        import('java.util.logging.Level')
       end
 
       def load(paths)
         Rjb::load(paths, Steam.config[:java_load_params].to_a)
       end
-      
+
       def logger(classifier)
-        Logger.getLogger(classifier)
+        Java::Util::Logging::Logger.getLogger(classifier)
       end
-      
+
       def log_level(name)
-        LogLevel.send(name.to_s.upcase)
+        Java::Util::Logging::Level.send(name.to_s.upcase)
       end
     end
   end

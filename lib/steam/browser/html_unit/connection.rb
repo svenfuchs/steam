@@ -9,7 +9,7 @@
 #   mock.mock :get, 'http://localhost:3000/', 'body!'
 #   connection = Steam::Browser::HtmlUnit::Connection.new(mock)
 #
-#   client = java::WebClient.new(Java::BrowserVersion.FIREFOX_3)
+#   client = java::WebClient.new(Java::Com::Gargoylesoftware::Htmlunit::BrowserVersion.FIREFOX_3)
 #   client.setWebConnection(Rjb::bind(connection, 'com.gargoylesoftware.htmlunit.WebConnection'))
 
 require 'thread'
@@ -21,13 +21,19 @@ module Steam
       class Connection
         @@lock = Mutex.new
 
+        include Java::Com::Gargoylesoftware::Htmlunit
+
         Java.import('com.gargoylesoftware.htmlunit.MockWebConnection')
+        classifier = Version.getProductVersion == '2.6' ?
+          'org.apache.commons.httpclient.NameValuePair' :    # HtmlUnit 2.6
+          'com.gargoylesoftware.htmlunit.util.NameValuePair' # HtmlUnit 2.7
+        NameValuePair = Java.import(classifier, :NameValuePair)
 
         attr_reader :connection, :java
 
         def initialize(connection)
           @connection = connection
-          @java = Java::MockWebConnection.new
+          @java = MockWebConnection.new
         end
 
         def getResponse(request)
@@ -51,8 +57,8 @@ module Steam
           status  = response.status
           message = Rack::Utils::HTTP_STATUS_CODES[status.to_i]
           charset = Steam.config[:charset]
-          headers = response.header.map { |key, value| Java::NameValuePair.new(key, value) }
-          headers = Java::Arrays.asList(headers)
+          headers = response.header.map { |key, value| NameValuePair.new(key, value) }
+          headers = Java::Util::Arrays.asList(headers)
           content_type = response.content_type
 
           java.setResponse(url, body, status, message, content_type, charset, headers)

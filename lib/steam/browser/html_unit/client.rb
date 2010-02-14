@@ -4,22 +4,17 @@
 module Steam
   module Browser
     class HtmlUnit
-      Java.load(Dir["#{Steam.config[:html_unit][:java_path]}/*.jar"].join(':'))
-
-      Java.import 'com.gargoylesoftware.htmlunit.Version', :HtmlUnitVersion
-      Java.import 'com.gargoylesoftware.htmlunit.WebClient'
-      Java.import 'com.gargoylesoftware.htmlunit.BrowserVersion'
-      Java.import 'com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController'
-      Java.import 'com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException'
-
-      VERSION = Java::HtmlUnitVersion.getProductVersion
-
-      classifier = VERSION == '2.6' ?
-        'org.apache.commons.httpclient.NameValuePair' :    # HtmlUnit 2.6
-        'com.gargoylesoftware.htmlunit.util.NameValuePair' # HtmlUnit 2.7
-      Java.import(classifier, :NameValuePair)
-
       class Client
+        Java.load(Dir["#{Steam.config[:html_unit][:java_path]}/*.jar"].join(':'))
+
+        Java.import 'com.gargoylesoftware.htmlunit.Version', :HtmlUnitVersion
+        Java.import 'com.gargoylesoftware.htmlunit.WebClient'
+        Java.import 'com.gargoylesoftware.htmlunit.BrowserVersion'
+        Java.import 'com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController'
+        Java.import 'com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException'
+
+        include Java::Com::Gargoylesoftware::Htmlunit
+
         class SilencingListener
           def notify(message, origin); end
         end
@@ -27,7 +22,7 @@ module Steam
         def initialize(connection = nil, options = {})
           options = Steam.config[:html_unit].merge(options)
 
-          @java = Java::WebClient.new(Java::BrowserVersion.send(options[:browser_version]))
+          @java = WebClient.new(BrowserVersion.send(options[:browser_version]))
           @java.setCssEnabled(options[:css])
           @java.setJavaScriptEnabled(options[:javascript])
           @java.setPrintContentOnFailingStatusCode(options[:on_error_status] == :print)
@@ -41,7 +36,7 @@ module Steam
           end
 
           if options[:resynchronize]
-            controller = Java::NicelyResynchronizingAjaxController.new
+            controller = NicelyResynchronizingAjaxController.new
             @java.setAjaxController(controller)
           end
 
