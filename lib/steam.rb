@@ -19,6 +19,7 @@ module Steam
         :charset           => 'utf-8',
         :java_load_params  => '-Xmx1024M',
         :html_unit => {
+          :java_path       =>  File.expand_path("../htmlunit-2.6/", __FILE__),
           :browser_version => :FIREFOX_3,
           :css             => true,
           :javascript      => true,

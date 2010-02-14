@@ -2,13 +2,23 @@
 # a com.gargoylesoftware.htmlunit.WebClient (HtmlUnit's main browser object).
 
 module Steam
-  Java.import 'com.gargoylesoftware.htmlunit.WebClient'
-  Java.import 'com.gargoylesoftware.htmlunit.BrowserVersion'
-  Java.import 'com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController'
-  Java.import 'com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException'
-
   module Browser
     class HtmlUnit
+      Java.load(Dir["#{Steam.config[:html_unit][:java_path]}/*.jar"].join(':'))
+
+      Java.import 'com.gargoylesoftware.htmlunit.Version', :HtmlUnitVersion
+      Java.import 'com.gargoylesoftware.htmlunit.WebClient'
+      Java.import 'com.gargoylesoftware.htmlunit.BrowserVersion'
+      Java.import 'com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController'
+      Java.import 'com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException'
+
+      VERSION = Java::HtmlUnitVersion.getProductVersion
+
+      classifier = VERSION == '2.6' ?
+        'org.apache.commons.httpclient.NameValuePair' :    # HtmlUnit 2.6
+        'com.gargoylesoftware.htmlunit.util.NameValuePair' # HtmlUnit 2.7
+      Java.import(classifier, :NameValuePair)
+
       class Client
         class SilencingListener
           def notify(message, origin); end
