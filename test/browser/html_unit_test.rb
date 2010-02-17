@@ -1,14 +1,12 @@
 require File.expand_path('../../test_helper', __FILE__)
 require 'fixtures/html_fakes'
+require 'locator'
 
-class HtmlUnitTest < Test::Unit::TestCase
-  include Steam, HtmlFakes
-
-  def setup
+module HtmlUnitTests
+  def init
     @app = Steam::Connection::Mock.new
     static = Steam::Connection::Static.new(:root => FIXTURES_PATH)
     @browser = Steam::Browser::HtmlUnit.new(Rack::Cascade.new([static, @app]))
-
     perform(:get, 'http://localhost:3000/', '<div id="foo"><div id="bar"><a id="buz" href="">bar!</a></div></div>')
   end
   
@@ -31,7 +29,7 @@ class HtmlUnitTest < Test::Unit::TestCase
   end
   
   test 'locate with search text' do
-    element = locate('bar!')
+    element = locate(:a, 'bar!')
     assert_equal 'a', element.name
   end
   
@@ -75,3 +73,25 @@ class HtmlUnitTest < Test::Unit::TestCase
     assert_equal 'a', element.name
   end
 end
+
+class HtmlUnitWithNokogiriAdapterTest < Test::Unit::TestCase
+  include Steam, HtmlUnitTests
+
+  def setup
+    init
+  end
+end
+
+class HtmlUnitWithHtmlUnitAdapterTest < Test::Unit::TestCase
+  include Steam, HtmlUnitTests
+
+  def setup
+    @old_adapter, Locator::Dom.adapter = Locator::Dom.adapter, Locator::Dom::Htmlunit
+    init
+  end
+  
+  def teardown
+    Locator::Dom.adapter = @old_adapter
+  end
+end
+

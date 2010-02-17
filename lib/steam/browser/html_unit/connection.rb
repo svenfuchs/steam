@@ -21,6 +21,8 @@ module Steam
       class Connection
         @@lock = Mutex.new
 
+        Java.import 'com.gargoylesoftware.htmlunit.Version'
+
         include Java::Com::Gargoylesoftware::Htmlunit
 
         Java.import('com.gargoylesoftware.htmlunit.MockWebConnection')

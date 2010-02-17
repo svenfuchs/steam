@@ -7,7 +7,7 @@ module Steam
       class Client
         Java.load(Dir["#{Steam.config[:html_unit][:java_path]}/*.jar"].join(':'))
 
-        Java.import 'com.gargoylesoftware.htmlunit.Version', :HtmlUnitVersion
+        Java.import 'com.gargoylesoftware.htmlunit.Version'
         Java.import 'com.gargoylesoftware.htmlunit.WebClient'
         Java.import 'com.gargoylesoftware.htmlunit.BrowserVersion'
         Java.import 'com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController'
@@ -41,7 +41,7 @@ module Steam
           end
 
           if connection
-            connection = Rjb::bind(Connection.new(connection), 'com.gargoylesoftware.htmlunit.WebConnection')
+            connection = Rjb::bind(HtmlUnit::Connection.new(connection), 'com.gargoylesoftware.htmlunit.WebConnection')
             @java.setWebConnection(connection)
           end
         end

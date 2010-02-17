@@ -7,11 +7,12 @@ module Steam
     module AutoDefine
       def const_set_nested(full_name, const)
         name = pop_name(full_name)
-        return const_set(name, const) if full_name.empty? && !const_defined?(name)
-
-        const_set(name, Module.new { extend AutoDefine }) unless const_defined?(name)
-        target = const_get(name)
-        target.const_set_nested(full_name, const)
+        if full_name.empty? && !const_defined?(name)
+          const_set(name, const)
+        else
+          const_set(name, Module.new { extend AutoDefine }) unless const_defined?(name)
+          const_get(name).const_set_nested(full_name, const) unless full_name.empty?
+        end
       end
 
       def pop_name(string)

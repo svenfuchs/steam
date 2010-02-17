@@ -44,16 +44,16 @@ module Steam
       end
 
       def locate(*args, &block)
-        Locator.locate(response.body, *args, &block) || raise(ElementNotFound.new(*args))
+        Locator.locate(dom, *args, &block) || raise(ElementNotFound.new(*args))
       end
 
       def locate_in_browser(*args, &block)
-        if args.first.respond_to?(:_classname)
+        if args.first.respond_to?(:_classname)     # native HtmlUnit element
           args.first
+        elsif args.first.respond_to?(:xpath)       # Locator element
+          silence_warnings { page.getFirstByXPath(args.first.xpath) }
         else
-          element = locate(*args, &block)
-          # FIXME remove silence_warnings, raise something meaningful
-          silence_warnings { page.getFirstByXPath(element.xpath) }
+          locate_in_browser(locate(*args, &block)) # something else
         end
       end
 
@@ -68,6 +68,17 @@ module Steam
           @page = Page.new(result)
           client.wait_for_javascript(Steam.config[:html_unit][:js_timeout])
           @response = Response.new(*page.to_a)
+        end
+
+        def dom
+          case Locator::Dom.adapter.name # yuck
+          when /Nokogiri/
+            response.body
+          when /Htmlunit/
+            @page.page
+          else
+            raise 'incompatible Locator::Dom adapter'
+          end
         end
     end
   end
