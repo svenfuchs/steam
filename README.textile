@@ -1,12 +1,6 @@
-Steam
-=====
+h1. Steam
 
-Steam is a headless integration testing tool driving HtmlUnit (http://htmlunit.sourceforge.net/) (and at some point potentially other browsers) which enables testing JavaScript-driven web sites.
-
-Concept
-=======
-
-Check out the pictures in the "doc" directory to get an idea how Steam is different from a classic (Webrat) Cucumber or Culerity setup.
+Steam is a headless integration testing tool driving "HtmlUnit":http://htmlunit.sourceforge.net to enable testing JavaScript-driven web sites. In that it is similar to Culerity which drives Celerity (which also drives HtmlUnit).
 
 Demo
 ====
