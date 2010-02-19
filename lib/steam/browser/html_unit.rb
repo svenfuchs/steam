@@ -10,6 +10,8 @@ module Steam
     class HtmlUnit
       autoload :Actions,     'steam/browser/html_unit/actions'
       autoload :Client,      'steam/browser/html_unit/client'
+      autoload :Drb,         'steam/browser/html_unit/drb'
+      autoload :Forker,      'steam/browser/html_unit/forker'
       autoload :Connection,  'steam/browser/html_unit/connection'
       autoload :Matchers,    'steam/browser/html_unit/matchers'
       autoload :Page,        'steam/browser/html_unit/page'
