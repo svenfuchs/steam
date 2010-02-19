@@ -4,6 +4,7 @@ module Steam
   autoload :Browser,    'steam/browser'
   autoload :Connection, 'steam/connection'
   autoload :Java,       'steam/java'
+  autoload :Process,    'steam/process'
   autoload :Request,    'steam/request'
   autoload :Response,   'steam/response'
   autoload :Session,    'steam/session'
