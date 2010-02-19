@@ -9,6 +9,8 @@ module Steam
         :stdout => $stdout, 
         :stderr => $stderr 
       }.merge(options)
+      
+      recall_pid && kill if options[:restart]
 
       @pid = Kernel.fork do 
         STDIN.reopen  options[:stdin]
@@ -16,8 +18,8 @@ module Steam
         STDERR.reopen options[:stderr]
         block.call
       end
-      # write_pid
-      at_exit { kill }
+      write_pid
+      # at_exit { kill }
     end
 
     def interrupt
@@ -25,6 +27,7 @@ module Steam
     end
 
     def kill(signal = 'TERM')
+      puts "killing #{@pid}"
       if running?
         Process.kill(Signal.list[signal], @pid)
         delete_pid
@@ -42,6 +45,10 @@ module Steam
 
       def write_pid
         ::File.open('/tmp/steam.pid', 'w'){ |f| f.write("#{@pid}") }
+      end
+
+      def recall_pid
+        @pid = ::File.read('/tmp/steam.pid').to_i rescue nil
       end
 
       def delete_pid

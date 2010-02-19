@@ -9,9 +9,9 @@ root = File.expand_path("../../fixtures/public", __FILE__)
 static = Connection::Static.new(:root => root, :urls => %w(/ /javascripts /stylesheets))
 connection = Rack::Cascade.new([static, @app])
 
-browser = Browser::HtmlUnit::Drb.new
+browser = Browser::HtmlUnit::Drb.new(connection)
 
-browser.daemonize(connection)
+browser.daemonize
 
 browser.request('/index.html')
 p browser.response.status

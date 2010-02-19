@@ -7,25 +7,27 @@ module Steam
         autoload :Client,  'steam/browser/html_unit/drb/client'
         autoload :Service, 'steam/browser/html_unit/drb/service'
 
-        def initialize
+        def initialize(connection, options = {})
           DRb.start_service
-          @browser = DRbObject.new(nil, Steam.config[:drb_uri])
+          @drb = DRbObject.new(nil, Steam.config[:drb_uri])
+          @connection = connection
+          @options = options
         end
         
-        def daemonize(connection = nil, options = {})
-          Forker.new { start(connection, options) }
+        def daemonize
+          Forker.new(@options) { start }
           sleep(1) # FIXME
         end
         
-        def start(connection = nil, options = {})
+        def start
           uri = Steam.config[:drb_uri]
-          DRb.start_service(uri, HtmlUnit.new(connection, options))
-          puts "Browser ready and listening at #{uri}"
+          DRb.start_service(uri, HtmlUnit.new(@connection, @options)) rescue Errno::EADDRINUSE
+          puts "HtmlUnit ready and listening at #{uri}"
           DRb.thread.join
         end
 
         def method_missing(method, *args, &block)
-          @browser.send(method, *args, &block)
+          @drb.send(method, *args, &block)
         end
       end
     end
