@@ -4,12 +4,11 @@ require 'steam'
 
 include Steam
 
-@app = Connection::Mock.new
 root = File.expand_path("../../fixtures/public", __FILE__)
-static = Connection::Static.new(:root => root, :urls => %w(/ /javascripts /stylesheets))
-connection = Rack::Cascade.new([static, @app])
+connection = Connection::Static.new(:root => root, :urls => %w(/ /javascripts /stylesheets))
 
-browser = Browser::HtmlUnit::Drb.new(connection, :daemon => true)
+
+browser = Steam::Browser.create(:html_unit, connection, :daemon => true)
 browser.request('/index.html')
 puts browser.response.status
 
