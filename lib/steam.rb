@@ -8,6 +8,7 @@ module Steam
   autoload :Request,    'steam/request'
   autoload :Response,   'steam/response'
   autoload :Session,    'steam/session'
+  autoload :Version,    'steam/version'
 
   class << self
     def config
