@@ -2,58 +2,48 @@ h1. Steam
 
 Steam is a headless integration testing tool driving "HtmlUnit":http://htmlunit.sourceforge.net to enable testing JavaScript-driven web sites. In that it is similar to Culerity which drives Celerity (which also drives HtmlUnit).
 
-Demo
-====
-
-You can find a demo application here:
-
-  http://github.com/clemens/steam-demo
-
-Installation
-============
+h2. Installation
 
 Steam currently has the following dependencies:
 
 * Working Java Runtime
 * RJB (if you're on OS X, see Troubleshooting section)
+* HtmlUnit
 
-After that, installing Steam for a Rails project should be as simple as typing
+You can install steam both as a gem or a plugin
 
-  $ ruby script/plugin install git://github.com/svenfuchs/steam.git
+.pre $ gem install steam
 
-Note: Since the HtmlUnit and all the JARs it depends on come packaged with Steam, the download might take a while.
+.pre $ ruby script/plugin install git://github.com/svenfuchs/steam.git
 
-Configuration
-=============
+To install HtmlUnit you can download it from "Sourceforge":http://sourceforge.net/projects/htmlunit/files. You also need to add HtmlUnit to your Java classpath. The following ways should both work:
 
-You can control some parameters in init.rb for fitting your needs:
+.pre ENV['CLASSPATH'] = Dir["path/to/your/htmlunit/*.jar"].join(':')
 
-	Steam.configure do |config|
-	  #:javaloadparams: "-Xms256M -Xmx2048M"
-	  config.java_load_params = "-Xmx2048M"
-	# your test server running steam
-	  config.server_name = "localhost"
-	# the port you start your test server
-	  config.server_port = "3000"
-	# the url scheme for rack
-	  config.rack_url_scheme = "http"
-	# defaut charset
-	  config.charset = "utf-8"
-	# DRB uri
-	  config.drb_uri = "druby://127.0.0.1:9000"
-	# for which server the session request the env
-	  config.request_env_for = "http://localhost"
-	end
+.pre Steam.config[:html_unit][:java_path] = 'path/to/your/htmlunit'
 
-Usage
-=====
+
+h2. Configuration
+
+You should not need to configure anything. If you do need though have a look at "Steam.config":http://github.com/svenfuchs/steam/blob/master/lib/steam.rb
+
+E.g. in order to tweak the Java load params you can
+
+.pre Steam.config[:java_load_params] = "-Xmx2048M"
+
+h2. Usage
 
 You can use Steam by itself as well as with Cucumber. You can find an example for a Cucumber setup in examples/cucumber/env.rb.
 
-Steam is widely compatible with Webrat - many actions are implemented and take the same or very similar parameters as their Webrat equivalent. You should even be able to use the default webrat_steps.rb that ships with Cucumber.
+Steam is widely compatible with Webrat - many actions are implemented and take the same or very similar parameters as their Webrat equivalent. You even might be able to use the default webrat_steps.rb that ships with Cucumber. *This file is an example and might be out of date.*
 
-Troubleshooting
-===============
+h2. Demo
+
+You can find a demo application here: "http://github.com/clemens/steam-demo":http://github.com/clemens/steam-demo
+
+
+
+h2. Troubleshooting
 
 Installing RJB on Mac OS X:
 
@@ -61,13 +51,11 @@ Installing RJB on Mac OS X:
 
 The visudo way worked for us. Don't forget to add yourself to the sudoers file, though.
 
-Acknowledgements
-================
+h2. Acknowledgements
 
-Kudos to Alexander Lang (http://github.com/langalex) for writing Culerity (http://github.com/langalex/culerity) which pioneered full-stack AJAX-enabled integration testing in Rails.
+Kudos to "Alexander Lang":http://github.com/langalex for writing "Culerity":http://github.com/langalex/culerity which pioneered full-stack AJAX-enabled integration testing in Rails.
 
-Developers
-==========
+h2. Developers
 
 Sven Fuchs <svenfuchs@artweb-design.de>
 Clemens Kofler <clemens@railway.at>

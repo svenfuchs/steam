@@ -4,6 +4,9 @@ require 'core_ext/ruby/string/underscore'
 
 module Steam
   module Java
+
+    # TODO replace this with http://github.com/sklemm/jrequire/blob/master/lib/java.rb
+
     module AutoDefine
       def const_set_nested(full_name, const)
         name = pop_name(full_name)
@@ -48,6 +51,11 @@ module Steam
         import('java.util.ArrayList')
         import('java.util.logging.Logger')
         import('java.util.logging.Level')
+      end
+
+      def load_from(path)
+        paths = Dir["#{Steam.config[:html_unit][:java_path]}/*.jar"]
+        load(paths.join(':')) unless paths.empty?
       end
 
       def load(paths)

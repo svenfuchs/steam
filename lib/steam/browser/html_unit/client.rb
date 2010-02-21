@@ -5,7 +5,7 @@ module Steam
   module Browser
     class HtmlUnit
       class Client
-        Java.load(Dir["#{Steam.config[:html_unit][:java_path]}/*.jar"].join(':'))
+        Java.load_from(Steam.config[:html_unit][:java_path])
 
         Java.import 'com.gargoylesoftware.htmlunit.Version'
         Java.import 'com.gargoylesoftware.htmlunit.WebClient'

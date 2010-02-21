@@ -21,7 +21,7 @@ module Steam
         :java_load_params  => '-Xmx1024M',
         :drb_uri           => 'druby://127.0.0.1:9000',
         :html_unit => {
-          :java_path         =>  File.expand_path("../htmlunit-2.6/", __FILE__),
+          :java_path         => File.expand_path("../../vendor/htmlunit-2.6/", __FILE__),
           :browser_version   => :FIREFOX_3,
           :css               => true,
           :javascript        => true,

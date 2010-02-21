@@ -1,2 +1,1 @@
-*.log
-fixtures/rails/log/**/*.log
+vendor
