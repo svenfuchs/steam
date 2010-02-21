@@ -1,27 +1,37 @@
+<a name="readme"></a>
+
 h1. Steam
 
-Steam is a headless integration testing tool driving "HtmlUnit":http://htmlunit.sourceforge.net to enable testing JavaScript-driven web sites. In that it is similar to Culerity which drives Celerity (which also drives HtmlUnit).
+Steam is a headless integration testing tool driving "HtmlUnit":http://htmlunit.sourceforge.net to enable testing JavaScript-driven web sites. In that it is similar to "Culerity":http://github.com/langalex/culerity which drives "Celerity":http://github.com/jarib/celerity (which also drives "HtmlUnit":http://htmlunit.sourceforge.net). See below for a "comparsion":#comparsion.
+
+<a name="installation"></a>
 
 h2. Installation
 
 Steam currently has the following dependencies:
 
 * Working Java Runtime
-* RJB (if you're on OS X, see Troubleshooting section)
-* HtmlUnit
+* HtmlUnit (jar files)
+* RJB and Locator gems
 
-You can install steam both as a gem or a plugin
+Installing Steam as as a gem will automatically install the required RJB and Locator gems:
 
-.pre $ gem install steam
+pre. $ gem install steam
 
-.pre $ ruby script/plugin install git://github.com/svenfuchs/steam.git
+To install HtmlUnit you can download it from "Sourceforge":http://sourceforge.net/projects/htmlunit/files. 
 
-To install HtmlUnit you can download it from "Sourceforge":http://sourceforge.net/projects/htmlunit/files. You also need to add HtmlUnit to your Java classpath. The following ways should both work:
+You then need to add HtmlUnit to your Java classpath. The following ways should both work:
 
-.pre ENV['CLASSPATH'] = Dir["path/to/your/htmlunit/*.jar"].join(':')
+<pre># anywhere during startup, e.g. in features/support/env.rb
+ENV['CLASSPATH'] = Dir["path/to/your/htmlunit/*.jar"].join(':')
 
-.pre Steam.config[:html_unit][:java_path] = 'path/to/your/htmlunit'
+# after steam has been added to the load path, e.g. in features/support/env.rb
+Steam.config[:html_unit][:java_path] = 'path/to/your/htmlunit'</pre>
 
+If you're on Mac OS X then you also need to export the JAVA_HOME variable for RJB. See here for two solutions: "Installing RJB on Mac OS X":http://www.elctech.com/articles/sudo-java_home-and-mac-os-x. The visudo way worked for us. Don't forget to add yourself to the sudoers file, though.
+
+
+<a name="configuration"></a>
 
 h2. Configuration
 
@@ -29,33 +39,53 @@ You should not need to configure anything. If you do need though have a look at 
 
 E.g. in order to tweak the Java load params you can
 
-.pre Steam.config[:java_load_params] = "-Xmx2048M"
+pre. Steam.config[:java_load_params] = "-Xmx2048M"
+
+
+<a name="usage"></a>
 
 h2. Usage
 
 You can use Steam by itself as well as with Cucumber. You can find an example for a Cucumber setup in examples/cucumber/env.rb.
 
-Steam is widely compatible with Webrat - many actions are implemented and take the same or very similar parameters as their Webrat equivalent. You even might be able to use the default webrat_steps.rb that ships with Cucumber. *This file is an example and might be out of date.*
+Steam is widely compatible with Webrat - many actions are implemented and take the same or very similar parameters as their Webrat equivalent. You even might be able to use the default webrat_steps.rb that ships with Cucumber, *but his file is meant as an example and might be out of date.*
+
+
+<a name="demo"></a>
 
 h2. Demo
 
 You can find a demo application here: "http://github.com/clemens/steam-demo":http://github.com/clemens/steam-demo
 
 
+<a name="comparsion"></a>
 
-h2. Troubleshooting
+h2. Comparsion to others
 
-Installing RJB on Mac OS X:
+Steam's advantages over Culerity/Celerity:
 
-  http://www.elctech.com/articles/sudo-java_home-and-mac-os-x
+* runs in Ruby MRI and does not require an entire JRuby environment.
+* Steam can have the HtmlUnit browser running in the same stack as your tests, thus making the whole thing less complex and hard to debug
+* Steam does not build on Celerity which is a quite heavy-weight Ruby wrapper around HtmlUnit adding a lot of unnecessary code
+* Steam uses "Locator":http://github.com/svenfuchs/locator
 
-The visudo way worked for us. Don't forget to add yourself to the sudoers file, though.
+Culerity/Celerity's advantages over Steam:
+
+* RJB can't resolve the mismatch of Ruby vs Java threads which makes fancy setups impossible to solve
+* Celerity implements a *lot* of stuff, maybe it contains something you need (e.g. maybe you want to test pop-down windows opening in the background?)
+* Steam still is in its infancy
+
+
+<a name="acknowledgements"></a>
 
 h2. Acknowledgements
 
 Kudos to "Alexander Lang":http://github.com/langalex for writing "Culerity":http://github.com/langalex/culerity which pioneered full-stack AJAX-enabled integration testing in Rails.
 
+
+<a name="developers"></a>
+
 h2. Developers
 
-Sven Fuchs <svenfuchs@artweb-design.de>
-Clemens Kofler <clemens@railway.at>
+* "Sven Fuchs":http://github.com/svenfuchs
+* "Clemens Kofler"::http://github.com/clemens
