@@ -10,9 +10,10 @@ module Steam
     class << self
       def create(*args)
         options    = args.last.is_a?(Hash) ? args.pop : {}
+        type       = args.shift if args.first.is_a?(Symbol)
         connection = args.pop
         
-        type = args.pop || :html_unit
+        type ||= :html_unit
         type = const_get(type.to_s.camelize)
         type = type.const_get('Drb') if options[:daemon]
 

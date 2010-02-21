@@ -20,21 +20,26 @@ module Steam
 
       def call(env)
         request = Rack::Request.new(env)
-        response(request.request_method, request.url).to_a
+        response = response(request.request_method, request.url)
+        response = response.call if response.is_a?(Proc)
+        response.to_a
       end
 
       def response(method, url)
         responses(method)[CGI::unescape(url)] || Rack::Response.new('', 404)
       end
 
-      def mock(method, url, response, headers = {})
-        responses(method)[url] = case response
-          when Rack::Response
-            response
+      def mock(*args)
+        headers = args.last.is_a?(Hash) ? args.pop : {}
+        response, url, method = *args.reverse
+
+        responses(method || :get)[url] = case response
           when Array
             Rack::Response.new(*response)
           when String
             Rack::Response.new(response, 200, headers)
+          else
+            response
           end
       end
 

@@ -40,9 +40,17 @@ module Steam
 
         def getResponse(request)
           # FIXME preserve original scheme, host + port
-          url = request.getUrl.toString.dup
           method = request.getHttpMethod.toString.dup
-          env = Request.env_for(url, :method => method)
+          url    = request.getUrl.toString.dup
+
+          body   = request.getRequestBody
+          body   = body.toString.dup if body
+
+          params = request.getRequestParameters
+          params = Hash[*params.toArray.map { |e| [e.name, e.value] }.flatten]
+
+          input  = body ? body : Rack::Utils.build_nested_query(params)
+          env    = Request.env_for(url, :method => method, :input => input)
 
           status, headers, response = connection.call(env)
           response.body.close if response.body.respond_to?(:close)
