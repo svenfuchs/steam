@@ -6,10 +6,10 @@ include Steam
 
 Steam.config[:html_unit][:java_path] = File.expand_path("../../lib/htmlunit-2.7/", __FILE__)
 
-@app = Connection::Mock.new
+@connection = Connection::Mock.new
 root = File.expand_path("../fixtures/public", __FILE__)
 static = Connection::Static.new(:root => root, :urls => %w(/ /javascripts /stylesheets))
-@browser = Browser::HtmlUnit.new(Rack::Cascade.new([static, @app]))
+@browser = Browser::HtmlUnit.new(Rack::Cascade.new([static, @connection]))
 
 def drag_to(target)
   @browser.page.executeJavaScript('$("#log").text("")')

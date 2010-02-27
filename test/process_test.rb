@@ -20,12 +20,12 @@ class ProcessTest < Test::Unit::TestCase
   end
 
   test "new instance recalls an existing pid" do
-    write_pid(1234)
-    assert_equal 1234, Process.new.pid
+    write_pid(::Process.pid)
+    assert_equal ::Process.pid, Process.new.pid
   end
 
   test "pid? returns true if pid was recalled" do
-    write_pid(1234)
+    write_pid(::Process.pid)
     assert_equal true, Process.new.pid?
   end
 

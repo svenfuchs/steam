@@ -89,3 +89,10 @@ h2. Developers
 
 * "Sven Fuchs":http://github.com/svenfuchs
 * "Clemens Kofler"::http://github.com/clemens
+
+
+TODO
+
+* explain requirement to start/restart a test server
+* explain log levels
+

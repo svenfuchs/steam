@@ -8,6 +8,10 @@ module Steam
   class Session
     autoload :Rails, 'steam/session/rails'
 
+    include Locator::Matcher
+    include Test::Unit::Assertions if defined?(Test::Unit)
+    # TODO include Rspec::Something if defined?(Rspec)
+
     attr_accessor :browser
 
     def initialize(browser = nil)

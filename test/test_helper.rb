@@ -43,7 +43,7 @@ class Test::Unit::TestCase
   include TestMethod
 
   def perform(method, url, response)
-    @app.mock(method, url, response)
+    @connection.mock(method, url, response)
     @status, @headers, @response = @browser.call(Steam::Request.env_for(url))
   end
 

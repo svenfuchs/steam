@@ -5,9 +5,9 @@ class HtmlUnitJavascriptTest < Test::Unit::TestCase
   include Steam, HtmlFakes
 
   def setup
-    @app = Steam::Connection::Mock.new
+    @connection = Steam::Connection::Mock.new
     static = Steam::Connection::Static.new(:root => FIXTURES_PATH)
-    @browser = Steam::Browser::HtmlUnit.new(Rack::Cascade.new([static, @app]))
+    @browser = Steam::Browser::HtmlUnit.new(Rack::Cascade.new([static, @connection]))
   end
 
   test "jquery: div:not([id]) selector" do

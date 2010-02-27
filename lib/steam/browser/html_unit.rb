@@ -17,7 +17,7 @@ module Steam
       autoload :Page,        'steam/browser/html_unit/page'
       autoload :WebResponse, 'steam/browser/html_unit/web_response'
 
-      include Actions # Matchers
+      include Actions
 
       attr_accessor :client, :page, :connection, :request, :response
 
