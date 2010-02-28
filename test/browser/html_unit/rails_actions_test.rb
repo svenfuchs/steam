@@ -5,13 +5,12 @@ class HtmlUnitRailsActionsTest < Test::Unit::TestCase
   include Steam, HtmlFakes
 
   def setup
-    @connection = Steam::Connection::Mock.new
-    static = Steam::Connection::Static.new(:root => FIXTURES_PATH)
-    @browser = Steam::Browser::HtmlUnit.new(Rack::Cascade.new([static, @connection]))
+    connection = Steam::Connection::Mock.new
+    @browser = Steam::Browser::HtmlUnit.new(connection)
 
-    @connection.mock :get, "http://localhost:3000/form?event_date(1i)=2009&event_date(2i)=11&event_date(3i)=7", 'DATE'
-    @connection.mock :get, "http://localhost:3000/form?event_datetime(1i)=2009&event_datetime(2i)=11&event_datetime(3i)=7&event_datetime(4i)=19&event_datetime(5i)=0", 'DATETIME'
-    @connection.mock :get, "http://localhost:3000/form?event_time(4i)=19&event_time(5i)=0", 'TIME'
+    mock :get, "http://localhost:3000/form?event_date(1i)=2009&event_date(2i)=11&event_date(3i)=7", 'DATE'
+    mock :get, "http://localhost:3000/form?event_datetime(1i)=2009&event_datetime(2i)=11&event_datetime(3i)=7&event_datetime(4i)=19&event_datetime(5i)=0", 'DATETIME'
+    mock :get, "http://localhost:3000/form?event_time(4i)=19&event_time(5i)=0", 'TIME'
   end
 
   def test_select_date

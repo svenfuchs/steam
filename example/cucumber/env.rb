@@ -1,17 +1,15 @@
-# Sets up the Rails environment for Cucumber
 ENV["RAILS_ENV"] ||= "cucumber"
 
-$: << File.expand_path(File.dirname(__FILE__) + "/../../vendor/plugins/steam/lib")
-require 'steam'
 require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
+require 'steam'
+require 'test/unit'
+# require 'rspec'
 
-browser = Steam::Browser::HtmlUnit.new
+Steam.config[:html_unit][:java_path] = 'path/to/your/htmlunit-2.6'
+
+browser = Steam::Browser.create
 World do
   Steam::Session::Rails.new(browser)
 end
 
-Before do
-  ActiveRecord::Base.send(:subclasses).each do |model|
-    model.connection.execute("DELETE FROM #{model.table_name}")
-  end
-end
+at_exit { browser.close }

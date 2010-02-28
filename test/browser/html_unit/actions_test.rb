@@ -5,16 +5,16 @@ class HtmlUnitActionsTest < Test::Unit::TestCase
   include Steam, HtmlFakes
 
   def setup
-    @connection = Steam::Connection::Mock.new
+    mock = Steam::Connection::Mock.new
     static = Steam::Connection::Static.new(:root => FIXTURES_PATH)
-    @browser = Steam::Browser::HtmlUnit.new(Rack::Cascade.new([static, @connection]))
+    @browser = Steam::Browser::HtmlUnit.new(Rack::Cascade.new([static, mock]))
   end
 
   test "click_on clicks on an element" do
     perform :get, 'http://localhost:3000/', html
   
     assert_response_contains('LINK') do
-      @connection.mock :get, 'http://localhost:3000/link', 'LINK'
+      mock :get, 'http://localhost:3000/link', 'LINK'
       @browser.click_on('link')
     end
   end
@@ -23,7 +23,7 @@ class HtmlUnitActionsTest < Test::Unit::TestCase
     perform :get, 'http://localhost:3000/', html(:fields => :text)
     
     assert_response_contains('FORM') do
-      @connection.mock :get, 'http://localhost:3000/form?field=', 'FORM'
+      mock :get, 'http://localhost:3000/form?field=', 'FORM'
       @browser.click_on(:button, 'button')
     end
   end
@@ -32,7 +32,7 @@ class HtmlUnitActionsTest < Test::Unit::TestCase
     perform :get, 'http://localhost:3000/', html
   
     assert_response_contains('LINK') do
-      @connection.mock :get, 'http://localhost:3000/link', 'LINK'
+      mock :get, 'http://localhost:3000/link', 'LINK'
       @browser.click_link('link')
     end
   end
@@ -41,7 +41,7 @@ class HtmlUnitActionsTest < Test::Unit::TestCase
     perform :get, 'http://localhost:3000/', html(:fields => :text)
   
     assert_response_contains('FORM') do
-      @connection.mock :get, 'http://localhost:3000/form?field=', 'FORM'
+      mock :get, 'http://localhost:3000/form?field=', 'FORM'
       @browser.click_button('button')
     end
   end
@@ -50,7 +50,7 @@ class HtmlUnitActionsTest < Test::Unit::TestCase
     perform :get, 'http://localhost:3000/', html(:fields => :text)
   
     assert_response_contains('FIELD') do
-      @connection.mock :get, 'http://localhost:3000/form?field=text', 'FIELD'
+      mock :get, 'http://localhost:3000/form?field=text', 'FIELD'
       @browser.fill_in('field', :with => 'text')
       @browser.click_button('button')
     end
@@ -60,7 +60,7 @@ class HtmlUnitActionsTest < Test::Unit::TestCase
     perform :get, 'http://localhost:3000/', html(:fields => :textarea)
   
     assert_response_contains('TEXTAREA') do
-      @connection.mock :get, 'http://localhost:3000/form?textarea=text', 'TEXTAREA'
+      mock :get, 'http://localhost:3000/form?textarea=text', 'TEXTAREA'
       @browser.fill_in('textarea', :with => 'text')
       @browser.click_button('button')
     end
@@ -70,7 +70,7 @@ class HtmlUnitActionsTest < Test::Unit::TestCase
     perform :get, 'http://localhost:3000/', html(:fields => :checkbox)
   
     assert_response_contains('CHECKED') do
-      @connection.mock :get, 'http://localhost:3000/form?checkbox=1', 'CHECKED'
+      mock :get, 'http://localhost:3000/form?checkbox=1', 'CHECKED'
       @browser.check('checkbox')
       @browser.click_button('button')
     end
@@ -80,7 +80,7 @@ class HtmlUnitActionsTest < Test::Unit::TestCase
     perform :get, 'http://localhost:3000/', html(:fields => :checkbox)
   
     assert_response_contains('FORM') do
-      @connection.mock :get, 'http://localhost:3000/form', 'FORM'
+      mock :get, 'http://localhost:3000/form', 'FORM'
       @browser.check('checkbox')
       @browser.uncheck('checkbox')
       @browser.click_button('button')
@@ -91,7 +91,7 @@ class HtmlUnitActionsTest < Test::Unit::TestCase
     perform :get, 'http://localhost:3000/', html(:fields => :radio)
   
     assert_response_contains('RADIO') do
-      @connection.mock :get, 'http://localhost:3000/form?radio=radio', 'RADIO'
+      mock :get, 'http://localhost:3000/form?radio=radio', 'RADIO'
       @browser.choose('radio')
       @browser.click_button('button')
     end
@@ -101,7 +101,7 @@ class HtmlUnitActionsTest < Test::Unit::TestCase
     perform :get, 'http://localhost:3000/', html(:fields => :select)
   
     assert_response_contains('SELECT') do
-      @connection.mock :get, 'http://localhost:3000/form?select=foo', 'SELECT'
+      mock :get, 'http://localhost:3000/form?select=foo', 'SELECT'
       @browser.select('foo', :from => 'select')
       @browser.click_button('button')
     end
@@ -111,7 +111,7 @@ class HtmlUnitActionsTest < Test::Unit::TestCase
     perform :get, 'http://localhost:3000/', html(:fields => :hidden)
   
     assert_response_contains('SELECT') do
-      @connection.mock :get, 'http://localhost:3000/form?hidden=foo', 'SELECT'
+      mock :get, 'http://localhost:3000/form?hidden=foo', 'SELECT'
       @browser.set_hidden_field('hidden', :to => 'foo')
       @browser.click_button('button')
     end
@@ -121,7 +121,7 @@ class HtmlUnitActionsTest < Test::Unit::TestCase
     perform :get, 'http://localhost:3000/', html(:fields => :file)
   
     assert_response_contains('FILE') do
-      @connection.mock :get, 'http://localhost:3000/form?file=rails.png', 'FILE'
+      mock :get, 'http://localhost:3000/form?file=rails.png', 'FILE'
       @browser.attach_file('file', "#{TEST_ROOT}/fixtures/rails.png")
       @browser.click_button('button')
     end
@@ -131,7 +131,7 @@ class HtmlUnitActionsTest < Test::Unit::TestCase
     perform :get, 'http://localhost:3000/', html(:fields => :text)
   
     assert_response_contains('FORM') do
-      @connection.mock :get, 'http://localhost:3000/form?field=', 'FORM'
+      mock :get, 'http://localhost:3000/form?field=', 'FORM'
       @browser.submit_form('form')
     end
   end

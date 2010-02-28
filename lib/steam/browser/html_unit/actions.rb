@@ -59,7 +59,10 @@ module Steam
         
         # TODO implement a way to supply content_type
         def attach_file(element, path, options = {})
-          fill_in(element, options.merge(:with => path))
+          respond_to do
+            element = locate_in_browser(:file, element, options)
+            element.setValueAttribute(path)
+          end
         end
         
         def submit_form(element, options = {})

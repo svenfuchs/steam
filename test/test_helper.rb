@@ -42,8 +42,14 @@ end
 class Test::Unit::TestCase
   include TestMethod
 
+  def mock(method, url, response)
+    connection = @browser.connection
+    connection = connection.apps.last if connection.is_a?(Rack::Cascade)
+    connection.mock(method, url, response)
+  end
+
   def perform(method, url, response)
-    @connection.mock(method, url, response)
+    mock(method, url, response)
     @status, @headers, @response = @browser.call(Steam::Request.env_for(url))
   end
 
@@ -52,5 +58,23 @@ class Test::Unit::TestCase
     response = yield
     assert_equal 200, response.status
     assert_match %r(<#{tag_name}>\s*#{text}\s*<\/#{tag_name}>), response.body
+  end
+
+  def assert_passes
+    begin
+      yield
+    rescue Test::Unit::AssertionFailedError => e
+    ensure
+      assert_nil e
+    end
+  end
+
+  def assert_fails
+    begin
+      yield
+    rescue Test::Unit::AssertionFailedError => e
+    ensure
+      assert_not_nil e
+    end
   end
 end

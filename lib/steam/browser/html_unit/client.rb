@@ -19,7 +19,10 @@ module Steam
           def notify(message, origin); end
         end
 
+        attr_reader :connection
+
         def initialize(connection = nil, options = {})
+          @connection = connection
           options = Steam.config[:html_unit].merge(options)
 
           @java = WebClient.new(BrowserVersion.send(options[:browser_version]))

@@ -9,6 +9,12 @@ module Steam
   autoload :Response,   'steam/response'
   autoload :Session,    'steam/session'
 
+  class ElementNotFound < StandardError
+    def initialize(*args)
+      super "could not find element: #{args.map { |arg| arg.inspect }.join(', ') }"
+    end
+  end
+
   class << self
     def config
       @@config ||= {
@@ -33,11 +39,19 @@ module Steam
         }
       }
     end
-  end
+    
+    def save_and_open(response)
+      filename = "/tmp/steam/#{response.url}.html"
+      FileUtils.mkdir_p(File.dirname(file))
+      File.open(filename, "w") { |f| f.write response.body }
+      open_in_browser(filename)
+    end
 
-  class ElementNotFound < StandardError
-    def initialize(*args)
-      super "could not find element: #{args.map { |arg| arg.inspect }.join(', ') }"
+    def open_in_browser(filename)
+      require "launchy"
+      Launchy::Browser.run(filename)
+    rescue LoadError
+      warn "Sorry, you need to install launchy to open pages: `gem install launchy`"
     end
   end
 end

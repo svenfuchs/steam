@@ -19,10 +19,14 @@ module Steam
 
       include Actions
 
-      attr_accessor :client, :page, :connection, :request, :response
+      attr_accessor :client, :page, :request, :response
 
       def initialize(*args)
         @client = Client.new(*args)
+      end
+
+      def connection
+        client.connection
       end
 
       def close
@@ -60,7 +64,7 @@ module Steam
       end
 
       def within(*args, &block)
-        Locator.within(*args, &block)
+        Locator.within(response.body, *args, &block)
       end
 
       protected
