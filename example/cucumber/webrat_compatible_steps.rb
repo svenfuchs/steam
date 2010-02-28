@@ -116,7 +116,7 @@ When /^(?:|I )attach the file at "([^\"]*)" to "([^\"]*)"$/ do |path, field|
 end
 
 Then /^(?:|I )should see "([^\"]*)"$/ do |text|
-  assert_contain(response.body, text)
+  assert_contain(text)
 end
 
 Then /^(?:|I )should see "([^\"]*)" within "([^\"]*)"$/ do |text, selector|
@@ -124,7 +124,7 @@ Then /^(?:|I )should see "([^\"]*)" within "([^\"]*)"$/ do |text, selector|
 end
 
 Then /^(?:|I )should see \/([^\/]*)\/$/ do |regexp|
-  assert_contain(response.body, Regexp.new(regexp))
+  assert_contain(Regexp.new(regexp))
 end
 
 Then /^(?:|I )should see \/([^\/]*)\/ within "([^\"]*)"$/ do |regexp, selector|
@@ -132,7 +132,7 @@ Then /^(?:|I )should see \/([^\/]*)\/ within "([^\"]*)"$/ do |regexp, selector|
 end
 
 Then /^(?:|I )should not see "([^\"]*)"$/ do |text|
-  assert_not_contain(response.body, text)
+  assert_not_contain(text)
 end
 
 Then /^(?:|I )should not see "([^\"]*)" within "([^\"]*)"$/ do |text, selector|
@@ -140,7 +140,7 @@ Then /^(?:|I )should not see "([^\"]*)" within "([^\"]*)"$/ do |text, selector|
 end
 
 Then /^(?:|I )should not see \/([^\/]*)\/$/ do |regexp|
-  assert_not_contain(response.body, Regexp.new(regexp))
+  assert_not_contain(Regexp.new(regexp))
 end
 
 Then /^(?:|I )should not see \/([^\/]*)\/ within "([^\"]*)"$/ do |regexp, selector|
@@ -173,10 +173,10 @@ Then /^(?:|I )should be on (.+)$/ do |page_name|
   actual.respond_to?(:should) ? actual.should == expected : assert_equal(expected, actual)
 end
 
-Then /^output the body$/ do
+register_rb_step_definition /^output the body$/ do
   puts response.body
 end
 
-Then /^show me the page$/ do
-  Steam.save_and_open(response)
+register_rb_step_definition /^show me the page$/ do
+  Steam.save_and_open(request.url, response)
 end
