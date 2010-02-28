@@ -39,11 +39,12 @@ module Steam
         }
       }
     end
-    
-    def save_and_open(response)
-      filename = "/tmp/steam/#{response.url}.html"
-      FileUtils.mkdir_p(File.dirname(file))
-      File.open(filename, "w") { |f| f.write response.body }
+
+    def save_and_open(url, response)
+      filename = "/tmp/steam/#{url.gsub(/[^\w\-\/]/, '_')}.html"
+      body = rewrite_assets(url, response.body)
+      FileUtils.mkdir_p(File.dirname(filename))
+      File.open(filename, "w") { |f| f.write body }
       open_in_browser(filename)
     end
 
@@ -52,6 +53,12 @@ module Steam
       Launchy::Browser.run(filename)
     rescue LoadError
       warn "Sorry, you need to install launchy to open pages: `gem install launchy`"
+    end
+
+    def rewrite_assets(url, html)
+      url = url.gsub(URI.parse(url).path, '')
+      pattern = %r(<script [^>]*src=['"]+([^'"]*)|<link[^>]* href=['"]?([^'"]+))
+      html.gsub(pattern) { |path| path.gsub($1 || $2, "#{url}#{$1 || $2}") }
     end
   end
 end
