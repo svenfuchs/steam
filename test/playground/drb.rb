@@ -37,14 +37,14 @@ connection = nil
 url = 'http://localhost:3000'
 
 def request_without_drb(browser, url)
-  browser.request(url)
+  browser.get(url)
   browser.response
 end
 
 def request_with_drb(browser, url)
   DRb.start_service(Steam.config[:drb_uri], browser)
   drb = DRbObject.new(nil, Steam.config[:drb_uri])
-  drb.request(url)
+  drb.get(url)
   drb.response
 end
 

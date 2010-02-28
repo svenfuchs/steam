@@ -52,6 +52,6 @@ puts page.getTitleText
 # browser = Browser::HtmlUnit.new(mock)
 # # client.setWebConnection(Rjb::bind(connection, 'com.gargoylesoftware.htmlunit.WebConnection'))
 # 
-# response = browser.request('http://localhost:3000/').last
+# response = browser.get('http://localhost:3000/').last
 # puts browser.page.asXml
 

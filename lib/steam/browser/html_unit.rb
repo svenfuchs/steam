@@ -33,15 +33,15 @@ module Steam
         @client.closeAllWindows
       end
 
-      def request(url)
+      def get(url)
         call Request.env_for(url)
       end
-      alias :visit :request
+      alias :visit :get
 
       def call(env)
         respond_to do
           @request = Rack::Request.new(env)
-          client.request(@request.url)
+          client.get(@request.url)
         end.to_a
       end
 

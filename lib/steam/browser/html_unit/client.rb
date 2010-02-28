@@ -49,7 +49,7 @@ module Steam
           end
         end
 
-        def request(*args)
+        def get(*args)
           @java.getPage(*args) # TODO use WebRequestSettings
         end
 
