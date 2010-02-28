@@ -28,7 +28,7 @@ ENV['CLASSPATH'] = Dir["path/to/your/htmlunit/*.jar"].join(':')
 # after steam has been added to the load path, e.g. in features/support/env.rb
 Steam.config[:html_unit][:java_path] = 'path/to/your/htmlunit'</pre>
 
-If you're on Mac OS X then you also need to export the JAVA_HOME variable for RJB. See here for two solutions: "Installing RJB on Mac OS X":http://www.elctech.com/articles/sudo-java_home-and-mac-os-x. The visudo way worked for us. Don't forget to add yourself to the sudoers file, though.
+If you are on Mac OS X and/or get an error saying that "JAVA_HOME is not set" then you need to export the JAVA_HOME variable for RJB. See here for two solutions: "Installing RJB on Mac OS X":http://www.elctech.com/articles/sudo-java_home-and-mac-os-x. The visudo way worked for us. Don't forget to add yourself to the sudoers file, though.
 
 
 <a name="configuration"></a>
@@ -41,15 +41,25 @@ E.g. in order to tweak the Java load params you can
 
 pre. Steam.config[:java_load_params] = "-Xmx2048M"
 
+If you want to test your application through Cucumber features then you need to setup your Cucumber environment and steps accordingly. You can find an example for a Cucumber setup here: "env.rb":http://github.com/svenfuchs/steam/blob/master/example/cucumber/env.rb.
+
+Steam is widely compatible with Webrat - many actions are implemented and take the same or very similar parameters as their Webrat equivalent. As a starting point you might want to copy the file "webrat_compatible_steps.rb":http://github.com/svenfuchs/steam/blob/master/example/cucumber/webrat_compatible_steps.rb over to your @features/step_definitions@ directory.
 
 <a name="usage"></a>
 
 h2. Usage
 
-You can use Steam by itself as well as with Cucumber. You can find an example for a Cucumber setup in examples/cucumber/env.rb.
+To test your application it needs to be available through http, so usually you want to start a test server:
 
-Steam is widely compatible with Webrat - many actions are implemented and take the same or very similar parameters as their Webrat equivalent. You even might be able to use the default webrat_steps.rb that ships with Cucumber, *but his file is meant as an example and might be out of date.*
+<pre>script/server -e test # Rails < 3.0.0
+rails server  -e test # Rails >= 3.0.0
+rackup        -E test # etc.</pre>
 
+If you have Cucumber set up you should now be able to run your features through Steam in a separate terminal (unless you've detached your server):
+
+<pre>cucumber features/*.feature</pre>
+
+Be sure to restart the server if you make changes to your application. During development it might be useful to enable class reloading on the test server. You also might want to consider having separate environments for development with Cucumber/Steam and running the full test suite, e.g. on CI (where you keep class reloading disabled for faster test runs).
 
 <a name="demo"></a>
 
@@ -62,10 +72,18 @@ You can find a demo application here: "http://github.com/clemens/steam-demo":htt
 
 h2. Comparsion to others
 
+Steam's advantages over plain Webrat:
+
+* Steam can test your Javascript and CSS, 'nuff said
+
+Plain Webrat's advantages over Steam:
+
+* It's still a little bit easier to set up. All full-stack integration testing tools still require you to manage more than one process (i.e. you have to start a server for the application). Webrat can run your tests, the "browser" (session) and application all in the same process, just like classic Rails integration tests.
+
 Steam's advantages over Culerity/Celerity:
 
 * runs in Ruby MRI and does not require an entire JRuby environment.
-* Steam can have the HtmlUnit browser running in the same stack as your tests, thus making the whole thing less complex and hard to debug
+* Steam can have the HtmlUnit browser running in the same process as your tests, thus making the whole thing less complex and hard to debug
 * Steam does not build on Celerity which is a quite heavy-weight Ruby wrapper around HtmlUnit adding a lot of unnecessary code
 * Steam uses "Locator":http://github.com/svenfuchs/locator
 
