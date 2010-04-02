@@ -16,7 +16,7 @@ begin
     s.files =  FileList['[A-Z]*', 'lib/steam.rb', 'lib/{core_ext,steam}/**/*']
 
     s.add_dependency 'rjb', '>= 1.2.0'
-    s.add_dependency 'locator', '>= 0.0.4'
+    s.add_dependency 'locator', '>= 0.0.6'
   end
 rescue LoadError
   puts 'Jeweler, or one of its dependencies, is not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com'

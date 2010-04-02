@@ -5,3 +5,9 @@ HtmlUnit appears to be leaking memory; what's the deal?
 Make sure (a) that you are using the latest version of HtmlUnit, and (b) that you are calling WebClient.closeAllWindows() when you are finished with your WebClient instance.
 
 
+check out for step tests: http://github.com/mattwynne/cucumber-step_definitions/blob/master/spec/spec_helper.rb
+
+add note to readme:
+
+Steam: can't create Java VM (RuntimeError).
+JAVA_HOME was incorrectly set to /Library/Java/Home
