@@ -13,6 +13,8 @@ module Steam
         Java.import 'com.gargoylesoftware.htmlunit.BrowserVersion'
         Java.import 'com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController'
         Java.import 'com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException'
+        Java.import 'org.apache.commons.httpclient.Cookie', 'Java::Com::Gargoylesoftware::Htmlunit::Cookie'
+        # Java.import 'com.gargoylesoftware.htmlunit.util.Cookie'
 
         include Java::Com::Gargoylesoftware::Htmlunit
 
@@ -20,10 +22,11 @@ module Steam
           def notify(message, origin); end
         end
 
-        attr_reader :connection
+        attr_reader :connection, :handlers
 
         def initialize(connection = nil, options = {})
           @connection = connection
+          @handlers   = {}
           options = Steam.config[:html_unit].merge(options)
 
           @java = WebClient.new(BrowserVersion.send(options[:browser_version]))
@@ -53,11 +56,11 @@ module Steam
         def get(request)
           perform(self.request_settings(request))
         end
-        
+
         def perform(request_settings)
           @java._invoke('getPage', 'Lcom.gargoylesoftware.htmlunit.WebRequestSettings;', request_settings)
         end
-        
+
         def request_settings(request)
           url      = Java::Net::Url.new(request.url)
           settings = WebRequestSettings.new(url)
@@ -70,7 +73,14 @@ module Steam
           yield if block_given?
         end
 
-        # FIXME setLevel throws "Fail: unknown method name `setLevel'". weird.
+        def set_handler(type, &block)
+          @java.send(:"set#{type.to_s.camelize}Handler", Handler.create(type, block))
+        end
+
+        def remove_handler(type)
+          @java.send(:"set#{type.to_s.camelize}Handler", nil)
+        end
+
         def log_level=(level)
           [ 'com.gargoylesoftware.htmlunit',
             'com.gargoylesoftware.htmlunit.html',

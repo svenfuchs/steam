@@ -19,6 +19,23 @@ module HtmlUnitTests
     @browser.within(*args, &block)
   end
 
+  test 'using an alert handler' do
+    @browser.set_handler(:alert) { |page, message| @alerted = message == 'FOO!' }
+    @browser.execute('alert("FOO!");')
+    assert @alerted
+  end
+
+  test 'using an confirm handler' do
+    @browser.set_handler(:alert)   { |page, message| @alerted = true }
+    @browser.set_handler(:confirm) { |page, message| message == 'bar?' }
+
+    @browser.execute('if(confirm("foo?")) alert("");')
+    assert !@alerted
+
+    @browser.execute('if(confirm("bar?")) alert("");')
+    assert @alerted
+  end
+
   test 'locate with node type' do
     element = locate(:a)
     assert_equal 'a', element.name

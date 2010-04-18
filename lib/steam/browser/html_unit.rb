@@ -10,9 +10,10 @@ module Steam
     class HtmlUnit
       autoload :Actions,     'steam/browser/html_unit/actions'
       autoload :Client,      'steam/browser/html_unit/client'
+      autoload :Connection,  'steam/browser/html_unit/connection'
       autoload :Drb,         'steam/browser/html_unit/drb'
       autoload :Forker,      'steam/browser/html_unit/forker'
-      autoload :Connection,  'steam/browser/html_unit/connection'
+      autoload :Handler,     'steam/browser/html_unit/handler'
       autoload :Matchers,    'steam/browser/html_unit/matchers'
       autoload :Page,        'steam/browser/html_unit/page'
       autoload :WebResponse, 'steam/browser/html_unit/web_response'
@@ -69,6 +70,14 @@ module Steam
 
       def within(*args, &block)
         Locator.within(response.body, *args, &block)
+      end
+
+      def set_handler(type, &block) # TODO use delegate
+        @client.set_handler(type, &block)
+      end
+
+      def remove_handler(type)
+        @client.remove_handler(type)
       end
 
       protected
