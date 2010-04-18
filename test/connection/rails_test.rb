@@ -10,7 +10,7 @@
 #     url = 'http://localhost:3000/users'
 #     connection = Connection::Rails.new
 # 
-#     status, headers, response = connection.call(Request.env_for(url))
+#     status, headers, response = connection.call(Request.new(:url => url).env)
 #     # assert !response.body.empty?
 #   end
 # end

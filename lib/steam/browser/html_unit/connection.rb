@@ -25,7 +25,7 @@ module Steam
 
         include Java::Com::Gargoylesoftware::Htmlunit
 
-        Java.import('com.gargoylesoftware.htmlunit.MockWebConnection')
+        Java.import 'com.gargoylesoftware.htmlunit.MockWebConnection'
         classifier = Version.getProductVersion == '2.6' ?
           'org.apache.commons.httpclient.NameValuePair' :    # HtmlUnit 2.6
           'com.gargoylesoftware.htmlunit.util.NameValuePair' # HtmlUnit 2.7
@@ -38,25 +38,25 @@ module Steam
           @java = MockWebConnection.new
         end
 
-        def getResponse(request)
+        def getResponse(request_settings)
           # FIXME preserve original scheme, host + port
-          method = request.getHttpMethod.toString.dup
-          url    = request.getUrl.toString.dup
+          method = request_settings.getHttpMethod.toString.dup
+          url    = request_settings.getUrl.toString.dup
 
-          body   = request.getRequestBody
+          body   = request_settings.getRequestBody
           body   = body.toString.dup if body
 
-          params = request.getRequestParameters
+          params = request_settings.getRequestParameters
           params = Hash[*params.toArray.map { |e| [e.name, e.value] }.flatten]
 
           input  = body ? body : Rack::Utils.build_nested_query(params)
-          env    = Request.env_for(url, :method => method, :input => input)
+          env    = Request.new(:method => method, :url => url, :input => input).env
 
           status, headers, response = connection.call(env)
           response.body.close if response.body.respond_to?(:close)
 
-          set_response(request.getUrl, response)
-          java.getResponse(request)
+          set_response(request_settings.getUrl, response)
+          java.getResponse(request_settings)
         rescue Exception => e
           puts "#{e.class.name}: #{e.message}"
           e.backtrace.each { |line| puts line }

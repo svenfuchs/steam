@@ -19,7 +19,7 @@ module Steam
 
       include Actions
 
-      attr_accessor :client, :page, :request, :response
+      attr_accessor :client, :page, :response
 
       def initialize(*args)
         @client = Client.new(*args)
@@ -33,15 +33,19 @@ module Steam
         @client.closeAllWindows
       end
 
+      def request
+        @request ||= Request.new
+      end
+
       def get(url)
-        call Request.env_for(url)
+        perform(:get, url)
       end
       alias :visit :get
 
-      def call(env)
+      def perform(method, uri)
         respond_to do
-          @request = Rack::Request.new(env)
-          client.get(@request.url)
+          request.update(:method => method, :uri => uri)
+          client.get(request)
         end.to_a
       end
 

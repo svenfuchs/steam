@@ -107,7 +107,7 @@ class Connection
   def getResponse(request)
     url = request.getUrl.toString.dup
     method = request.getHttpMethod.toString.dup
-    request = Request.new(method, url) # headers
+    request = Request.new(:method => method, :url => url) # headers
     response = @@responses[url]
     Rjb::bind(WebResponse.new(request, response), 'com.gargoylesoftware.htmlunit.WebResponse')
   rescue Exception => e

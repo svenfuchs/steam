@@ -6,7 +6,6 @@ module Steam
   module Browser
     class HtmlUnit
       class WebResponse
-        Java.import 'java.net.Url'
         Java.import 'java.io.ByteArrayInputStream'
         Java.import 'com.gargoylesoftware.htmlunit.WebRequestSettings'
 

@@ -9,6 +9,7 @@ module Steam
 
         Java.import 'com.gargoylesoftware.htmlunit.Version'
         Java.import 'com.gargoylesoftware.htmlunit.WebClient'
+        Java.import 'com.gargoylesoftware.htmlunit.WebRequestSettings'
         Java.import 'com.gargoylesoftware.htmlunit.BrowserVersion'
         Java.import 'com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController'
         Java.import 'com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException'
@@ -49,8 +50,19 @@ module Steam
           end
         end
 
-        def get(*args)
-          @java.getPage(*args) # TODO use WebRequestSettings
+        def get(request)
+          perform(self.request_settings(request))
+        end
+        
+        def perform(request_settings)
+          @java._invoke('getPage', 'Lcom.gargoylesoftware.htmlunit.WebRequestSettings;', request_settings)
+        end
+        
+        def request_settings(request)
+          url      = Steam::Java::Net::Url.new(request.url)
+          settings = WebRequestSettings.new(url)
+          request.headers.each { |name, value| settings.setAdditionalHeader(name.to_s, value.to_s) } if request.headers
+          settings
         end
 
         def wait_for_javascript(timeout)

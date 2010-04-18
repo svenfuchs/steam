@@ -35,7 +35,7 @@ class ConnectionCascadeTest < Test::Unit::TestCase
 
   def test_cascade
     @urls.each_with_index do |url, index|
-      status, headers, response = @connection.call(Request.env_for(url))
+      status, headers, response = @connection.call(Request.new(:url => url).env)
       assert_equal @bodies[index], response.body.join
     end
   end

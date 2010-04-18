@@ -10,6 +10,7 @@ $: << TEST_ROOT
 FIXTURES_PATH = File.expand_path("../fixtures", __FILE__)
 
 require 'steam'
+require 'ruby-debug'
 
 # Steam::Java.import('com.gargoylesoftware.htmlunit.StringWebResponse')
 # Steam::Java.import('com.gargoylesoftware.htmlunit.WebClient')
@@ -50,7 +51,7 @@ class Test::Unit::TestCase
 
   def perform(method, url, response)
     mock(method, url, response)
-    @status, @headers, @response = @browser.call(Steam::Request.env_for(url))
+    @status, @headers, @response = @browser.send(method, url)
   end
 
   def assert_response_contains(text, options = {})

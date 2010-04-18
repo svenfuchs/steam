@@ -25,7 +25,7 @@ module Steam
 
         # FIXME remove ActionController::Request dependency
         def generic_url_rewriter 
-          env = Request.env_for(Steam.config[:request_url])
+          env = Request.new(:method => :get, :url => Steam.config[:request_url]).env
           UrlRewriter.new(ActionController::Request.new(env), {})
         end
     end
