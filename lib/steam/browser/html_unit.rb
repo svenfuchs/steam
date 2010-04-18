@@ -80,6 +80,18 @@ module Steam
         @client.remove_handler(type)
       end
 
+      def get_cookie(name)
+        @client.get_cookie(name)
+      end
+
+      def add_cookie(name, value)
+        @client.add_cookie(name, value)
+      end
+
+      def clear_cookies
+        @client.clear_cookies
+      end
+
       protected
 
         def respond_to

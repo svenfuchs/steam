@@ -36,6 +36,17 @@ module HtmlUnitTests
     assert @alerted
   end
 
+  test 'adding a cookie' do
+    @browser.add_cookie('foo', 'bar')
+    assert_equal 'bar', @browser.get_cookie('foo')
+  end
+
+  test 'clearing cookies' do
+    @browser.add_cookie('foo', 'bar')
+    @browser.clear_cookies
+    assert_equal nil, @browser.get_cookie('foo')
+  end
+
   test 'locate with node type' do
     element = locate(:a)
     assert_equal 'a', element.name

@@ -81,6 +81,22 @@ module Steam
           @java.send(:"set#{type.to_s.camelize}Handler", nil)
         end
 
+        def get_cookie(name)
+          cookie = @java.getCookieManager.getCookie(name)
+          cookie ? cookie.getValue : nil
+        end
+
+        def add_cookie(name, value) # TODO what about domain, path, expires etc?
+          cookie = Cookie.new
+          cookie.setName(name)
+          cookie.setValue(value)
+          @java.getCookieManager.addCookie(cookie)
+        end
+
+        def clear_cookies
+          @java.getCookieManager.clearCookies
+        end
+
         def log_level=(level)
           [ 'com.gargoylesoftware.htmlunit',
             'com.gargoylesoftware.htmlunit.html',
