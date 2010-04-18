@@ -29,7 +29,7 @@ module Steam
         classifier = Version.getProductVersion == '2.6' ?
           'org.apache.commons.httpclient.NameValuePair' :    # HtmlUnit 2.6
           'com.gargoylesoftware.htmlunit.util.NameValuePair' # HtmlUnit 2.7
-        NameValuePair = Java.import(classifier, :NameValuePair)
+        NameValuePair = Java.import(classifier, 'NameValuePair')
 
         attr_reader :connection, :java
 

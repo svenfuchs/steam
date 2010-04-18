@@ -19,7 +19,7 @@ class JavaTest < Test::Unit::TestCase
   end
   
   test "java_path_to_const_name" do
-    assert_equal 'Util::ArrayList', Java.path_to_const_name("java.util.ArrayList")
+    assert_equal 'Java::Util::ArrayList', Java.path_to_const_name("java.util.ArrayList")
   end
   
   test "import" do

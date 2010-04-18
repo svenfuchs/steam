@@ -33,19 +33,19 @@ module Steam
       end
 
       def import(signature, name = nil)
-        init unless @initialized
-        name = path_to_const_name(signature)
+        name ||= path_to_const_name(signature)
+        name.gsub!('Java::', '')
         const_set_nested(name, Rjb::import(signature))
       end
 
       def path_to_const_name(path)
-        path.split('.').map { |token| token.underscore.camelize }.join('::').gsub('Java::', '')
+        path.split('.').map { |token| token.underscore.camelize }.join('::')
       end
 
       def init
         @initialized = true
 
-        import('java.net.URL')
+        import('java.net.URL', 'Java::Net::Url')
         import('java.lang.System')
         import('java.util.Arrays')
         import('java.util.ArrayList')
@@ -56,6 +56,7 @@ module Steam
       def load_from(path)
         paths = Dir["#{Steam.config[:html_unit][:java_path]}/*.jar"]
         load(paths.join(':')) unless paths.empty?
+        init
       end
 
       def load(paths)
@@ -63,11 +64,11 @@ module Steam
       end
 
       def logger(classifier)
-        Java::Util::Logging::Logger.getLogger(classifier)
+        Util::Logging::Logger.getLogger(classifier)
       end
 
       def log_level(name)
-        Java::Util::Logging::Level.send(name.to_s.upcase)
+        Util::Logging::Level.send(name.to_s.upcase)
       end
     end
   end

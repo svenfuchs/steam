@@ -59,7 +59,7 @@ module Steam
         end
         
         def request_settings(request)
-          url      = Steam::Java::Net::Url.new(request.url)
+          url      = Java::Net::Url.new(request.url)
           settings = WebRequestSettings.new(url)
           request.headers.each { |name, value| settings.setAdditionalHeader(name.to_s, value.to_s) } if request.headers
           settings
