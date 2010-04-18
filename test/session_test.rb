@@ -14,27 +14,27 @@ class SessionTest < Test::Unit::TestCase
     assert @session.respond_to?(:response)
   end
 
-  test 'assert_contain' do
-    @session.assert_contain(@session.response.body, 'bar!')
+  test 'assert_contains' do
+    @session.assert_contains(@session.response.body, 'bar!')
   end
 
-  test 'assert_not_contain' do
-    @session.assert_not_contain(@session.response.body, 'bar!!')
+  test 'assert_does_not_contain' do
+    @session.assert_does_not_contain(@session.response.body, 'bar!!')
   end
 
-  test 'assert_have_tag' do
-    @session.assert_have_tag(@session.response.body, :a, 'bar!', :id => 'buz')
+  test 'assert_has_tag' do
+    @session.assert_has_tag(@session.response.body, :a, 'bar!', :id => 'buz')
   end
 
-  test 'assert_have_no_tag' do
-    @session.assert_have_no_tag(@session.response.body, :a, 'bar!', :class => 'buz')
+  test 'assert_no_tag' do
+    @session.assert_no_tag(@session.response.body, :a, 'bar!', :class => 'buz')
   end
 
-  test 'assert_have_xpath' do
-    @session.assert_have_xpath(@session.response.body, '//div/a[@id="buz"]')
+  test 'assert_has_xpath' do
+    @session.assert_has_xpath(@session.response.body, '//div/a[@id="buz"]')
   end
 
-  test 'assert_have_no_xpath' do
-    @session.assert_have_no_xpath(@session.response.body, '//div/a[@class="buz"]')
+  test 'assert_no_xpath' do
+    @session.assert_no_xpath(@session.response.body, '//div/a[@class="buz"]')
   end
 end

@@ -116,35 +116,35 @@ When /^(?:|I )attach the file at "([^\"]*)" to "([^\"]*)"$/ do |path, field|
 end
 
 Then /^(?:|I )should see "([^\"]*)"$/ do |text|
-  assert_contain(text)
+  assert_contains(text)
 end
 
 Then /^(?:|I )should see "([^\"]*)" within "([^\"]*)"$/ do |text, selector|
-  within(selector) { assert_contain(text) }
+  within(selector) { assert_contains(text) }
 end
 
 Then /^(?:|I )should see \/([^\/]*)\/$/ do |regexp|
-  assert_contain(Regexp.new(regexp))
+  assert_contains(Regexp.new(regexp))
 end
 
 Then /^(?:|I )should see \/([^\/]*)\/ within "([^\"]*)"$/ do |regexp, selector|
-  within(selector) { assert_contain(Regexp.new(regexp)) }
+  within(selector) { assert_contains(Regexp.new(regexp)) }
 end
 
 Then /^(?:|I )should not see "([^\"]*)"$/ do |text|
-  assert_not_contain(text)
+  assert_does_not_contain(text)
 end
 
 Then /^(?:|I )should not see "([^\"]*)" within "([^\"]*)"$/ do |text, selector|
-  within(selector) { assert_not_contain(text) }
+  within(selector) { assert_does_not_contain(text) }
 end
 
 Then /^(?:|I )should not see \/([^\/]*)\/$/ do |regexp|
-  assert_not_contain(Regexp.new(regexp))
+  assert_does_not_contain(Regexp.new(regexp))
 end
 
 Then /^(?:|I )should not see \/([^\/]*)\/ within "([^\"]*)"$/ do |regexp, selector|
-  within(selector) { assert_not_contain(Regexp.new(regexp)) }
+  within(selector) { assert_does_not_contain(Regexp.new(regexp)) }
 end
 
 Then /^the "([^\"]*)" field should contain "([^\"]*)"$/ do |selector, text|
