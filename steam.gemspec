@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.homepage     = 'http://github.com/svenfuchs/steam'
   s.summary      = 'Headless integration testing w/ HtmlUnit: enables testing JavaScript-driven web sites'
   s.description  = 'Steam is a headless integration testing tool driving HtmlUnit to enable testing JavaScript-driven web sites.'
-  s.files        = Dir.glob('lib/**/*') + %w(MIT-LICENSE README.textile)
+  s.files        = Dir['{lib/**/*,[A-Z]*}']
 
   s.add_runtime_dependency 'rjb',     '>= 1.2.0'
   s.add_runtime_dependency 'locator', '>= 0.0.6'
