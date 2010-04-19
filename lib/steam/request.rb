@@ -40,34 +40,45 @@ module Steam
       super.merge(headers)
     end
 
-    def method=(method)
-      @env['REQUEST_METHOD'] = method
+    def url=(url)
+      url = URI.parse(url)
+      self.path   = url.path
+      self.scheme = url.scheme if url.scheme
+      self.host   = url.host   if url.host
+      self.port   = url.port   if url.port
+      self.query  = url.query  if url.query
     end
+    alias :uri :url
+    alias :uri= :url=
 
-    def uri=(uri)
-      uri = URI.parse(uri)
-      self.path   = uri.path
-      self.query  = uri.query  if uri.query
-      self.scheme = uri.scheme if uri.scheme
-      self.port   = uri.port   if uri.port
+    def method=(method)
+      @env.merge!(
+        'REQUEST_METHOD' => method
+      )
     end
-    alias url= uri=
     
     def scheme=(scheme)
       @env.merge!(
         'rack.url_scheme'  => scheme,
         'rack.test.scheme' => scheme
       )
+      self.port = nil # reset the port so we switch according to the protocol
     end
+    alias :protocol :scheme
+    alias :protocol= :scheme=
     
     def host=(host)
+      host, self.port = host.split(':')
       @env.merge!(
+        'HTTP_HOST'      => host,
         'rack.test.host' => host
       )
     end
     
     def port=(port)
+      port ||= protocol == 'https' ? 443 : 80
       @env.merge!(
+        'SERVER_PORT'    => port,
         'rack.test.port' => port
       )
     end

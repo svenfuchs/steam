@@ -4,6 +4,8 @@ require 'fixtures/html_fakes'
 class HtmlUnitJavascriptTest < Test::Unit::TestCase
   include Steam, HtmlFakes
 
+  attr_reader :browser
+
   def setup
     @connection = Steam::Connection::Mock.new
     static = Steam::Connection::Static.new(:root => FIXTURES_PATH)
@@ -17,7 +19,7 @@ class HtmlUnitJavascriptTest < Test::Unit::TestCase
           <script src="/javascripts/jquery.js" type="text/javascript"></script>
           <script>
             $(document).ready(function() {
-              $('div:not([id])').each(function() { 
+              $('div:not([id])').each(function() {
                 document.title = $(this).html();
               });
             });
@@ -29,9 +31,9 @@ class HtmlUnitJavascriptTest < Test::Unit::TestCase
         </body>
       </html>
     html
-    
+
     perform(:get, 'http://localhost:3000/', html)
-    assert_equal 'bar', @browser.page.getTitleText
+    assert_equal 'bar', browser.page.getTitleText
   end
 
   test "jquery: div[id*=bar] selector" do
@@ -41,7 +43,7 @@ class HtmlUnitJavascriptTest < Test::Unit::TestCase
           <script src="/javascripts/jquery.js" type="text/javascript"></script>
           <script>
             $(document).ready(function() {
-            	$('div[id*=bar]').each(function() { 
+            	$('div[id*=bar]').each(function() {
             	  document.title = $(this).html();
             	});
             });
@@ -52,9 +54,9 @@ class HtmlUnitJavascriptTest < Test::Unit::TestCase
         </body>
       </html>
     html
-    
+
     perform(:get, 'http://localhost:3000/', html)
-    assert_equal 'foobar', @browser.page.getTitleText
+    assert_equal 'foobar', browser.page.getTitleText
   end
 
 end

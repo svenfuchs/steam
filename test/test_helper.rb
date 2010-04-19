@@ -52,6 +52,7 @@ class Test::Unit::TestCase
   def perform(method, url, response)
     mock(method, url, response)
     @status, @headers, @response = @browser.send(method, url)
+    [@status, @headers, @response]
   end
 
   def assert_response_contains(text, options = {})
