@@ -1,3 +1,5 @@
+require 'locator'
+
 # Conceptually a session is something different than a browser. E.g. a (test-)
 # session can be started (setting up test data etc.) and stopped (cleaning
 # stuff up etc.). Webrat and Capybara don't separate these concepts. So let's
@@ -9,8 +11,8 @@ module Steam
     autoload :Rails, 'steam/session/rails'
 
     include Locator::Matcher
+    include Locator::Assertions
     include Test::Unit::Assertions if defined?(Test::Unit)
-    # TODO include Rspec::Something if defined?(Rspec)
 
     attr_accessor :browser
 

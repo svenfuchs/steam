@@ -18,7 +18,7 @@ Installing Steam as as a gem will automatically install the required RJB and Loc
 
 pre. $ gem install steam
 
-To install HtmlUnit you can download it from "Sourceforge":http://sourceforge.net/projects/htmlunit/files. 
+To install HtmlUnit you can download it from "Sourceforge":http://sourceforge.net/projects/htmlunit/files.
 
 You then need to add HtmlUnit to your Java classpath. The following ways should both work:
 
@@ -29,6 +29,8 @@ ENV['CLASSPATH'] = Dir["path/to/your/htmlunit/*.jar"].join(':')
 Steam.config[:html_unit][:java_path] = 'path/to/your/htmlunit'</pre>
 
 If you are on Mac OS X and/or get an error saying that "JAVA_HOME is not set" then you need to export the JAVA_HOME variable for RJB. See here for two solutions: "Installing RJB on Mac OS X":http://www.elctech.com/articles/sudo-java_home-and-mac-os-x. The visudo way worked for us. Don't forget to add yourself to the sudoers file, though.
+
+Um. Since some Mac OS X 10.6 update removed the Java header files that are necessary to compile RJB one also needs to install "Java for Mac OS X 10.6 Update 3 Developer Package":http://connect.apple.com/cgi-bin/WebObjects/MemberSite.woa/wa/downloads
 
 
 <a name="configuration"></a>

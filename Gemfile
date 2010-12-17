@@ -1,2 +1,11 @@
-gem 'rjb',     '>= 1.2.0'
-gem 'locator', '>= 0.0.6'
+source :rubygems
+
+gem 'rack'
+gem 'rjb'
+gem 'locator', :path => '~/Development/projects/locator'
+
+group :test do
+  gem 'mocha'
+  gem 'ruby-debug'
+  gem 'test_declarative'
+end
