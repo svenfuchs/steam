@@ -1,8 +1,13 @@
-Potential bugs
-==============
+http://htmlunit.sourceforge.net/logging.html
 
-Doesn't work:
-  locate_element("list_1") { click_link(:class => 'add_task') }
-  within("list_1") { click_link(:class => 'add_task') }
-Works:
-  locate_element("list_1") { @page = page.getFirstByXPath(locate_element(:class => 'add_task').xpath).click && respond! }
+http://htmlunit.sourceforge.net/faq.html#MemoryLeak
+HtmlUnit appears to be leaking memory; what's the deal?
+Make sure (a) that you are using the latest version of HtmlUnit, and (b) that you are calling WebClient.closeAllWindows() when you are finished with your WebClient instance.
+
+
+check out for step tests: http://github.com/mattwynne/cucumber-step_definitions/blob/master/spec/spec_helper.rb
+
+add note to readme:
+
+Steam: can't create Java VM (RuntimeError).
+JAVA_HOME was incorrectly set to /Library/Java/Home

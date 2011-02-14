@@ -5,4 +5,4 @@ module Kernel
   ensure
     $VERBOSE = old_verbose
   end
-end
+end unless Kernel.method_defined?(:silence_warnings)

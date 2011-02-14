@@ -1,6 +1,0 @@
-<h1>Users</h1>
-<ul id="users">
-	<% User.all.each do |user| %>
-		<li id="<%= dom_id(user) %>"><%= link_to user.name, user %></li>
-	<% end %>
-</ul>

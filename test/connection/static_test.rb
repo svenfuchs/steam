@@ -1,7 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class ConnectionStaticTest < Test::Unit::TestCase
-  include TestHelper
   include Steam
 
   def test_static
@@ -9,7 +8,7 @@ class ConnectionStaticTest < Test::Unit::TestCase
     root = File.expand_path(File.dirname(__FILE__) + '/../fixtures')
     connection = Connection::Static.new(:root => root)
 
-    status, headers, response = connection.call(Request.env_for(url))
+    status, headers, response = connection.call(Request.new(:url => url).env)
     assert_equal File.read(root + '/javascripts/foo.js'), response.body.join
   end
 end

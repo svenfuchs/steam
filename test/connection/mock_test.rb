@@ -17,7 +17,7 @@ class ConnectionMockTest < Test::Unit::TestCase
   
   def test_call
     @connection.mock(:get, @url, @body)
-    status, headers, response = @connection.call(Request.env_for(@url))
+    status, headers, response = @connection.call(Request.new(:url => @url).env)
     assert_equal [@body], response.body
   end
 

@@ -1,5 +1,5 @@
 class String
   def camelize
-    split(/[^a-z0-9]/i).map { |w| w.capitalize }.join
+    to_s.gsub(/\/(.?)/) { "::#{$1.upcase}" }.gsub(/(?:^|_)(.)/) { $1.upcase }
   end
-end
+end unless String.method_defined?(:camelize)

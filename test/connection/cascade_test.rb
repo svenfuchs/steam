@@ -2,7 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 require 'rack/cascade'
 
 class ConnectionCascadeTest < Test::Unit::TestCase
-  include TestHelper
   include Steam
 
   def setup
@@ -36,7 +35,7 @@ class ConnectionCascadeTest < Test::Unit::TestCase
 
   def test_cascade
     @urls.each_with_index do |url, index|
-      status, headers, response = @connection.call(Request.env_for(url))
+      status, headers, response = @connection.call(Request.new(:url => url).env)
       assert_equal @bodies[index], response.body.join
     end
   end

@@ -12,21 +12,20 @@ module Steam
         klass.module_eval { public *Routing::Routes.named_routes.helpers }
       end
 
-      # FIXME! how to get access to the controller?
+      # FIXME we only have access to the controller when Steam can run HtmlUnit
+      # and the app in one stack
       def controller
       end
       
       def url_for(options) 
-        controller ?
-          controller.url_for(options) :
-          generic_url_rewriter.rewrite(options)
+        controller ? controller.url_for(options) : generic_url_rewriter.rewrite(options)
       end
       
       protected
 
         # FIXME remove ActionController::Request dependency
         def generic_url_rewriter 
-          env = Request.env_for(Steam.config.request_env_for)
+          env = Request.new(:method => :get, :url => Steam.config[:request_url]).env
           UrlRewriter.new(ActionController::Request.new(env), {})
         end
     end

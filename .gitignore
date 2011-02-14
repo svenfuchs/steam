@@ -1,2 +1,3 @@
-*.log
-fixtures/rails/log/**/*.log
+vendor
+*.gem
+.bundle/*

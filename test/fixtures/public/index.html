@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <title></title>
+    <script src="/jquery-1.4.1.js" type="text/javascript"></script>
+    <script src="/jquery-ui-1.8rc1.js" type="text/javascript"></script>
+    <script src="/title.js" type="text/javascript"></script>
+
+    <script>
+      (function($) {  
+       $.fn.outerHTML = function() {
+         return $('<div>').append(this.eq(0).clone()).html();
+       };
+      })(jQuery);
+      
+      $(document).ready(function() {
+        $('.drop').droppable({
+          drop: function() {
+  	        $('#log').text($('#log').text() + $(this).closest('.drop').outerHTML());
+          }
+        });
+        $('.drag').draggable();
+      })
+    </script>
+    
+    <style>
+      div   { width: 50px; height: 50px; }
+      .drop { border: 1px solid red; margin-bottom: 25px; }
+      .drag { border: 1px solid green; }
+    </style>
+  </head>
+  <body>
+    <div class="drop" id="drop_1"></div>
+    <div class="drop" id="drop_2"></div>
+    <div class="drop" id="drop_3"></div>
+    <div class="drop" id="drop_4"></div>
+    <div class="drop" id="drop_5"></div>
+    <div class="drop" id="drop_6"></div>
+    <div class="drag"></div>
+    <p id="log"></p>
+  </body>
+</html>

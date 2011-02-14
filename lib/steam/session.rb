@@ -1,36 +1,27 @@
+require 'locator'
+
+# Conceptually a session is something different than a browser. E.g. a (test-)
+# session can be started (setting up test data etc.) and stopped (cleaning
+# stuff up etc.). Webrat and Capybara don't separate these concepts. So let's
+# keep them separate though from the beginning even though we don't implement
+# any such behavior so far.
+
 module Steam
   class Session
     autoload :Rails, 'steam/session/rails'
 
-    # cattr_accessor :host
+    include Locator::Matcher
+    include Locator::Assertions
+    include Test::Unit::Assertions if defined?(Test::Unit)
 
-    attr_accessor :id, :browser
-    #, :request, :response, :session, :cookies
-    # delegate :headers, :to => :response
+    attr_accessor :browser
 
     def initialize(browser = nil)
       @browser = browser
-      # @id = start
-    end
-
-    def start
-      # response = post('/test/sessions')
-      # raise unless response.code == '200'
-      # response.body
-    end
-
-    def stop
-      # delete("/test/sessions/#{id}")
     end
 
     def respond_to?(method)
-      return true if browser.respond_to?(method)
-      super
-    end
-
-    # FIXME - there has to be a better way to enforce this - how does webrat handle it?
-    def select(*args, &block)
-      browser.select(*args, &block)
+      browser.respond_to?(method) ? true : super
     end
 
     def method_missing(method, *args, &block)
@@ -38,14 +29,8 @@ module Steam
       super
     end
 
-    # def redirect?
-    #   response.status/100 == 3
-    # end
-    #
-    # def follow_redirect!
-    #   # raise "not a redirect! #{@status} #{@status_message}" unless redirect?
-    #   get(headers['location'])
-    #   status
-    # end
+    def select(*args, &block) # because Class implements #select
+      browser.select(*args, &block)
+    end
   end
 end

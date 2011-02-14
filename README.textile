@@ -1,0 +1,118 @@
+<a name="readme"></a>
+
+h1. Steam
+
+Steam is a headless integration testing tool driving "HtmlUnit":http://htmlunit.sourceforge.net to enable testing JavaScript-driven web sites. In that it is similar to "Culerity":http://github.com/langalex/culerity which drives "Celerity":http://github.com/jarib/celerity (which also drives "HtmlUnit":http://htmlunit.sourceforge.net). See below for a "comparsion":#comparsion.
+
+<a name="installation"></a>
+
+h2. Installation
+
+Steam currently has the following dependencies:
+
+* Working Java Runtime
+* HtmlUnit (jar files)
+* RJB and Locator gems
+
+Installing Steam as as a gem will automatically install the required RJB and Locator gems:
+
+pre. $ gem install steam
+
+To install HtmlUnit you can download it from "Sourceforge":http://sourceforge.net/projects/htmlunit/files.
+
+You then need to add HtmlUnit to your Java classpath. The following ways should both work:
+
+<pre># anywhere during startup, e.g. in features/support/env.rb
+ENV['CLASSPATH'] = Dir["path/to/your/htmlunit/*.jar"].join(':')
+
+# after steam has been added to the load path, e.g. in features/support/env.rb
+Steam.config[:html_unit][:java_path] = 'path/to/your/htmlunit'</pre>
+
+Since some Mac OS X 10.6 update removed the Java header files that are necessary to compile RJB one also needs to install "Java for Mac OS X 10.6 Update 3 Developer Package":http://connect.apple.com/cgi-bin/WebObjects/MemberSite.woa/wa/downloads
+
+Also, if you are on Mac OS X, use `sudo` and get an error saying that "JAVA_HOME is not set" then you need to export the JAVA_HOME variable for RJB. See here for two solutions: "Installing RJB on Mac OS X":http://www.elctech.com/articles/sudo-java_home-and-mac-os-x. The visudo way worked for us. Don't forget to add yourself to the sudoers file, though.
+
+
+<a name="configuration"></a>
+
+h2. Configuration
+
+You should not need to configure anything. If you do need though have a look at "Steam.config":http://github.com/svenfuchs/steam/blob/master/lib/steam.rb
+
+E.g. in order to tweak the Java load params you can
+
+pre. Steam.config[:java_load_params] = "-Xmx2048M"
+
+If you want to test your application through Cucumber features then you need to setup your Cucumber environment and steps accordingly. You can find an example for a Cucumber setup here: "env.rb":http://github.com/svenfuchs/steam/blob/master/example/cucumber/env.rb.
+
+Steam is widely compatible with Webrat - many actions are implemented and take the same or very similar parameters as their Webrat equivalent. As a starting point you might want to copy the file "webrat_compatible_steps.rb":http://github.com/svenfuchs/steam/blob/master/example/cucumber/webrat_compatible_steps.rb over to your @features/step_definitions@ directory.
+
+<a name="usage"></a>
+
+h2. Usage
+
+To test your application it needs to be available through http, so usually you want to start a test server:
+
+<pre>script/server -e test # Rails < 3.0.0
+rails server  -e test # Rails >= 3.0.0
+rackup        -E test # etc.</pre>
+
+If you have Cucumber set up you should now be able to run your features through Steam in a separate terminal (unless you've detached your server):
+
+<pre>cucumber features/*.feature</pre>
+
+Be sure to restart the server if you make changes to your application. During development it might be useful to enable class reloading on the test server. You also might want to consider having separate environments for development with Cucumber/Steam and running the full test suite, e.g. on CI (where you keep class reloading disabled for faster test runs).
+
+<a name="demo"></a>
+
+h2. Demo
+
+You can find a demo application here: "http://github.com/clemens/steam-demo":http://github.com/clemens/steam-demo
+
+
+<a name="comparsion"></a>
+
+h2. Comparsion to others
+
+Steam's advantages over plain Webrat:
+
+* Steam can test your Javascript and CSS, 'nuff said
+
+Plain Webrat's advantages over Steam:
+
+* It's still a little bit easier to set up. All full-stack integration testing tools still require you to manage more than one process (i.e. you have to start a server for the application). Webrat can run your tests, the "browser" (session) and application all in the same process, just like classic Rails integration tests.
+
+Steam's advantages over Culerity/Celerity:
+
+* runs in Ruby MRI and does not require an entire JRuby environment.
+* Steam can have the HtmlUnit browser running in the same process as your tests, thus making the whole thing less complex and hard to debug
+* Steam does not build on Celerity which is a quite heavy-weight Ruby wrapper around HtmlUnit adding a lot of unnecessary code
+* Steam uses "Locator":http://github.com/svenfuchs/locator
+
+Culerity/Celerity's advantages over Steam:
+
+* RJB can't resolve the mismatch of Ruby vs Java threads which makes fancy setups impossible to solve
+* Celerity implements a *lot* of stuff, maybe it contains something you need (e.g. maybe you want to test pop-down windows opening in the background?)
+* Steam still is in its infancy
+
+
+<a name="acknowledgements"></a>
+
+h2. Acknowledgements
+
+Kudos to "Alexander Lang":http://github.com/langalex for writing "Culerity":http://github.com/langalex/culerity which pioneered full-stack AJAX-enabled integration testing in Rails.
+
+
+<a name="developers"></a>
+
+h2. Developers
+
+* "Sven Fuchs":http://github.com/svenfuchs
+* "Clemens Kofler"::http://github.com/clemens
+
+
+TODO
+
+* explain requirement to start/restart a test server
+* explain log levels
+
