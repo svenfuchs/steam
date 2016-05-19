@@ -32,7 +32,6 @@ Since some Mac OS X 10.6 update removed the Java header files that are necessary
 
 Also, if you are on Mac OS X, use `sudo` and get an error saying that "JAVA_HOME is not set" then you need to export the JAVA_HOME variable for RJB. See here for two solutions: "Installing RJB on Mac OS X":http://www.elctech.com/articles/sudo-java_home-and-mac-os-x. The visudo way worked for us. Don't forget to add yourself to the sudoers file, though.
 
-
 <a name="configuration"></a>
 
 h2. Configuration
@@ -41,7 +40,7 @@ You should not need to configure anything. If you do need though have a look at 
 
 E.g. in order to tweak the Java load params you can
 
-pre. Steam.config[:java_load_params] = "-Xmx2048M"
+pre. Steam.config[:java_load_params] = ["-Xmx2048M"]
 
 If you want to test your application through Cucumber features then you need to setup your Cucumber environment and steps accordingly. You can find an example for a Cucumber setup here: "env.rb":http://github.com/svenfuchs/steam/blob/master/example/cucumber/env.rb.
 

@@ -60,7 +60,7 @@ module Steam
       end
 
       def load(paths)
-        Rjb::load(paths, Steam.config[:java_load_params].to_a)
+        Rjb::load(paths, Steam.config[:java_load_params])
       end
 
       def logger(classifier)
